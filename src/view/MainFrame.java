@@ -21,6 +21,7 @@ public class MainFrame {
 		catch (Exception e) {}
 	            
 		frmMain = new JFrame ("JavaRice IDE");
+		frmMain.setSize(1024, 700);
 		pane = frmMain.getContentPane();
 		pane.setLayout(new BorderLayout());
 
