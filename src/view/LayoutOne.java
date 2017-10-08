@@ -27,6 +27,8 @@ public class LayoutOne extends JPanel {
 	JTextPane codeTextPane;
 	JTextPane consoleTextPane;
 	
+	JPanel consolePanel;
+	
 	String code;
 	
 	/**
@@ -37,7 +39,7 @@ public class LayoutOne extends JPanel {
 		
 		setLayout(new BorderLayout(0, 0));
 		
-		JPanel consolePanel = new JPanel();
+		consolePanel = new JPanel();
 		consolePanel.setBackground(Color.WHITE);
 		add(consolePanel, BorderLayout.SOUTH);
 		consolePanel.setLayout(new BorderLayout(0, 0));
@@ -63,6 +65,7 @@ public class LayoutOne extends JPanel {
 		lblConsole.setBackground(Color.WHITE);
 		
 		consoleTextPane = new JTextPane();
+		consoleTextPane.setEditable(false);
 		consoleTextPane.setForeground(Color.RED);
 		consoleTextPane.setFont(new Font("Consolas", Font.PLAIN, 16));
 		consoleTextPane.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -101,8 +104,10 @@ public class LayoutOne extends JPanel {
 				cmpController.compile(codeTextPane.getText());
 				
 				//setting console text
-				consoleTextPane.setText("");
+				
 				String console = "Lexeme = Token\n---\n";
+				consoleTextPane.setText(console);
+				System.out.println("CONSOLE: " + console);
 				ArrayList<STRow> symbolTable = cmpController.getSymbolTable();
 				for(int i=0; i<symbolTable.size(); i++){
 					console += symbolTable.get(i).getLexeme() + " = " + symbolTable.get(i).getTokenId();

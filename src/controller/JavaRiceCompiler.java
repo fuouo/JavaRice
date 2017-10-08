@@ -29,6 +29,7 @@ public class JavaRiceCompiler {
 	}
 	
 	public void compile(String code){
+		symbolTable = new ArrayList<STRow>();
 		walkCode(code);
 	}
 	
