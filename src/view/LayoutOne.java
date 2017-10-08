@@ -2,10 +2,12 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -13,12 +15,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Utilities;
 
 import controller.JavaRiceCompiler;
 import model.symboltable.STRow;
-import javax.swing.ScrollPaneConstants;
+import java.awt.Rectangle;
 
 public class LayoutOne extends JPanel {
 	JavaRiceCompiler cmpController;
@@ -26,6 +31,7 @@ public class LayoutOne extends JPanel {
 	JButton btnRun;
 	JTextPane codeTextPane;
 	JTextPane consoleTextPane;
+	JTextPane lineNumberPane;
 	
 	JPanel consolePanel;
 	
@@ -45,23 +51,22 @@ public class LayoutOne extends JPanel {
 		consolePanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel toolPanel = new JPanel();
+		toolPanel.setBorder(new EmptyBorder(5, 5, 5, 100));
 		toolPanel.setFont(new Font("Consolas", Font.PLAIN, 13));
 		toolPanel.setBackground(Color.WHITE);
 		consolePanel.add(toolPanel, BorderLayout.NORTH);
 		toolPanel.setLayout(new BorderLayout(0, 0));
 		
-		btnRun = new JButton("\r\nRun Code\r\n");
+		btnRun = new JButton("\r\nRun");
+		btnRun.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnRun.setFont(new Font("Consolas", Font.PLAIN, 16));
 		btnRun.setBackground(Color.WHITE);
-		btnRun.setMinimumSize(new Dimension(50, 25));
-		btnRun.setMaximumSize(new Dimension(50, 25));
-		btnRun.setPreferredSize(new Dimension(50, 50));
-		toolPanel.add(btnRun, BorderLayout.NORTH);
+		toolPanel.add(btnRun, BorderLayout.WEST);
 		
 		JLabel lblConsole = new JLabel("[Console]");
 		lblConsole.setFont(new Font("Consolas", Font.PLAIN, 16));
-		toolPanel.add(lblConsole, BorderLayout.CENTER);
-		lblConsole.setBorder(new EmptyBorder(20, 10, 20, 200));
+		toolPanel.add(lblConsole);
+		lblConsole.setBorder(new EmptyBorder(10, 10, 10, 100));
 		lblConsole.setBackground(Color.WHITE);
 		
 		consoleTextPane = new JTextPane();
@@ -79,22 +84,67 @@ public class LayoutOne extends JPanel {
 		
 		codeTextPane = new JTextPane();
 		codeTextPane.setFont(new Font("Consolas", Font.PLAIN, 16));
-		codePanel.add(codeTextPane, BorderLayout.NORTH);
+		codePanel.add(codeTextPane, BorderLayout.CENTER);
 		codeTextPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		codeTextPane.setText("//Insert Code Here");
+		codeTextPane.setText("//Code by Best B*tches\r\n//Insert Code Here\r\n//");
 		
 		JScrollPane codeScrollPane = new JScrollPane(codePanel);
+		
+		lineNumberPane = new JTextPane();
+		lineNumberPane.setBorder(new EmptyBorder(10, 3, 0, 3));
+		lineNumberPane.setBackground(SystemColor.controlHighlight);
+		lineNumberPane.setEditable(false);
+		lineNumberPane.setText("1\r\n2\r\n3");
+		lineNumberPane.setFont(new Font("Consolas", Font.PLAIN, 16));
+		codePanel.add(lineNumberPane, BorderLayout.WEST);
 		add(codeScrollPane, BorderLayout.CENTER);
 		
 		JScrollPane consoleScrollPane = new JScrollPane(consolePanel);
-		consoleScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		consoleScrollPane.setBackground(Color.WHITE);
 		add(consoleScrollPane, BorderLayout.EAST);
 
 		addActionListeners();
 	}
 	
+	private int getLineNumber(){
+		return codeTextPane.getText().split("\n").length;
+	}
+	
+	private void setLineNumber(){
+		String lineNumbers = "";
+		for(int i=0; i<getLineNumber(); i++){
+			lineNumbers += (i+1) + "\r\n";
+			
+		}
+		lineNumberPane.setText(lineNumbers);
+	}
+	
 	private void addActionListeners(){
+		
+		codeTextPane.addKeyListener(new KeyListener(){
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int key = e.getKeyCode();
+				// TODO Auto-generated method stub
+				if(key == KeyEvent.VK_ENTER || key == KeyEvent.VK_BACK_SPACE){
+					setLineNumber();
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		
 		btnRun.addActionListener(new ActionListener(){
 
