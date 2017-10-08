@@ -1,34 +1,35 @@
 package view;
 
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import controller.JavaRiceCompiler;
-
-import java.awt.Color;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JScrollPane;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import model.symboltable.STRow;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.awt.Dimension;
-import java.awt.Font;
 
 public class LayoutOne extends JPanel {
-
-	
 	JavaRiceCompiler cmpController;
 	
 	JButton btnRun;
 	JTextPane codeTextPane;
 	JTextPane consoleTextPane;
+	
+	JPanel consolePanel;
+	
+	String code;
 	
 	/**
 	 * Create the panel.
@@ -38,7 +39,7 @@ public class LayoutOne extends JPanel {
 		
 		setLayout(new BorderLayout(0, 0));
 		
-		JPanel consolePanel = new JPanel();
+		consolePanel = new JPanel();
 		consolePanel.setBackground(Color.WHITE);
 		add(consolePanel, BorderLayout.SOUTH);
 		consolePanel.setLayout(new BorderLayout(0, 0));
@@ -63,7 +64,8 @@ public class LayoutOne extends JPanel {
 		lblConsole.setBorder(new EmptyBorder(20, 10, 20, 200));
 		lblConsole.setBackground(Color.WHITE);
 		
-		JTextPane consoleTextPane = new JTextPane();
+		consoleTextPane = new JTextPane();
+		consoleTextPane.setEditable(false);
 		consoleTextPane.setForeground(Color.RED);
 		consoleTextPane.setFont(new Font("Consolas", Font.PLAIN, 16));
 		consoleTextPane.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -85,6 +87,7 @@ public class LayoutOne extends JPanel {
 		add(codeScrollPane, BorderLayout.CENTER);
 		
 		JScrollPane consoleScrollPane = new JScrollPane(consolePanel);
+		consoleScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		consoleScrollPane.setBackground(Color.WHITE);
 		add(consoleScrollPane, BorderLayout.EAST);
 
@@ -98,7 +101,19 @@ public class LayoutOne extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+				cmpController.compile(codeTextPane.getText());
 				
+				//setting console text
+				
+				String console = "Lexeme = Token\n---\n";
+				consoleTextPane.setText(console);
+				System.out.println("CONSOLE: " + console);
+				ArrayList<STRow> symbolTable = cmpController.getSymbolTable();
+				for(int i=0; i<symbolTable.size(); i++){
+					console += symbolTable.get(i).getLexeme() + " = " + symbolTable.get(i).getTokenId();
+					console+= "\n";
+				}
+				consoleTextPane.setText(console);
 			}
 			
 		});
