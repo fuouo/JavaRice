@@ -79,6 +79,8 @@ public class JavaRiceCompiler {
 			symbolTable.add(stRow);
 		}
 		
+		System.out.println(tree.toStringTree(parser));
+		
 	}
 	
 	void PrintAllTokens(JavaRiceParser parser){

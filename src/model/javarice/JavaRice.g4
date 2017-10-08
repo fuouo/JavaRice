@@ -28,7 +28,7 @@ variableModifier
     ;
 
 classDeclaration
-    :   'class' Identifier typeParameters?
+    :   ('public')? 'class' Identifier typeParameters?
         ('extends' typeType)?
         classBody
     ;
