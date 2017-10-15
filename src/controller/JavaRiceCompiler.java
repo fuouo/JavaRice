@@ -93,6 +93,10 @@ public class JavaRiceCompiler {
 		}
 
 		System.out.println(tree.toStringTree(parser));
+		
+		if(parser.getNumberOfSyntaxErrors() == 0) {
+			System.err.println("No syntax errors.");
+		}
 
 	}
 
