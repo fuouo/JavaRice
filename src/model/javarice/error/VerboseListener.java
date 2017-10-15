@@ -1,19 +1,15 @@
 package model.javarice.error;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
-public class VerboseListener extends BaseErrorListener {
+public class VerboseListener extends MyBaseErrorListener {
 	
 	public static final VerboseListener INSTANCE = new VerboseListener();
-	
-	private ArrayList<String> errors = new ArrayList<>();
 	
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
@@ -22,10 +18,6 @@ public class VerboseListener extends BaseErrorListener {
 		Collections.reverse(stack);
 //		System.err.println("rule stack: " + stack);
 //		System.err.println("line " + line + ":" + charPositionInLine + " at " + offendingSymbol + ": " + msg);
-		errors.add("line " + line + ":" + charPositionInLine + " at " + offendingSymbol + ": " + msg);
-	}
-	
-	public ArrayList<String> getErrors() {
-		return errors;
+		this.errors.add("line " + line + ":" + charPositionInLine + " at " + offendingSymbol + ": " + msg);
 	}
 }

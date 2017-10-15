@@ -9,12 +9,11 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
-public class DialogListener extends BaseErrorListener {
+public class DialogListener extends MyBaseErrorListener {
 	
 	public static final DialogListener INSTANCE = new DialogListener();
 	
@@ -28,6 +27,8 @@ public class DialogListener extends BaseErrorListener {
 		StringBuilder buf = new StringBuilder();
 		buf.append("rule stack: " + stack);
 		buf.append("line " + line + ":" + charPositionInLine + " at " + offendingSymbol + ": " + msg);
+		
+		this.errors.add("line " + line + ":" + charPositionInLine + " at " + offendingSymbol + ": " + msg);
 		
 		JDialog dialog = new JDialog();
 		Container contentpane = dialog.getContentPane();

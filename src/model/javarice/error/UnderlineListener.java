@@ -1,12 +1,11 @@
 package model.javarice.error;
 
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 
-public class UnderlineListener extends BaseErrorListener {
+public class UnderlineListener extends MyBaseErrorListener {
 	
 	public static final UnderlineListener INSTANCE = new UnderlineListener();
 
@@ -15,6 +14,7 @@ public class UnderlineListener extends BaseErrorListener {
 			String msg, RecognitionException e) {
 		// TODO Auto-generated method stub
 		
+		this.errors.add("line " + line + ":" + charPositionInLine + " " + msg);
 		
 		System.err.println("line " + line + ":" + charPositionInLine + " " + msg);
 		underlineError(recognizer, (Token) offendingSymbol, line, charPositionInLine);
