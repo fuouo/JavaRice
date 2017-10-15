@@ -57,6 +57,9 @@ public class JavaRiceCompiler {
 		parser.removeErrorListeners();							// remove ConsoleErrorListener
 		parser.addErrorListener(VerboseListener.INSTANCE);		// add custom listener
 //		parser.setErrorHandler(new BailErrorStrategy());		// set custom error strategy
+		
+		// refresh error list of listener
+		((MyBaseErrorListener)parser.getErrorListeners().get(0)).getErrors().clear();
 
 		// For Ambiguity
 		parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
