@@ -56,7 +56,7 @@ public class JavaRiceCompiler {
 		// For Error Handling
 		parser.removeErrorListeners();							// remove ConsoleErrorListener
 		parser.addErrorListener(VerboseListener.INSTANCE);		// add custom listener
-//		parser.setErrorHandler(new BailErrorStrategy());		// set custom error strategy
+//		parser.setErrorHandler(new JavaRiceErrorStrategy());		// set custom error strategy
 		
 		// refresh error list of listener
 		((MyBaseErrorListener)parser.getErrorListeners().get(0)).getErrors().clear();
