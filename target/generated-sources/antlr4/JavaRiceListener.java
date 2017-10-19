@@ -8,35 +8,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface JavaRiceListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#local_variable_declaration}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#memberDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterLocal_variable_declaration(@NotNull JavaRiceParser.Local_variable_declarationContext ctx);
+	void enterMemberDeclaration(@NotNull JavaRiceParser.MemberDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#local_variable_declaration}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#memberDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitLocal_variable_declaration(@NotNull JavaRiceParser.Local_variable_declarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#for_init}.
-	 * @param ctx the parse tree
-	 */
-	void enterFor_init(@NotNull JavaRiceParser.For_initContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#for_init}.
-	 * @param ctx the parse tree
-	 */
-	void exitFor_init(@NotNull JavaRiceParser.For_initContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#variable_assignment}.
-	 * @param ctx the parse tree
-	 */
-	void enterVariable_assignment(@NotNull JavaRiceParser.Variable_assignmentContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#variable_assignment}.
-	 * @param ctx the parse tree
-	 */
-	void exitVariable_assignment(@NotNull JavaRiceParser.Variable_assignmentContext ctx);
+	void exitMemberDeclaration(@NotNull JavaRiceParser.MemberDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaRiceParser#program}.
 	 * @param ctx the parse tree
@@ -48,75 +28,35 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 */
 	void exitProgram(@NotNull JavaRiceParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#member_declaration}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#innerCreator}.
 	 * @param ctx the parse tree
 	 */
-	void enterMember_declaration(@NotNull JavaRiceParser.Member_declarationContext ctx);
+	void enterInnerCreator(@NotNull JavaRiceParser.InnerCreatorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#member_declaration}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#innerCreator}.
 	 * @param ctx the parse tree
 	 */
-	void exitMember_declaration(@NotNull JavaRiceParser.Member_declarationContext ctx);
+	void exitInnerCreator(@NotNull JavaRiceParser.InnerCreatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#shortcut_for_control}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#variableModifier}.
 	 * @param ctx the parse tree
 	 */
-	void enterShortcut_for_control(@NotNull JavaRiceParser.Shortcut_for_controlContext ctx);
+	void enterVariableModifier(@NotNull JavaRiceParser.VariableModifierContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#shortcut_for_control}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#variableModifier}.
 	 * @param ctx the parse tree
 	 */
-	void exitShortcut_for_control(@NotNull JavaRiceParser.Shortcut_for_controlContext ctx);
+	void exitVariableModifier(@NotNull JavaRiceParser.VariableModifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#for_control}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#classBodyDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterFor_control(@NotNull JavaRiceParser.For_controlContext ctx);
+	void enterClassBodyDeclaration(@NotNull JavaRiceParser.ClassBodyDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#for_control}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#classBodyDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitFor_control(@NotNull JavaRiceParser.For_controlContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#par_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterPar_expression(@NotNull JavaRiceParser.Par_expressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#par_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitPar_expression(@NotNull JavaRiceParser.Par_expressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#constant_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConstant_expression(@NotNull JavaRiceParser.Constant_expressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#constant_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConstant_expression(@NotNull JavaRiceParser.Constant_expressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterStatement(@NotNull JavaRiceParser.StatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitStatement(@NotNull JavaRiceParser.StatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#expression_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpression_list(@NotNull JavaRiceParser.Expression_listContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#expression_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpression_list(@NotNull JavaRiceParser.Expression_listContext ctx);
+	void exitClassBodyDeclaration(@NotNull JavaRiceParser.ClassBodyDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaRiceParser#block}.
 	 * @param ctx the parse tree
@@ -128,75 +68,425 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 */
 	void exitBlock(@NotNull JavaRiceParser.BlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#for_update}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#arrayInitializer}.
 	 * @param ctx the parse tree
 	 */
-	void enterFor_update(@NotNull JavaRiceParser.For_updateContext ctx);
+	void enterArrayInitializer(@NotNull JavaRiceParser.ArrayInitializerContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#for_update}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#arrayInitializer}.
 	 * @param ctx the parse tree
 	 */
-	void exitFor_update(@NotNull JavaRiceParser.For_updateContext ctx);
+	void exitArrayInitializer(@NotNull JavaRiceParser.ArrayInitializerContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#block_statement}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#forUpdate}.
 	 * @param ctx the parse tree
 	 */
-	void enterBlock_statement(@NotNull JavaRiceParser.Block_statementContext ctx);
+	void enterForUpdate(@NotNull JavaRiceParser.ForUpdateContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#block_statement}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#forUpdate}.
 	 * @param ctx the parse tree
 	 */
-	void exitBlock_statement(@NotNull JavaRiceParser.Block_statementContext ctx);
+	void exitForUpdate(@NotNull JavaRiceParser.ForUpdateContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#super_suffix}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#constDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterSuper_suffix(@NotNull JavaRiceParser.Super_suffixContext ctx);
+	void enterConstDeclaration(@NotNull JavaRiceParser.ConstDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#super_suffix}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#constDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitSuper_suffix(@NotNull JavaRiceParser.Super_suffixContext ctx);
+	void exitConstDeclaration(@NotNull JavaRiceParser.ConstDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#finally_block}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#typeType}.
 	 * @param ctx the parse tree
 	 */
-	void enterFinally_block(@NotNull JavaRiceParser.Finally_blockContext ctx);
+	void enterTypeType(@NotNull JavaRiceParser.TypeTypeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#finally_block}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#typeType}.
 	 * @param ctx the parse tree
 	 */
-	void exitFinally_block(@NotNull JavaRiceParser.Finally_blockContext ctx);
+	void exitTypeType(@NotNull JavaRiceParser.TypeTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#variable_definition}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#resource}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariable_definition(@NotNull JavaRiceParser.Variable_definitionContext ctx);
+	void enterResource(@NotNull JavaRiceParser.ResourceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#variable_definition}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#resource}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariable_definition(@NotNull JavaRiceParser.Variable_definitionContext ctx);
+	void exitResource(@NotNull JavaRiceParser.ResourceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#catch_clause}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#qualifiedName}.
 	 * @param ctx the parse tree
 	 */
-	void enterCatch_clause(@NotNull JavaRiceParser.Catch_clauseContext ctx);
+	void enterQualifiedName(@NotNull JavaRiceParser.QualifiedNameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#catch_clause}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#qualifiedName}.
 	 * @param ctx the parse tree
 	 */
-	void exitCatch_clause(@NotNull JavaRiceParser.Catch_clauseContext ctx);
+	void exitQualifiedName(@NotNull JavaRiceParser.QualifiedNameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#class_body}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#enhancedForControl}.
 	 * @param ctx the parse tree
 	 */
-	void enterClass_body(@NotNull JavaRiceParser.Class_bodyContext ctx);
+	void enterEnhancedForControl(@NotNull JavaRiceParser.EnhancedForControlContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#class_body}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#enhancedForControl}.
 	 * @param ctx the parse tree
 	 */
-	void exitClass_body(@NotNull JavaRiceParser.Class_bodyContext ctx);
+	void exitEnhancedForControl(@NotNull JavaRiceParser.EnhancedForControlContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#resourceSpecification}.
+	 * @param ctx the parse tree
+	 */
+	void enterResourceSpecification(@NotNull JavaRiceParser.ResourceSpecificationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#resourceSpecification}.
+	 * @param ctx the parse tree
+	 */
+	void exitResourceSpecification(@NotNull JavaRiceParser.ResourceSpecificationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#formalParameterList}.
+	 * @param ctx the parse tree
+	 */
+	void enterFormalParameterList(@NotNull JavaRiceParser.FormalParameterListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#formalParameterList}.
+	 * @param ctx the parse tree
+	 */
+	void exitFormalParameterList(@NotNull JavaRiceParser.FormalParameterListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#nonWildcardTypeArgumentsOrDiamond}.
+	 * @param ctx the parse tree
+	 */
+	void enterNonWildcardTypeArgumentsOrDiamond(@NotNull JavaRiceParser.NonWildcardTypeArgumentsOrDiamondContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#nonWildcardTypeArgumentsOrDiamond}.
+	 * @param ctx the parse tree
+	 */
+	void exitNonWildcardTypeArgumentsOrDiamond(@NotNull JavaRiceParser.NonWildcardTypeArgumentsOrDiamondContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#expressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpressionList(@NotNull JavaRiceParser.ExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#expressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpressionList(@NotNull JavaRiceParser.ExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#classOrInterfaceType}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassOrInterfaceType(@NotNull JavaRiceParser.ClassOrInterfaceTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#classOrInterfaceType}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassOrInterfaceType(@NotNull JavaRiceParser.ClassOrInterfaceTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#variableDeclaratorId}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableDeclaratorId(@NotNull JavaRiceParser.VariableDeclaratorIdContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#variableDeclaratorId}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableDeclaratorId(@NotNull JavaRiceParser.VariableDeclaratorIdContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimary(@NotNull JavaRiceParser.PrimaryContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimary(@NotNull JavaRiceParser.PrimaryContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#classCreatorRest}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassCreatorRest(@NotNull JavaRiceParser.ClassCreatorRestContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#classCreatorRest}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassCreatorRest(@NotNull JavaRiceParser.ClassCreatorRestContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#typeArguments}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeArguments(@NotNull JavaRiceParser.TypeArgumentsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#typeArguments}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeArguments(@NotNull JavaRiceParser.TypeArgumentsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#switchBlockStatementGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterSwitchBlockStatementGroup(@NotNull JavaRiceParser.SwitchBlockStatementGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#switchBlockStatementGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitSwitchBlockStatementGroup(@NotNull JavaRiceParser.SwitchBlockStatementGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#typeParameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeParameter(@NotNull JavaRiceParser.TypeParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#typeParameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeParameter(@NotNull JavaRiceParser.TypeParameterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#methodDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodDeclaration(@NotNull JavaRiceParser.MethodDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#methodDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodDeclaration(@NotNull JavaRiceParser.MethodDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#methodBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodBody(@NotNull JavaRiceParser.MethodBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#methodBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodBody(@NotNull JavaRiceParser.MethodBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#typeArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeArgument(@NotNull JavaRiceParser.TypeArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#typeArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeArgument(@NotNull JavaRiceParser.TypeArgumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#scan}.
+	 * @param ctx the parse tree
+	 */
+	void enterScan(@NotNull JavaRiceParser.ScanContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#scan}.
+	 * @param ctx the parse tree
+	 */
+	void exitScan(@NotNull JavaRiceParser.ScanContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#finallyBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterFinallyBlock(@NotNull JavaRiceParser.FinallyBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#finallyBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitFinallyBlock(@NotNull JavaRiceParser.FinallyBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#typeParameters}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeParameters(@NotNull JavaRiceParser.TypeParametersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#typeParameters}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeParameters(@NotNull JavaRiceParser.TypeParametersContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#lastFormalParameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterLastFormalParameter(@NotNull JavaRiceParser.LastFormalParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#lastFormalParameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitLastFormalParameter(@NotNull JavaRiceParser.LastFormalParameterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#classDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassDeclaration(@NotNull JavaRiceParser.ClassDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#classDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassDeclaration(@NotNull JavaRiceParser.ClassDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteral(@NotNull JavaRiceParser.LiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteral(@NotNull JavaRiceParser.LiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#catchClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterCatchClause(@NotNull JavaRiceParser.CatchClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#catchClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitCatchClause(@NotNull JavaRiceParser.CatchClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#variableDeclarator}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableDeclarator(@NotNull JavaRiceParser.VariableDeclaratorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#variableDeclarator}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableDeclarator(@NotNull JavaRiceParser.VariableDeclaratorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#typeList}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeList(@NotNull JavaRiceParser.TypeListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#typeList}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeList(@NotNull JavaRiceParser.TypeListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(@NotNull JavaRiceParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(@NotNull JavaRiceParser.StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#classBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassBody(@NotNull JavaRiceParser.ClassBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#classBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassBody(@NotNull JavaRiceParser.ClassBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#createdName}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreatedName(@NotNull JavaRiceParser.CreatedNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#createdName}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreatedName(@NotNull JavaRiceParser.CreatedNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#importDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterImportDeclaration(@NotNull JavaRiceParser.ImportDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#importDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitImportDeclaration(@NotNull JavaRiceParser.ImportDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#primitiveType}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimitiveType(@NotNull JavaRiceParser.PrimitiveTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#primitiveType}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimitiveType(@NotNull JavaRiceParser.PrimitiveTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#formalParameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterFormalParameter(@NotNull JavaRiceParser.FormalParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#formalParameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitFormalParameter(@NotNull JavaRiceParser.FormalParameterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#parExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterParExpression(@NotNull JavaRiceParser.ParExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#parExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitParExpression(@NotNull JavaRiceParser.ParExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#variableInitializer}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableInitializer(@NotNull JavaRiceParser.VariableInitializerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#variableInitializer}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableInitializer(@NotNull JavaRiceParser.VariableInitializerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#localVariableDeclarationStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocalVariableDeclarationStatement(@NotNull JavaRiceParser.LocalVariableDeclarationStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#localVariableDeclarationStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocalVariableDeclarationStatement(@NotNull JavaRiceParser.LocalVariableDeclarationStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#creator}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreator(@NotNull JavaRiceParser.CreatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#creator}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreator(@NotNull JavaRiceParser.CreatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#arrayCreatorRest}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayCreatorRest(@NotNull JavaRiceParser.ArrayCreatorRestContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#arrayCreatorRest}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayCreatorRest(@NotNull JavaRiceParser.ArrayCreatorRestContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#blockStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockStatement(@NotNull JavaRiceParser.BlockStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#blockStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockStatement(@NotNull JavaRiceParser.BlockStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaRiceParser#expression}.
 	 * @param ctx the parse tree
@@ -208,35 +498,95 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 */
 	void exitExpression(@NotNull JavaRiceParser.ExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#method_declaration}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#constantExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterMethod_declaration(@NotNull JavaRiceParser.Method_declarationContext ctx);
+	void enterConstantExpression(@NotNull JavaRiceParser.ConstantExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#method_declaration}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#constantExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitMethod_declaration(@NotNull JavaRiceParser.Method_declarationContext ctx);
+	void exitConstantExpression(@NotNull JavaRiceParser.ConstantExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#class_declaration}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#qualifiedNameList}.
 	 * @param ctx the parse tree
 	 */
-	void enterClass_declaration(@NotNull JavaRiceParser.Class_declarationContext ctx);
+	void enterQualifiedNameList(@NotNull JavaRiceParser.QualifiedNameListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#class_declaration}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#qualifiedNameList}.
 	 * @param ctx the parse tree
 	 */
-	void exitClass_declaration(@NotNull JavaRiceParser.Class_declarationContext ctx);
+	void exitQualifiedNameList(@NotNull JavaRiceParser.QualifiedNameListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#local_variable_declaration_statement}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#constantDeclarator}.
 	 * @param ctx the parse tree
 	 */
-	void enterLocal_variable_declaration_statement(@NotNull JavaRiceParser.Local_variable_declaration_statementContext ctx);
+	void enterConstantDeclarator(@NotNull JavaRiceParser.ConstantDeclaratorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#local_variable_declaration_statement}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#constantDeclarator}.
 	 * @param ctx the parse tree
 	 */
-	void exitLocal_variable_declaration_statement(@NotNull JavaRiceParser.Local_variable_declaration_statementContext ctx);
+	void exitConstantDeclarator(@NotNull JavaRiceParser.ConstantDeclaratorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#resources}.
+	 * @param ctx the parse tree
+	 */
+	void enterResources(@NotNull JavaRiceParser.ResourcesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#resources}.
+	 * @param ctx the parse tree
+	 */
+	void exitResources(@NotNull JavaRiceParser.ResourcesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#statementExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatementExpression(@NotNull JavaRiceParser.StatementExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#statementExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatementExpression(@NotNull JavaRiceParser.StatementExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#variableDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableDeclaration(@NotNull JavaRiceParser.VariableDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#variableDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableDeclaration(@NotNull JavaRiceParser.VariableDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#forControl}.
+	 * @param ctx the parse tree
+	 */
+	void enterForControl(@NotNull JavaRiceParser.ForControlContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#forControl}.
+	 * @param ctx the parse tree
+	 */
+	void exitForControl(@NotNull JavaRiceParser.ForControlContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#packageDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterPackageDeclaration(@NotNull JavaRiceParser.PackageDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#packageDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitPackageDeclaration(@NotNull JavaRiceParser.PackageDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#localVariableDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocalVariableDeclaration(@NotNull JavaRiceParser.LocalVariableDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#localVariableDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocalVariableDeclaration(@NotNull JavaRiceParser.LocalVariableDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaRiceParser#print}.
 	 * @param ctx the parse tree
@@ -248,35 +598,65 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 */
 	void exitPrint(@NotNull JavaRiceParser.PrintContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#formal_parameter_list}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#nonWildcardTypeArguments}.
 	 * @param ctx the parse tree
 	 */
-	void enterFormal_parameter_list(@NotNull JavaRiceParser.Formal_parameter_listContext ctx);
+	void enterNonWildcardTypeArguments(@NotNull JavaRiceParser.NonWildcardTypeArgumentsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#formal_parameter_list}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#nonWildcardTypeArguments}.
 	 * @param ctx the parse tree
 	 */
-	void exitFormal_parameter_list(@NotNull JavaRiceParser.Formal_parameter_listContext ctx);
+	void exitNonWildcardTypeArguments(@NotNull JavaRiceParser.NonWildcardTypeArgumentsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#switch_block_statement_group}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#variableDeclarators}.
 	 * @param ctx the parse tree
 	 */
-	void enterSwitch_block_statement_group(@NotNull JavaRiceParser.Switch_block_statement_groupContext ctx);
+	void enterVariableDeclarators(@NotNull JavaRiceParser.VariableDeclaratorsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#switch_block_statement_group}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#variableDeclarators}.
 	 * @param ctx the parse tree
 	 */
-	void exitSwitch_block_statement_group(@NotNull JavaRiceParser.Switch_block_statement_groupContext ctx);
+	void exitVariableDeclarators(@NotNull JavaRiceParser.VariableDeclaratorsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#variable_declaration_list}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#switchLabel}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariable_declaration_list(@NotNull JavaRiceParser.Variable_declaration_listContext ctx);
+	void enterSwitchLabel(@NotNull JavaRiceParser.SwitchLabelContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#variable_declaration_list}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#switchLabel}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariable_declaration_list(@NotNull JavaRiceParser.Variable_declaration_listContext ctx);
+	void exitSwitchLabel(@NotNull JavaRiceParser.SwitchLabelContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#forInit}.
+	 * @param ctx the parse tree
+	 */
+	void enterForInit(@NotNull JavaRiceParser.ForInitContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#forInit}.
+	 * @param ctx the parse tree
+	 */
+	void exitForInit(@NotNull JavaRiceParser.ForInitContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#catchType}.
+	 * @param ctx the parse tree
+	 */
+	void enterCatchType(@NotNull JavaRiceParser.CatchTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#catchType}.
+	 * @param ctx the parse tree
+	 */
+	void exitCatchType(@NotNull JavaRiceParser.CatchTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#formalParameters}.
+	 * @param ctx the parse tree
+	 */
+	void enterFormalParameters(@NotNull JavaRiceParser.FormalParametersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#formalParameters}.
+	 * @param ctx the parse tree
+	 */
+	void exitFormalParameters(@NotNull JavaRiceParser.FormalParametersContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaRiceParser#arguments}.
 	 * @param ctx the parse tree
@@ -288,13 +668,23 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 */
 	void exitArguments(@NotNull JavaRiceParser.ArgumentsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#switch_label}.
+	 * Enter a parse tree produced by {@link JavaRiceParser#typeArgumentsOrDiamond}.
 	 * @param ctx the parse tree
 	 */
-	void enterSwitch_label(@NotNull JavaRiceParser.Switch_labelContext ctx);
+	void enterTypeArgumentsOrDiamond(@NotNull JavaRiceParser.TypeArgumentsOrDiamondContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#switch_label}.
+	 * Exit a parse tree produced by {@link JavaRiceParser#typeArgumentsOrDiamond}.
 	 * @param ctx the parse tree
 	 */
-	void exitSwitch_label(@NotNull JavaRiceParser.Switch_labelContext ctx);
+	void exitTypeArgumentsOrDiamond(@NotNull JavaRiceParser.TypeArgumentsOrDiamondContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#classOrInterfaceModifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassOrInterfaceModifier(@NotNull JavaRiceParser.ClassOrInterfaceModifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#classOrInterfaceModifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassOrInterfaceModifier(@NotNull JavaRiceParser.ClassOrInterfaceModifierContext ctx);
 }

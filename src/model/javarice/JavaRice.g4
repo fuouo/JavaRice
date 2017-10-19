@@ -28,7 +28,7 @@ variableModifier
     ;
 
 classDeclaration
-    :   'class' Identifier typeParameters?
+    :   (classOrInterfaceModifier)? 'class' Identifier typeParameters?
         ('extends' typeType)?
         classBody
     ;
@@ -67,7 +67,7 @@ memberDeclaration
    for invalid return type after parsing.
  */
 methodDeclaration
-    :   (typeType|'void') Identifier formalParameters ('[' ']')*
+    :   (typeType|'_void') Identifier formalParameters ('[' ']')*
         ('throws' qualifiedNameList)?
         (   methodBody
         |   ';'
@@ -213,6 +213,8 @@ statement
     |   ';'
     |   statementExpression ';'
     |   Identifier ':' statement
+    |	print
+    | 	scan
     ;
 
 catchClause

@@ -1,5 +1,4 @@
 package model.javarice;
-
 // Generated from JavaRice.g4 by ANTLR 4.5.3
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
