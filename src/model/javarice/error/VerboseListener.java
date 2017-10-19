@@ -1,50 +1,58 @@
 package model.javarice.error;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
-public class VerboseListener extends MyBaseErrorListener {
+public class VerboseListener extends BaseErrorListener {
 	
 	public static final VerboseListener INSTANCE = new VerboseListener();
 	
-	
+	private ArrayList<Error> errors = new ArrayList<>();
+	private Error error;
 	
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
 			String msg, RecognitionException e) {
 		List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
 		Collections.reverse(stack);		
-		String error_msg = "Syntax Error at line " + line + ": ";
-		ErrorType errorType = null;
+		SubErrorType subErrorType = null;
 		
 		if(msg.contains("extraneous input")) {
-			errorType = ErrorType.EXTRANEOUS;
+			subErrorType = SubErrorType.EXTRANEOUS;
 		} else if(msg.contains("mismatched input")) {
-			errorType = ErrorType.MISMATCHED;
+			subErrorType = SubErrorType.MISMATCHED;
 		} else if(msg.contains("no viable alternative")) {
-			errorType = ErrorType.NO_VIABLE_ALT;
+			subErrorType = SubErrorType.NO_VIABLE_ALT;
 		} else if(msg.contains("missing")) {
-			errorType = ErrorType.MISSING;
+			subErrorType = SubErrorType.MISSING;
 		} else if(msg.contains("token recognition error")) {
-			errorType = ErrorType.UNRECOG_TOKEN;
+			subErrorType = SubErrorType.UNRECOG_TOKEN;
 		} 
 		
-		error_msg = error_msg + generateErrorMessage(msg, errorType);
+		String message = generateErrorMessage(msg, subErrorType);
 		
-		this.errors.add(error_msg);
+		error = new Error();
+		error.setErrorType(ErrorType.SYNTAX_ERROR);
+		error.setSubErrorType(subErrorType);
+		error.setLine(line);
+		error.setMessage(message);
+		
+		this.errors.add(error);
 	}
 	
-	private String generateErrorMessage(String msg, ErrorType errorType) {
+	private String generateErrorMessage(String msg, SubErrorType subErrorType) {
 		
 		String[] tokens;
 		
 		String error = "";
 		
-		switch(errorType) {
+		switch(subErrorType) {
 		
 		case EXTRANEOUS: 
 			
@@ -79,5 +87,9 @@ public class VerboseListener extends MyBaseErrorListener {
 		}
 		
 		return error;
+	}
+	
+	public ArrayList<Error> getErrors() {
+		return errors;
 	}
 }

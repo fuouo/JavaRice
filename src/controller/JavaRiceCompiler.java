@@ -11,9 +11,10 @@ import org.antlr.v4.runtime.atn.PredictionMode;
 import model.MyTokenFactory;
 import model.javarice.JavaRiceLexer;
 import model.javarice.JavaRiceParser;
-import model.javarice.error.MyBaseErrorListener;
 import model.javarice.error.VerboseListener;
 import model.symboltable.STRow;
+
+import model.javarice.error.Error;
 
 public class JavaRiceCompiler {
 
@@ -59,7 +60,7 @@ public class JavaRiceCompiler {
 //		parser.setErrorHandler(new JavaRiceErrorStrategy());		// set custom error strategy
 		
 		// refresh error list of listener
-		((MyBaseErrorListener)parser.getErrorListeners().get(0)).getErrors().clear();
+		((VerboseListener)parser.getErrorListeners().get(0)).getErrors().clear();
 
 		// For Ambiguity
 		parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
@@ -105,10 +106,12 @@ public class JavaRiceCompiler {
 		} else {
 			// listener example: verbose
 			// can get errors here
-			ArrayList<String> errors = ((MyBaseErrorListener) parser.getErrorListeners().get(0)).getErrors();
-			for (String string : errors) {
-				System.err.println(string);
+			
+			ArrayList<Error> errors = ((VerboseListener) parser.getErrorListeners().get(0)).getErrors();
+			for (Error error : errors) {
+				System.err.println("Syntax Error at line " + error.getLine() + ": " + error.getMessage());
 			}
+			
 		}
 
 	}
