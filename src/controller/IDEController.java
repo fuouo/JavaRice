@@ -24,9 +24,7 @@ public class IDEController extends ControllerInterface{
 	public void goToLine(int line){
 		IDEView v = (IDEView)views.get(0);
 		
-		
-		
-		v.highlightLine(line, line+2, Color.red);
+		v.highlightLine(line,Color.red);
 	}
 	
 	@Override
