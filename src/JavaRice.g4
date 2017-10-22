@@ -2,7 +2,7 @@ grammar JavaRice;
 
 // starting point for parsing a java file
 program
-    :   packageDeclaration? importDeclaration* classOrInterfaceModifier* classDeclaration* EOF
+    :   packageDeclaration? importDeclaration* classDeclaration* EOF
     ;
 
 packageDeclaration
@@ -28,7 +28,7 @@ variableModifier
     ;
 
 classDeclaration
-    :   'class' Identifier typeParameters?
+    :   (classOrInterfaceModifier)? 'class' Identifier typeParameters?
         ('extends' typeType)?
         classBody
     ;
@@ -67,7 +67,7 @@ memberDeclaration
    for invalid return type after parsing.
  */
 methodDeclaration
-    :   (typeType|'void') Identifier formalParameters ('[' ']')*
+    :   (typeType|'_void') Identifier formalParameters ('[' ']')*
         ('throws' qualifiedNameList)?
         (   methodBody
         |   ';'
@@ -110,8 +110,8 @@ arrayInitializer
     ;
 
 typeType
-    : primitiveType ('[' ']')*  
-    | classOrInterfaceType ('[' ']')*
+    :   classOrInterfaceType ('[' ']')*
+    |   primitiveType ('[' ']')*
     ;
 
 classOrInterfaceType
@@ -213,6 +213,8 @@ statement
     |   ';'
     |   statementExpression ';'
     |   Identifier ':' statement
+    |	print
+    | 	scan
     ;
 
 catchClause
@@ -430,7 +432,7 @@ PACKAGE       : 'package';
 PRIVATE       : 'private';
 PROTECTED     : 'protected';
 PUBLIC        : 'public';
-READ          : 'read';
+READ	      : 'read';
 RETURN        : 'return';
 SHORT         : '_short';
 STATIC        : 'static';
@@ -444,7 +446,7 @@ THROWS        : 'throws';
 TRY           : 'try';
 VOID          : '_void';
 WHILE         : 'while';
-WRITE         : 'write';
+WRITE		  : 'write';
 
 // §3.10.1 Integer Literals
 

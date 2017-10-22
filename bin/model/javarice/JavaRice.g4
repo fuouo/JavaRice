@@ -259,7 +259,8 @@ forControl
     ;
 
 forInit
-    :   localVariableDeclaration
+    :   INT variableDeclaratorId ASSIGN expression
+    |	INT variableDeclaratorId 		{	notifyErrorListeners("Variable must be initialized first.");}
     |   expressionList
     ;
 
@@ -389,13 +390,13 @@ arguments
 scan
     :   'read' '(' primitiveType ',' variableDeclaratorId ')' ';'
     ;
-
    
 
 // OUTPUT
 
 print
     :   'write' '(' expression ')' ';'
+    |	'write' '(' Identifier Identifier+ ')' ';' { notifyErrorListeners("Multiple identifiers detected. Only one identifier is allowed."); }
     ;
 
 // LEXER

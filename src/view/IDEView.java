@@ -36,7 +36,7 @@ import view.factory.Panel;
 public class IDEView extends ViewInterface{
 
 	private final int FRAME_WIDTH = 1024;
-	private final int FRAME_HEIGHT = 1024;
+	private final int FRAME_HEIGHT = 720;
 	
 	private view.factory.Panel consolePanel;
 	private ConsolePanelFactory consoleFactory;

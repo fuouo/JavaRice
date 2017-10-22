@@ -33,7 +33,9 @@ public class VerboseListener extends BaseErrorListener {
 			subErrorType = SubErrorType.MISSING;
 		} else if(msg.contains("token recognition error")) {
 			subErrorType = SubErrorType.UNRECOG_TOKEN;
-		} 
+		} else {
+			subErrorType = SubErrorType.CUSTOM;
+		}
 		
 		String message = generateErrorMessage(msg, subErrorType);
 		
@@ -54,36 +56,28 @@ public class VerboseListener extends BaseErrorListener {
 		
 		switch(subErrorType) {
 		
-		case EXTRANEOUS: 
-			
+		case EXTRANEOUS: 			
 			tokens = msg.split("extraneous input | expecting ");
-			error = "There's an extra " + tokens[1] + " found; we're expecting " + tokens[2] + ".";
-			
+			error = "There's an extra " + tokens[1] + " found; we're expecting " + tokens[2] + ".";			
 			break;
-		case MISSING: 
-			
+		case MISSING: 			
 			tokens = msg.split("missing | at ");
-			error = "Did you forget " + tokens[1] + " before " + tokens[2] + "?";
-			
+			error = "Did you forget " + tokens[1] + " before " + tokens[2] + "?";			
 			break;
-		case MISMATCHED: 
-			
+		case MISMATCHED: 			
 			tokens = msg.split("mismatched input | expecting ");
-			error = "There's an input mismatch for " + tokens[1] + "; we're expecting " + tokens[2] + ".";
-			
+			error = "There's an input mismatch for " + tokens[1] + "; we're expecting " + tokens[2] + ".";			
 			break;
-		case NO_VIABLE_ALT: 
-			
+		case NO_VIABLE_ALT: 			
 			tokens = msg.split("no viable alternative at input ");
-			error = "Sorry, we can't decide which path to take based on your input " + tokens[1] + ".";
-			
+			error = "Sorry, we can't decide w hich path to take based on your input " + tokens[1] + ".";			
 			break;
-		case UNRECOG_TOKEN: 
-			
+		case UNRECOG_TOKEN: 			
 			tokens = msg.split("token recognition error at: ");
 			error = "Oh no! We don't recognize this token " + tokens[1];
-			
 			break;
+		default:
+			error = msg;
 		}
 		
 		return error;
