@@ -24,9 +24,9 @@ public class IDEController extends ControllerInterface{
 	public void goToLine(int line){
 		IDEView v = (IDEView)views.get(0);
 		
+		Color errorHighlight = new Color(255, 147, 147);
 		
-		
-		v.highlightLine(line, line+2, Color.red);
+		v.highlightLine(line, errorHighlight);
 	}
 	
 	@Override

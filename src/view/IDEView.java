@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -23,8 +21,10 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.DefaultHighlighter;
+
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import controller.ControllerInterface;
 import view.consolepanels.ErrorPanel;
@@ -48,6 +48,7 @@ public class IDEView extends ViewInterface{
 	
 	//INSERT AFTER THIS PART GLOBAL UI ELEMENTS
 	JTextPane codeTextPane, lineNumberPane;
+	RSyntaxTextArea codeTextArea;
 	JTabbedPane consoleTabPane;
 	
 	public IDEView(){
@@ -83,8 +84,8 @@ public class IDEView extends ViewInterface{
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("[MAIN] ... Running the code!!");
 				
-				highlightLine(0, codeTextPane.getText().length(), Color.white);
-				controller.runCode(codeTextPane.getText());
+				controller.runCode(codeTextArea.getText());
+				codeTextArea.removeAllLineHighlights();
 				UpdateConsolePanel();
 				//call compiler from here
 			}
@@ -93,35 +94,24 @@ public class IDEView extends ViewInterface{
 		btnRun.setBounds(FRAME_WIDTH - 150, 20, 100, 30);
 		
 		
-		//=========== TEXT PANE FOR CODE ========== //
-		codeTextPane = new JTextPane();
-		codeTextPane.setFont(new Font("Consolas", Font.PLAIN, 16));
-		codeTextPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		codeTextPane.setText("//Code by Best B*tches\r\n//Insert Code Here\r\n\r\npublic class Main{\r\n//insert code here\r\n}");
-		codeTextPane.setBounds(0, 0, 800, FRAME_HEIGHT);
+		//=========== RSyntaxTextAreaPane ============= //
+		codeTextArea = new RSyntaxTextArea(20, 60);
+		codeTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+		codeTextArea.setCodeFoldingEnabled(true);
+		codeTextArea.setHighlightCurrentLine(false);
 		
-		JScrollPane codeScrollPane = new JScrollPane(codeTextPane);
-		codeScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		codeScrollPane.setBounds(50, 75, FRAME_WIDTH-70, FRAME_HEIGHT/2);
-		codeScrollPane.setBorder(null);
-		contentPane.add(codeScrollPane);
-
-		lineNumberPane = new JTextPane();
-		lineNumberPane.setBorder(new EmptyBorder(10, 3, 0, 3));
-		lineNumberPane.setBackground(Color.white);
-		lineNumberPane.setEditable(false);
-		lineNumberPane.setText("1\r\n2\r\n3");
-		lineNumberPane.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lineNumberPane.setBounds(25, 75, 25, FRAME_HEIGHT/2);
-		//contentPane.add(lineNumberPane);
-		
-		JScrollPane lineNumberScrollPane = new JScrollPane(lineNumberPane);
-		lineNumberScrollPane.setBounds(25, 75, 25, FRAME_HEIGHT/2);
-		lineNumberScrollPane.setBorder(null);
-		lineNumberScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		lineNumberScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		contentPane.add(lineNumberScrollPane);
-		
+		//customize RSyntaxTextArea
+		codeTextArea.setText("//Code by Best B*tches\r\n//Insert Code Here\r\n\r\npublic class Main{\r\n//insert code here\r\n}");
+		codeTextArea.setFont(new Font("Consolas", Font.PLAIN, 16));
+		codeTextArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+		codeTextArea.setBounds(0, 0, 800, FRAME_HEIGHT);
+						
+		//add RSyntaxTextArea to Scroll
+		RTextScrollPane sp = new RTextScrollPane(codeTextArea);
+		sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		sp.setBounds(5, 75, FRAME_WIDTH-15, FRAME_HEIGHT/2);
+		sp.setBorder(null);
+		contentPane.add(sp);
 		
 		
 		//=========== CONSOLE PANEL ========== //
@@ -130,7 +120,7 @@ public class IDEView extends ViewInterface{
 		contentPane.add(bottomPanel);
 		bottomPanel.setLayout(new GridLayout(1, 1));
 		bottomPanel.setBorder(new MatteBorder(0, 0, 1, 0, (Color) Color.LIGHT_GRAY));
-		//insert more ui elements here
+
 		
 		//=========== TABS FOR CONSOLE ========//
 		consoleTabPane = new JTabbedPane();
@@ -206,64 +196,18 @@ public class IDEView extends ViewInterface{
 	}
 	
 	private void addActionListeners(){
-	
-		codeTextPane.addKeyListener(new KeyListener(){
-			@Override
-			public void keyPressed(KeyEvent e) {
-				int key = e.getKeyCode();
-				setLineNumber();
-				// TODO Auto-generated method stub
-				//if(key == KeyEvent.VK_ENTER || key == KeyEvent.VK_BACK_SPACE){
-				//	
-				//}
-				DefaultCaret caret = (DefaultCaret)lineNumberPane.getCaret();
-				caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		
 		Panel errorPanel = ((Panel)consoleTabPane.getComponent(1));
 		JScrollPane scrollErrorPanel = (JScrollPane)errorPanel.getComponent(0);
 		
 	}
 	
-	public void highlightLine(int start, int end, Color color){
-		
-		DefaultHighlighter.DefaultHighlightPainter highlightPainter = 
-		        new DefaultHighlighter.DefaultHighlightPainter(color);
-		    try {
-		    	
-		    	System.out.println(start + " = " + end);
-		    	
-				lineNumberPane.getHighlighter().addHighlight(start, end, highlightPainter);
-			} catch (BadLocationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	}
-	
-	private int getLineNumber(){
-		return codeTextPane.getText().split("\n").length;
-	}
-	
-	private void setLineNumber(){
-		String lineNumbers = "";
-		for(int i=0; i<getLineNumber(); i++){
-			lineNumbers += (i+1) + "\r\n";
-			
+	public void highlightLine(int line, Color color){
+		try {
+			codeTextArea.addLineHighlight(line-1, color);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		lineNumberPane.setText(lineNumbers);
 	}
-	
 
 }
