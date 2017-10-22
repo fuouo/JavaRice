@@ -25,8 +25,13 @@ public class IDEController extends ControllerInterface{
 		IDEView v = (IDEView)views.get(0);
 		
 		Color errorHighlight = new Color(255, 147, 147);
-		
+
 		v.highlightLine(line, errorHighlight);
+	}
+	
+	public void clearLineHighlights() {
+		IDEView v = (IDEView)views.get(0);
+		v.clearLineHighlights();
 	}
 	
 	@Override

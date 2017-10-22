@@ -67,6 +67,7 @@ public class ErrorPanel extends Panel {
 					return;
 				System.out.println("LINE: " + line);
 				IDEController cntrl = (IDEController) controller;
+				cntrl.clearLineHighlights();
 				cntrl.goToLine(line);
 			}
 			

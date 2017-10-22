@@ -209,5 +209,8 @@ public class IDEView extends ViewInterface{
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void clearLineHighlights() {
+		codeTextArea.removeAllLineHighlights();
+	}
 }
