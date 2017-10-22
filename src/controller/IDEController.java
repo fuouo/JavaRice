@@ -26,6 +26,7 @@ public class IDEController extends ControllerInterface{
 		
 		Color errorHighlight = new Color(255, 147, 147);
 
+		v.moveCareToLine(line);
 		v.highlightLine(line, errorHighlight);
 	}
 	

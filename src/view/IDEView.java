@@ -201,6 +201,17 @@ public class IDEView extends ViewInterface{
 		
 	}
 	
+	public void moveCareToLine(int line){
+		try {
+			int index = codeTextArea.getLineStartOffset(line-1);
+			codeTextArea.setCaretPosition(index);
+			codeTextArea.requestFocus();
+		} catch (BadLocationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
 	public void highlightLine(int line, Color color){
 		try {
 			codeTextArea.addLineHighlight(line-1, color);
