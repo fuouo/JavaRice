@@ -36,6 +36,10 @@ public class JavaRiceArray {
 		System.out.println("JavaRiceArray initialized to size " + this.javaRiceArray.length);
 	}
 	
+	public int getSize() {
+		return this.javaRiceArray.length;
+	}
+	
 	public void updateValueAt(JavaRiceValue javaRiceValue, int index) {
 		if(index >= this.javaRiceArray.length) {
 			// should print error to console
@@ -65,9 +69,6 @@ public class JavaRiceArray {
 		
 		if(RecognizedKeywords.matchesKeyword(RecognizedKeywords.PRIMITIVE_TYPE_BOOLEAN, primitiveTypeString)) {
 			primitiveType = PrimitiveType.BOOLEAN;
-		}
-		else if(RecognizedKeywords.matchesKeyword(RecognizedKeywords.PRIMITIVE_TYPE_BYTE, primitiveTypeString)) {
-			primitiveType = PrimitiveType.BYTE;
 		}
 		else if(RecognizedKeywords.matchesKeyword(RecognizedKeywords.PRIMITIVE_TYPE_CHAR, primitiveTypeString)) {
 			primitiveType = PrimitiveType.CHAR;

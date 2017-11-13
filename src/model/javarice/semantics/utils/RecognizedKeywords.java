@@ -5,7 +5,6 @@ public class RecognizedKeywords {
 	public static String PRIMITIVE_TYPE_BOOLEAN = "_boolean";
 	public static String PRIMITIVE_TYPE_CHAR = "_char";
 	public static String PRIMITIVE_TYPE_INT = "_int";
-	public static String PRIMITIVE_TYPE_BYTE = "_byte";
 	public static String PRIMITIVE_TYPE_SHORT = "_short";
 	public static String PRIMITIVE_TYPE_LONG = "_long";
 	public static String PRIMITIVE_TYPE_FLOAT = "_float";

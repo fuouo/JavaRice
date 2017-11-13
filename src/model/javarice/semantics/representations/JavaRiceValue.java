@@ -11,7 +11,6 @@ public class JavaRiceValue {
 		BOOLEAN,
 		CHAR,
 		INT,
-		BYTE,
 		SHORT,
 		LONG,
 		FLOAT,
@@ -57,7 +56,6 @@ public class JavaRiceValue {
 		case BOOLEAN:
 		case CHAR:
 		case INT:
-		case BYTE:
 		case SHORT:
 		case LONG:
 		case FLOAT:
@@ -76,10 +74,13 @@ public class JavaRiceValue {
 		}
 	}
 	
+	public Object getValue() {
+		return this.value;
+	}
+	
 	private Object attemptTypeCast(String value) {
 		switch(this.primitiveType) {
 			case BOOLEAN: return Boolean.valueOf(value);
-			case BYTE: return Byte.valueOf(value);
 			case CHAR: return Character.valueOf(value.charAt(0)); //only get first char at value
 			case INT: return Integer.valueOf(value);
 			case LONG: return Long.valueOf(value);
@@ -99,8 +100,6 @@ public class JavaRiceValue {
 				return value instanceof Character;
 			case INT:
 				return value instanceof Integer;
-			case BYTE:
-				return value instanceof Byte;
 			case SHORT:
 				return value instanceof Short;
 			case LONG:
@@ -129,9 +128,6 @@ public class JavaRiceValue {
 		
 		if(RecognizedKeywords.matchesKeyword(RecognizedKeywords.PRIMITIVE_TYPE_BOOLEAN, primitiveTypeString)) {
 			primitiveType = PrimitiveType.BOOLEAN;
-		}
-		else if(RecognizedKeywords.matchesKeyword(RecognizedKeywords.PRIMITIVE_TYPE_BYTE, primitiveTypeString)) {
-			primitiveType = PrimitiveType.BYTE;
 		}
 		else if(RecognizedKeywords.matchesKeyword(RecognizedKeywords.PRIMITIVE_TYPE_CHAR, primitiveTypeString)) {
 			primitiveType = PrimitiveType.CHAR;
