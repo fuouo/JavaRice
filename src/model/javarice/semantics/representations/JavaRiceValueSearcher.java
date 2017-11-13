@@ -20,7 +20,7 @@ public class JavaRiceValueSearcher {
 		}
 		
 		if(javaRiceValue == null) {
-			// do something here
+			// parser handler shit here
 		}
 		
 		return javaRiceValue;

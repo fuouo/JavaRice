@@ -10,6 +10,11 @@ import model.javarice.JavaRiceParser.ExpressionContext;
 import model.javarice.JavaRiceParser.LiteralContext;
 import model.javarice.JavaRiceParser.PrimaryContext;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.semantics.representations.JavaRiceArray;
+import model.javarice.semantics.representations.JavaRiceValue;
+import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
+import model.javarice.semantics.representations.JavaRiceValueSearcher;
 import model.javarice.semantics.utils.StringUtils;
 
 public class PrintCommand implements ICommand, ParseTreeListener{
@@ -31,6 +36,7 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		treeWalker.walk(this, expressionContext);
 		
 		// log to console
+		System.err.println("ADD TO CONSOLE: " + this.strToPrint);
 		
 		// rest statement to print
 		this.strToPrint = "";
@@ -54,17 +60,30 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 			PrimaryContext primaryContext = (PrimaryContext) context;
 			
 			if(primaryContext.expression() != null) {
-				ExpressionContext exprCtx = primaryContext.expression();
+				ExpressionContext expressionContext = primaryContext.expression();
 				this.complexExpr = true;
 				
-				// evaluation command here
+				// add to console
+				System.err.println("ADD TO CONSOLE: " + "Complex expression detected: " + expressionContext.getText());
 				
+				EvaluationCommand evaluationCommand = new EvaluationCommand(expressionContext);
+				evaluationCommand.execute();
 				
-				//shit hirap wtf
+				this.strToPrint += evaluationCommand.getResult().toEngineeringString();
+				
 			}
 			
 			else if(primaryContext.expression() != null && this.complexExpr == false) {
 				String identifier = primaryContext.getText();
+				
+				JavaRiceValue value = JavaRiceValueSearcher.searchJavaRiceValue(identifier);
+				
+				if(value.getPrimitiveType() == PrimitiveType.ARRAY) {
+					this.arrayAccess = true;
+					this.evaluateArrayPrint(value, primaryContext);
+				} else if(this.arrayAccess == false) {
+					this.strToPrint += value.getValue();
+				}
 				
 			}
 			
@@ -89,5 +108,23 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		
 	}	
 	
+	public void evaluateArrayPrint(JavaRiceValue javaRiceValue, PrimaryContext primaryContext) {
+		
+		// move up and determine expression contexts
+		ExpressionContext parentExpressionContext = (ExpressionContext) primaryContext.getParent().getParent();
+		ExpressionContext arrayIndexExpressionContext = parentExpressionContext.expression(1);
+		
+		EvaluationCommand evaluationCommand = new EvaluationCommand(arrayIndexExpressionContext);
+		evaluationCommand.execute();
+		
+		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
+		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
+		
+		this.strToPrint += arrayJavaRiceValue.getValue().toString();
+	}
+	
+	public String getStatementToPrint() {
+		return this.strToPrint;
+	}
 
 }
