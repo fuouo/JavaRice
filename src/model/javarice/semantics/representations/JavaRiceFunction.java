@@ -6,6 +6,9 @@ import java.util.List;
 
 import model.javarice.JavaRiceParser.ExpressionContext;
 import model.javarice.error.errorcheckers.TypeErrorChecker;
+import model.javarice.execution.ExecutionManager;
+import model.javarice.execution.ExecutionMonitor;
+import model.javarice.execution.FunctionTracker;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
@@ -209,6 +212,17 @@ public class JavaRiceFunction implements IControlledCommand{
 		System.err.println(index + " has exceeded parameter list!");
 		return null;
 	}
+	
+	public JavaRiceValue getReturnValue() {
+		if(this.returnType == FunctionType.VOID_TYPE) {
+			// console pls
+			System.err.println("ADD TO CONSOLE: " + this.functionName + " is a void function."
+					+ " Null java rice value is returned.");
+			return null;
+		}
+		
+		return this.returnValue;
+	}
 
 	@Override
 	public ControlTypeEnum getControlType() {
@@ -225,7 +239,20 @@ public class JavaRiceFunction implements IControlledCommand{
 	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
-
+		
+		ExecutionMonitor executionMonitor = ExecutionManager.getInstance().getExecutionMonitor();
+		FunctionTracker.getInstance().reportEnterFunction(this);
+		
+		try {
+			for (ICommand command : this.commandSequences) {
+				executionMonitor.tryExecution();
+				command.execute();
+			}
+		} catch(InterruptedException e) {
+			System.err.println("Monitor blocked interrupted! " + e.getMessage());
+		}
+		
+		FunctionTracker.getInstance().reportExitFunction();
 	}
 
 	public static FunctionType identifyFunctionType(String primitiveTypeString) {
