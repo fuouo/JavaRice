@@ -50,6 +50,10 @@ public class JavaRiceValue {
 		return this.finalFlag;
 	}
 	
+	public void reset() {
+		this.value = this.defaultValue;
+	}
+	
 	public void setValue(String value) {
 		
 		switch(this.primitiveType) {

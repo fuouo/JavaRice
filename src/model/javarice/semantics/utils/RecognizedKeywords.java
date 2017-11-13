@@ -2,6 +2,9 @@ package model.javarice.semantics.utils;
 
 public class RecognizedKeywords {
 	
+	public static String CLASS_MODIFIER_PRIVATE = "private";
+	public static String CLASS_MODIFIER_PUBLIC = "public";
+	
 	public static String PRIMITIVE_TYPE_BOOLEAN = "_boolean";
 	public static String PRIMITIVE_TYPE_CHAR = "_char";
 	public static String PRIMITIVE_TYPE_INT = "_int";
