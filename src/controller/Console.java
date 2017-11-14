@@ -2,7 +2,6 @@ package controller;
 
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
