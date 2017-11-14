@@ -9,7 +9,7 @@ public class IDE_API {
 	public IDE_API(){
 		
 		//insert model declaration here
-		JavaRiceCompiler compiler = new JavaRiceCompiler();
+		JavaRiceCompiler compiler = JavaRiceCompiler.getInstance();
 		
 		//insert view declaration here
 		IDEView ideView = new IDEView();

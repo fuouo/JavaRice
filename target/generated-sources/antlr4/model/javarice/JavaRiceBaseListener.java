@@ -269,6 +269,18 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMethodCall(@NotNull JavaRiceParser.MethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodCall(@NotNull JavaRiceParser.MethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTypeArguments(@NotNull JavaRiceParser.TypeArgumentsContext ctx) { }
 	/**
 	 * {@inheritDoc}

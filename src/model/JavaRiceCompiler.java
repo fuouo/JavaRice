@@ -18,6 +18,22 @@ import model.javarice.error.Error;
 
 public class JavaRiceCompiler extends ModelInterface {
 
+	private static JavaRiceCompiler instance;
+	
+	public static JavaRiceCompiler getInstance(){
+		if(instance == null)
+			instance = new JavaRiceCompiler();
+		return instance;
+	}
+	
+	private JavaRiceCompiler(){
+		initialize();
+	}
+	
+	public void initialize(){
+		symbolTable = new ArrayList<STRow>();
+	}
+	
 	private ArrayList<STRow> symbolTable;
 	private ArrayList<Error> errorList;
 
@@ -37,11 +53,6 @@ public class JavaRiceCompiler extends ModelInterface {
 		this.errorList = errors;
 	}
 	
-	
-	public JavaRiceCompiler(){
-		symbolTable = new ArrayList<STRow>();
-		
-	}
 
 	public void compile(String code){
 		symbolTable = new ArrayList<STRow>();
