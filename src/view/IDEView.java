@@ -5,25 +5,32 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
 
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.BasicCompletion;
+import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.autocomplete.ShorthandCompletion;
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
+import org.fife.ui.rsyntaxtextarea.folding.FoldParserManager;
+import org.fife.ui.rsyntaxtextarea.templates.CodeTemplate;
+import org.fife.ui.rsyntaxtextarea.templates.StaticCodeTemplate;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import controller.Console;
@@ -32,7 +39,6 @@ import view.consolepanels.ErrorPanel;
 import view.consolepanels.MessagePanel;
 import view.factory.ConsolePanelFactory;
 import view.factory.ConsoleType;
-import view.factory.Panel;
 
 public class IDEView extends ViewInterface{
 
@@ -51,6 +57,18 @@ public class IDEView extends ViewInterface{
 	JTextPane codeTextPane, lineNumberPane;
 	RSyntaxTextArea codeTextArea;
 	JTabbedPane consoleTabPane;
+	/*
+	 private static final String text = "public class ExampleSource {\n\n"
+	         + "   // Check out the crazy modified styles!\n"
+	         + "   public static void main(String[] args) {\n"
+	         + "      System.out.println(\"Hello, world!\");\n" + "   }\n\n"
+	         + "}\n";
+	 */
+	 private static final String text = "//Code by Best B*tches\n"
+	 		+ "//Insert Code Here\n\n"
+	 		+ "public class Main{"
+	 		+ "\n//insert code here\n"
+	 		+ "}";
 	
 	public IDEView(){
 	}
@@ -65,8 +83,6 @@ public class IDEView extends ViewInterface{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		myView.setContentPane(contentPane);
 		contentPane.setLayout(null);
-
-		
 		
 		//=========== PANEL FOR HEADER (FOR BUTTONS) ==========
 		JPanel headerPanel = new JPanel();
@@ -96,12 +112,45 @@ public class IDEView extends ViewInterface{
 		
 		//=========== RSyntaxTextAreaPane ============= //
 		codeTextArea = new RSyntaxTextArea(20, 60);
-		codeTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+		//codeTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+	
+		// === Syntax Highlighting === //
+		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+		atmf.putMapping("text/javaRice", "model.javarice.token.JavaRiceTokenMaker");
+		codeTextArea.setSyntaxEditingStyle("text/javaRice");
+		FoldParserManager.get().addFoldParserMapping("text/javaRice", new CurlyFoldParser());
+		//changeStyleProgrammatically();
 		codeTextArea.setCodeFoldingEnabled(true);
+		// === SyntaxHighlighting === //
+		
+		// === Code Templates === //
+		RSyntaxTextArea.setTemplatesEnabled(true);
+		CodeTemplateManager ctm = RSyntaxTextArea.getCodeTemplateManager();
+		CodeTemplate ct = new StaticCodeTemplate("wr", "write(",");");
+	    ctm.addTemplate(ct);
+	    
+	    // A CompletionProvider is what knows of all possible completions, and
+	    // analyzes the contents of the text area at the caret position to
+	    // determine what completion choices should be presented. Most instances
+	    // of CompletionProvider (such as DefaultCompletionProvider) are designed
+	    // so that they can be shared among multiple text components.
+	    CompletionProvider provider = createCompletionProvider();
+
+	    // An AutoCompletion acts as a "middle-man" between a text component
+	    // and a CompletionProvider. It manages any options associated with
+	    // the auto-completion (the popup trigger key, whether to display a
+	    // documentation window along with completion choices, etc.). Unlike
+	    // CompletionProviders, instances of AutoCompletion cannot be shared
+	    // among multiple text components.
+	    AutoCompletion ac = new AutoCompletion(provider);
+	    ac.install(codeTextArea);
+	    
+	 // === Code Templates === //
+		
 		codeTextArea.setHighlightCurrentLine(false);
 		
 		//customize RSyntaxTextArea
-		codeTextArea.setText("//Code by Best B*tches\r\n//Insert Code Here\r\n\r\npublic class Main{\r\n//insert code here\r\n}");
+		codeTextArea.setText(text);
 		codeTextArea.setFont(new Font("Consolas", Font.PLAIN, 16));
 		codeTextArea.setBorder(new EmptyBorder(10, 10, 10, 10));
 		codeTextArea.setBounds(0, 0, 800, FRAME_HEIGHT);
@@ -195,4 +244,42 @@ public class IDEView extends ViewInterface{
 	public void clearLineHighlights() {
 		codeTextArea.removeAllLineHighlights();
 	}
+	
+	
+	
+	/**
+	    * Create a simple provider that adds some Java-related completions.
+	    */
+	   private CompletionProvider createCompletionProvider() {
+
+	      // A DefaultCompletionProvider is the simplest concrete implementation
+	      // of CompletionProvider. This provider has no understanding of
+	      // language semantics. It simply checks the text entered up to the
+	      // caret position for a match against known completions. This is all
+	      // that is needed in the majority of cases.
+	      DefaultCompletionProvider provider = new DefaultCompletionProvider();
+
+	      // Add completions for all Java keywords. A BasicCompletion is just
+	      // a straightforward word completion.
+	      provider.addCompletion(new BasicCompletion(provider, "abstract"));
+	      provider.addCompletion(new BasicCompletion(provider, "assert"));
+	      provider.addCompletion(new BasicCompletion(provider, "break"));
+	      provider.addCompletion(new BasicCompletion(provider, "case"));
+	      // ... etc ...
+	      provider.addCompletion(new BasicCompletion(provider, "transient"));
+	      provider.addCompletion(new BasicCompletion(provider, "try"));
+	      provider.addCompletion(new BasicCompletion(provider, "void"));
+	      provider.addCompletion(new BasicCompletion(provider, "volatile"));
+	      provider.addCompletion(new BasicCompletion(provider, "while"));
+
+	      // Add a couple of "shorthand" completions. These completions don't
+	      // require the input text to be the same thing as the replacement text.
+	      provider.addCompletion(new ShorthandCompletion(provider, "sysout",
+	            "System.out.println(", "System.out.println("));
+	      provider.addCompletion(new ShorthandCompletion(provider, "syserr",
+	            "System.err.println(", "System.err.println("));
+
+	      return provider;
+
+	   }
 }
