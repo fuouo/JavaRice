@@ -26,6 +26,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import controller.Console;
 import controller.ControllerInterface;
 import view.consolepanels.ErrorPanel;
 import view.consolepanels.MessagePanel;
@@ -83,10 +84,9 @@ public class IDEView extends ViewInterface{
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("[MAIN] ... Running the code!!");
-				
 				controller.runCode(codeTextArea.getText());
 				codeTextArea.removeAllLineHighlights();
-				UpdateConsolePanel();
+				Console.getInstance().UpdateConsolePanel();
 				//call compiler from here
 			}
 		});
@@ -131,37 +131,13 @@ public class IDEView extends ViewInterface{
 		consoleTabPane.addTab("Error/s", errorTab);
 		bottomPanel.add(consoleTabPane);
 		
-		consoleTabPane.addChangeListener(new ChangeListener(){
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				UpdateConsolePanel();
-			}
-			
-		});
 	
 		//NO MORE CODE AFTER HERE PLEASE :)
-		//setPanel(ConsoleType.ERRORS);
-		UpdateConsolePanel();
-		addActionListeners();
+		Console.getInstance().setConsoleTabPane(consoleTabPane);
 		myView.setVisible(true);
 		myView.setResizable(false);
 	}
 
-	public void UpdateConsolePanel(){
-		view.factory.Panel activePanel = (view.factory.Panel)consoleTabPane.getSelectedComponent();
-		
-		ArrayList<Object> list = null;
-		if(activePanel.getId() == ConsoleType.TOKENS){
-			System.out.println("SHOWING TOKENS");
-			list = controller.getMessages("");
-		}else if(activePanel.getId() == ConsoleType.ERRORS){
-			System.out.println("SHOWING ERRORS");
-			list = controller.getErrors("");
-		}
-		System.out.println(list);
-		
-		activePanel.displayItems(list);
-	}
 	
 	@Override
 	public void update() {
@@ -195,11 +171,6 @@ public class IDEView extends ViewInterface{
 		update();
 	}
 	
-	private void addActionListeners(){
-		Panel errorPanel = ((Panel)consoleTabPane.getComponent(1));
-		JScrollPane scrollErrorPanel = (JScrollPane)errorPanel.getComponent(0);
-		
-	}
 	
 	public void moveCareToLine(int line){
 		try {
