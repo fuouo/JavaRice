@@ -219,6 +219,16 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 */
 	void exitClassCreatorRest(@NotNull JavaRiceParser.ClassCreatorRestContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#methodCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodCall(@NotNull JavaRiceParser.MethodCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#methodCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodCall(@NotNull JavaRiceParser.MethodCallContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link JavaRiceParser#typeArguments}.
 	 * @param ctx the parse tree
 	 */

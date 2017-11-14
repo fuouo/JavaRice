@@ -211,10 +211,11 @@ statement
     |   'break' Identifier? ';'
     |   'continue' Identifier? ';'
     |   ';'
+    |   methodCall ';'
     |   statementExpression ';'
     |   Identifier ':' statement
-    |	print
-    | 	scan
+    |   print
+    |   scan
     ;
 
 catchClause
@@ -260,7 +261,7 @@ forControl
 
 forInit
     :   INT variableDeclaratorId ASSIGN expression
-    |	INT variableDeclaratorId 		{	notifyErrorListeners("Variable must be initialized first.");}
+    |   INT variableDeclaratorId        {   notifyErrorListeners("Variable must be initialized first.");}
     |   expressionList
     ;
 
@@ -294,7 +295,7 @@ expression
     :   primary
     |   expression '.' Identifier
     |   expression '[' expression ']'
-    |   expression '(' expressionList? ')'
+    |   expression arguments
     |   'new' creator
     |   '(' typeType ')' expression
     |   expression ('++' | '--')
@@ -382,6 +383,10 @@ classCreatorRest
     :   arguments classBody?
     ;
 
+methodCall
+    :   Identifier arguments
+    ;
+
 arguments
     :   '(' expressionList? ')'
     ;
@@ -396,7 +401,7 @@ scan
 
 print
     :   'write' '(' expression ')' ';'
-    |	'write' '(' Identifier Identifier+ ')' ';' { notifyErrorListeners("Multiple identifiers detected. Only one identifier is allowed."); }
+    |   'write' '(' Identifier Identifier+ ')' ';' { notifyErrorListeners("Multiple identifiers detected. Only one identifier is allowed."); }
     ;
 
 // LEXER
@@ -433,7 +438,7 @@ PACKAGE       : 'package';
 PRIVATE       : 'private';
 PROTECTED     : 'protected';
 PUBLIC        : 'public';
-READ	      : 'read';
+READ          : 'read';
 RETURN        : 'return';
 SHORT         : '_short';
 STATIC        : 'static';
@@ -447,7 +452,7 @@ THROWS        : 'throws';
 TRY           : 'try';
 VOID          : '_void';
 WHILE         : 'while';
-WRITE		  : 'write';
+WRITE         : 'write';
 
 // §3.10.1 Integer Literals
 
