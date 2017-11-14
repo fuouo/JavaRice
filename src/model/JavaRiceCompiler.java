@@ -7,14 +7,14 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import model.MyTokenFactory;
+import model.javarice.JavaRiceBaseListener;
 import model.javarice.JavaRiceLexer;
 import model.javarice.JavaRiceParser;
+import model.javarice.error.Error;
 import model.javarice.error.VerboseListener;
 import model.symboltable.STRow;
-
-import model.javarice.error.Error;
 
 public class JavaRiceCompiler extends ModelInterface {
 
@@ -36,7 +36,16 @@ public class JavaRiceCompiler extends ModelInterface {
 	
 	private ArrayList<STRow> symbolTable;
 	private ArrayList<Error> errorList;
+	private ArrayList<String> classNames;
 
+	public ArrayList<String> getClassNames(){
+		return classNames;
+	}
+	
+	public void addClassName(String className){
+		classNames.add(className);
+	}
+	
 	public ArrayList<STRow> getSymbolTable() {
 		return symbolTable;
 	}
@@ -56,6 +65,7 @@ public class JavaRiceCompiler extends ModelInterface {
 
 	public void compile(String code){
 		symbolTable = new ArrayList<STRow>();
+		classNames = new ArrayList<String>();
 		walkCode(code);
 	}
 
@@ -90,6 +100,11 @@ public class JavaRiceCompiler extends ModelInterface {
 		// Create a parser tree starting from the first rule
 		JavaRiceParser.ProgramContext tree = parser.program();
 
+		//Walker
+		ParseTreeWalker walker = new ParseTreeWalker();
+		walker.walk( new JavaRiceBaseListener(), tree );
+
+		
 		//print all tokens of the input
 		MyTokenFactory factory = new MyTokenFactory(input);
 		lexer.setTokenFactory(factory);
@@ -136,6 +151,14 @@ public class JavaRiceCompiler extends ModelInterface {
 			
 			this.errorList = errors;
 		}
+		
+		System.out.println("ClassNames: ");
+		for(int i=0; i<classNames.size(); i++){
+			System.out.println("[" + i + "] " + classNames.get(i));
+		}
+		
+		//Generates the PARSER TREE UI
+  		//Trees.inspect(tree, parser);
 
 	}
 
