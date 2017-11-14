@@ -293,10 +293,9 @@ constantExpression
 
 expression
     :   primary
-    |   methodCall
     |   expression '.' Identifier
     |   expression '[' expression ']'
-    |   expression '(' expressionList? ')'
+    |   expression arguments
     |   'new' creator
     |   '(' typeType ')' expression
     |   expression ('++' | '--')

@@ -92,7 +92,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private void evaluateFunctionCall(ExpressionContext expressionContext) {
 		String functionName = expressionContext.expression(0).Identifier().getText();
 		
-		// parser handler here
+		// parser handler shit here
 		ClassScope classScope = null;
 		
 		JavaRiceFunction javaRiceFunction = classScope.searchFunction(functionName);
