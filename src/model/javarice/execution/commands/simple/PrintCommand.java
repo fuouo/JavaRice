@@ -36,7 +36,7 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		treeWalker.walk(this, expressionContext);
 		
 		// log to console
-		System.out.println("CONSOLE [DEBUG]: " + this.strToPrint);
+		System.out.println("CONSOLE [VERBOSE]: " + this.strToPrint);
 		
 		// rest statement to print
 		this.strToPrint = "";
