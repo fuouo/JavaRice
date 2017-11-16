@@ -31,7 +31,7 @@ public class JavaRiceArray {
 		return this.finalFlag;
 	}
 	
-	public void initSize(int size) {
+	public void initializeSize(int size) {
 		this.javaRiceArray = new JavaRiceValue[size];
 		System.out.println("JavaRiceArray initialized to size " + this.javaRiceArray.length);
 	}

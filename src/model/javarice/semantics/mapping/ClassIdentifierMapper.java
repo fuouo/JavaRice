@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.java.JavaParser.PrimaryContext;
+import model.javarice.JavaRiceParser.PrimaryContext;
 import model.javarice.JavaRiceParser.ExpressionContext;
 import model.javarice.JavaRiceParser.ParExpressionContext;
 import model.javarice.semantics.representations.JavaRiceValue;

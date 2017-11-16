@@ -2,9 +2,12 @@ package model.javarice.execution.commands.simple;
 
 import java.util.List;
 
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
 import model.javarice.JavaRiceParser.ExpressionContext;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.semantics.analyzers.FunctionCallVerifier;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
@@ -23,8 +26,8 @@ public class FunctionCallCommand implements ICommand {
 
 		this.searchFunction();
 
-		// parse tree walker here
-
+		ParseTreeWalker functionWalker = new ParseTreeWalker();
+		functionWalker.walk(new FunctionCallVerifier(), this.expressionContext);
 
 		this.verifyParameters();
 	}

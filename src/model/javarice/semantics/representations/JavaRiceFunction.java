@@ -140,7 +140,7 @@ public class JavaRiceFunction implements IControlledCommand{
 		JavaRiceArray newArray = new JavaRiceArray(javaRiceArray.getPrimitiveType(), strIdentifier);
 		JavaRiceValue newValue = new JavaRiceValue(newArray, PrimitiveType.ARRAY);
 
-		newArray.initSize(javaRiceArray.getSize());
+		newArray.initializeSize(javaRiceArray.getSize());
 
 		for(int i = 0; i < newArray.getSize(); i ++) {
 			newArray.updateValueAt(javaRiceArray.getValueAt(i), i);

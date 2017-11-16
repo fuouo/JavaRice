@@ -18,6 +18,8 @@ public class VariableSearcher {
 		
 		if(javaRiceValue == null) {
 			// parser handler shit here
+			ClassScope classScope = null;
+			javaRiceValue = searchVariableInClassIncludingLocal(classScope, strIdentifier);
 		}
 		
 		return javaRiceValue;
