@@ -139,6 +139,16 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 */
 	void exitMethodDeclaration(JavaRiceParser.MethodDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link JavaRiceParser#mainDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterMainDeclaration(JavaRiceParser.MainDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRiceParser#mainDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitMainDeclaration(JavaRiceParser.MainDeclarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link JavaRiceParser#variableDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -659,16 +669,6 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 */
 	void exitClassCreatorRest(JavaRiceParser.ClassCreatorRestContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#methodCall}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodCall(JavaRiceParser.MethodCallContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#methodCall}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodCall(JavaRiceParser.MethodCallContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link JavaRiceParser#arguments}.
 	 * @param ctx the parse tree
 	 */
@@ -688,14 +688,4 @@ public interface JavaRiceListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitScan(JavaRiceParser.ScanContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRiceParser#print}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrint(JavaRiceParser.PrintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRiceParser#print}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrint(JavaRiceParser.PrintContext ctx);
 }

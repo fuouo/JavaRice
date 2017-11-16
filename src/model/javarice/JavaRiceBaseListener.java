@@ -173,6 +173,18 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMainDeclaration(JavaRiceParser.MainDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMainDeclaration(JavaRiceParser.MainDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVariableDeclaration(JavaRiceParser.VariableDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -797,18 +809,6 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodCall(JavaRiceParser.MethodCallContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodCall(JavaRiceParser.MethodCallContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterArguments(JavaRiceParser.ArgumentsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -828,18 +828,6 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitScan(JavaRiceParser.ScanContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPrint(JavaRiceParser.PrintContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPrint(JavaRiceParser.PrintContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

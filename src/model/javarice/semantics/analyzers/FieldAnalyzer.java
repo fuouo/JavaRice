@@ -104,7 +104,7 @@ public class FieldAnalyzer implements ParseTreeListener {
 			String identifierString = this.identifiedTokens.getToken(ClassAnalyzer.IDENTIFIER_KEY);
 			String identifierValueString = null;
 			
-			System.err.println("ADD TO CONSOLE: " + "Class modifier: " +classModifierString);
+			System.out.println("CONSOLE [DEBUG]: " + "Class modifier: " +classModifierString);
 			
 			if(this.identifiedTokens.containsTokens(ClassAnalyzer.IDENTIFIER_VALUE_KEY)) {
 				identifierValueString = this.identifiedTokens.getToken(ClassAnalyzer.IDENTIFIER_VALUE_KEY);

@@ -40,7 +40,7 @@ public class ClassAnalyzer implements ParseTreeListener {
 	public void analyze(ClassDeclarationContext ctx) {
 		String className = ctx.Identifier().getText();
 		
-		System.err.println("ADD TO CONSOLE: " + "Class name is " +className);
+		System.out.println("CONSOLE [DEBUG] " + "Class name is " +className);
 		ClassNameChecker classNameChecker = new ClassNameChecker(className);
 		classNameChecker.verify();
 		
@@ -103,7 +103,7 @@ public class ClassAnalyzer implements ParseTreeListener {
 					this.identifiedTokens.clearTokens();	
 				} //check if its array declaration
 				else if(ClassAnalyzer.isPrimitiveArrayDeclaration(typeCtx)) {
-					System.err.println("ADD TO CONSOLE: " + "Primitive array declaration: " + fieldCtx.getText());
+					System.out.println("CONSOLE [DEBUG]: " + "Primitive array declaration: " + fieldCtx.getText());
 					ArrayAnalyzer arrayAnalyzer = new ArrayAnalyzer(this.identifiedTokens, this.declaredClassScope);
 					arrayAnalyzer.analyze(fieldCtx);
 				} //this is for class type ctx

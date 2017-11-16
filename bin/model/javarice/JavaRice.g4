@@ -56,7 +56,8 @@ classBodyDeclaration
     ;
 
 memberDeclaration
-    :   methodDeclaration
+    :   mainDeclaration
+    |	methodDeclaration
     |   variableDeclaration
     |   classDeclaration
     ;
@@ -73,6 +74,10 @@ methodDeclaration
         |   ';'
         )
     ;
+    
+mainDeclaration
+	: VOID MAIN '(' ')' methodBody
+	;
 
 variableDeclaration
     :   typeType variableDeclarators ';'
@@ -211,10 +216,9 @@ statement
     |   'break' Identifier? ';'
     |   'continue' Identifier? ';'
     |   ';'
-    |   methodCall ';'
     |   statementExpression ';'
     |   Identifier ':' statement
-    |   print
+    |   WRITE '(' expression ')' ';'
     |   scan
     ;
 
@@ -260,8 +264,7 @@ forControl
     ;
 
 forInit
-    :   INT variableDeclaratorId ASSIGN expression
-    |   INT variableDeclaratorId        {   notifyErrorListeners("Variable must be initialized first.");}
+    :   localVariableDeclaration
     |   expressionList
     ;
 
@@ -383,10 +386,6 @@ classCreatorRest
     :   arguments classBody?
     ;
 
-methodCall
-    :   Identifier arguments
-    ;
-
 arguments
     :   '(' expressionList? ')'
     ;
@@ -394,14 +393,6 @@ arguments
 // INPUT
 scan
     :   'read' '(' primitiveType ',' variableDeclaratorId ')' ';'
-    ;
-   
-
-// OUTPUT
-
-print
-    :   'write' '(' expression ')' ';'
-    |   'write' '(' Identifier Identifier+ ')' ';' { notifyErrorListeners("Multiple identifiers detected. Only one identifier is allowed."); }
     ;
 
 // LEXER
@@ -433,6 +424,7 @@ INSTANCEOF    : 'instanceof';
 INT           : '_int';
 INTERFACE     : 'interface';
 LONG          : '_long';
+MAIN		  : 'main';
 NEW           : 'new';
 PACKAGE       : 'package';
 PRIVATE       : 'private';

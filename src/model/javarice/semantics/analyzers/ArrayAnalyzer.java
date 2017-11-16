@@ -99,7 +99,7 @@ public class ArrayAnalyzer implements ParseTreeListener {
 				JavaRiceValue javaRiceValue = new JavaRiceValue(this.declaredArray, PrimitiveType.ARRAY);
 				
 				this.declaredClassScope.addJavaRiceValue(accessControlString, arrayIdentifierString, javaRiceValue);
-				System.err.println("ADD TO CONSOLE: " + 
+				System.out.println("CONSOLE [DEBUG]: " + 
 						"Creating array with type " +arrayTypeString+ " variable " +arrayIdentifierString);
 				
 				this.identifiedTokens.clearTokens();
@@ -114,7 +114,7 @@ public class ArrayAnalyzer implements ParseTreeListener {
 				JavaRiceValue javaRiceValue = new JavaRiceValue(this.declaredArray, PrimitiveType.ARRAY);
 				
 				this.localScope.addJavaRiceValue(arrayIdentifierString, javaRiceValue);
-				System.err.println("ADD TO CONSOLE: " + 
+				System.out.println("CONSOLE [DEBUG]: " + 
 						"Creating array with type " +arrayTypeString+ " variable " +arrayIdentifierString);
 				
 				this.identifiedTokens.clearTokens();

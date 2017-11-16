@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import model.javarice.JavaRiceParser.ExpressionContext;
+import model.javarice.JavaRiceParser.StatementContext;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
 import model.javarice.semantics.representations.JavaRiceFunction;
@@ -105,6 +106,20 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		if(javaRiceValue == null) {
 			// report error shit here
 			// BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", varExprCtx.getText(), this.lineNumber);
+		}
+	}
+	
+	/*
+	 * Verifies a var or const identifier from a scan statement since scan grammar is different.
+	 */
+	public static void verifyVarOrConstForScan(String identifier, StatementContext statementCtx) {
+		// parser handler shit here
+		ClassScope classScope = null;
+		JavaRiceValue javaRiceValue = VariableSearcher.searchVariableInClassIncludingLocal(classScope, identifier);
+		
+		if(javaRiceValue == null) {
+			// report error shit here
+			// BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", identifier, firstToken.getLine());
 		}
 	}
 }
