@@ -74,7 +74,7 @@ public class ForCommand implements IControlledCommand {
 	@Override
 	public void addCommand(ICommand command) {
 		// TODO Auto-generated method stub
-		System.err.println("ADD TO CONSOLE: " + "Added command to FOR");
+		System.out.println("CONSOLE [DEBUG]: " + "Added command to FOR");
 		this.commandSequences.add(command);
 	}
 	

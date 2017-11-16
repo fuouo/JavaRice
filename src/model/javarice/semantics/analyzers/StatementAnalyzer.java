@@ -135,13 +135,13 @@ public class StatementAnalyzer {
 
 		// an RETURN statement
 		else if(isRETURNStatement(ctx) && ExecutionManager.getInstance().isInFunctionExecution()) {
-			System.out.println("CONSOLE [DEBUG]: " + "Detected return expression: " +ctx.expression().getText());
-			this.handleReturnStatement(ctx.expression());
+			System.out.println("CONSOLE [DEBUG]: " + "Detected return expression: " +ctx.expression(0).getText());
+			this.handleReturnStatement(ctx.expression(0));
 		}
 	}
 	
 	private void handlePrintStatement(StatementContext ctx) {
-		PrintCommand printCommand = new PrintCommand(ctx.expression());
+		PrintCommand printCommand = new PrintCommand(ctx.expression(0));
 		
 		StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
 		//add to conditional controlled command

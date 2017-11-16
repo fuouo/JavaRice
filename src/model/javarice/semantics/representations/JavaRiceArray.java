@@ -33,7 +33,7 @@ public class JavaRiceArray {
 	
 	public void initializeSize(int size) {
 		this.javaRiceArray = new JavaRiceValue[size];
-		System.out.println("JavaRiceArray initialized to size " + this.javaRiceArray.length);
+		System.out.println("CONSOLE [DEBUG]: " + "JavaRiceArray initialized to size " + this.javaRiceArray.length);
 	}
 	
 	public int getSize() {
@@ -43,7 +43,7 @@ public class JavaRiceArray {
 	public void updateValueAt(JavaRiceValue javaRiceValue, int index) {
 		if(index >= this.javaRiceArray.length) {
 			// should print error to console
-			System.err.println("Print to Console: ARRAY OUT OF BOUNDS");
+			System.err.println("CONSOLE [ERROR]: " + "Print to Console: ARRAY OUT OF BOUNDS");
 			return;
 		}
 		
@@ -53,7 +53,7 @@ public class JavaRiceArray {
 	public JavaRiceValue getValueAt(int index) {
 		if(index >= this.javaRiceArray.length) {
 			// should print error to console
-			System.err.println("Print to Console: ARRAY OUT OF BOUNDS");
+			System.err.println("CONSOLE [ERROR]: " + "Print to Console: ARRAY OUT OF BOUNDS");
 			return this.javaRiceArray[this.javaRiceArray.length - 1];
 		}
 		

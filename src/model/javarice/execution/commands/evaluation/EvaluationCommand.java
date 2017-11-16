@@ -113,10 +113,12 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		}
 		
 		javaRiceFunction.execute();
-		System.err.println("Before modified expression function call: " + this.modifiedExpression);
+		System.out.println("CONSOLE [DEBUG]: " + 
+				"Before modified expression function call: " + this.modifiedExpression);
 		this.modifiedExpression = this.modifiedExpression.replace(expressionContext.getText(), 
 				javaRiceFunction.getReturnValue().getValue().toString());
-		System.err.println("Afer modified expression function call: " + this.modifiedExpression);
+		System.out.println("CONSOLE [DEBUG]: " + 
+				"Afer modified expression function call: " + this.modifiedExpression);
 		
 	}
 	

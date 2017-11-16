@@ -36,7 +36,7 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		treeWalker.walk(this, expressionContext);
 		
 		// log to console
-		System.err.println("ADD TO CONSOLE: " + this.strToPrint);
+		System.out.println("CONSOLE [DEBUG]: " + this.strToPrint);
 		
 		// rest statement to print
 		this.strToPrint = "";
@@ -64,7 +64,8 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 				this.complexExpr = true;
 				
 				// add to console
-				System.err.println("ADD TO CONSOLE: " + "Complex expression detected: " + expressionContext.getText());
+				System.out.println("CONSOLE [DEBUG]: " + 
+						"Complex expression detected: " + expressionContext.getText());
 				
 				EvaluationCommand evaluationCommand = new EvaluationCommand(expressionContext);
 				evaluationCommand.execute();

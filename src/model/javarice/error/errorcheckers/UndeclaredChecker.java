@@ -81,7 +81,7 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 			// report error shit here
 			// BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_FUNCTION, "", functionName, this.lineNumber);
 		} else {
-			System.err.println("ADD TO CONSOLE: Function found " + functionName);
+			System.out.println("CONSOLE [DEBUG]: Function found " + functionName);
 		}
 	}
 	
@@ -94,7 +94,7 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 					javaRiceFunction, varExprCtx.primary().Identifier().getText());
 		}
 		
-		// if mobi value is still null, search class
+		// if java rice value is still null, search class
 		if(javaRiceValue == null) {
 			// parser handler shit here
 			ClassScope classScope = null;

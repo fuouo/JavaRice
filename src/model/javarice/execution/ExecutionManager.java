@@ -93,7 +93,7 @@ public class ExecutionManager {
 			return functionExecutionAdder.getAssignedFunction();
 		}
 		
-		System.err.println("Execution Manager is not in a function!");
+		System.out.println("Execution Manager is not in a function!");
 		return null;
 	}
 	

@@ -19,7 +19,7 @@ public class ExecutionMonitor {
 		
 		try {
 			while(this.executionFlag == false) {
-				System.err.println("Execution flag has been set to false. Execution sleeps!");
+				System.out.println("Execution flag has been set to false. Execution sleeps!");
 				this.executionGate.await();
 			}
 		} finally {

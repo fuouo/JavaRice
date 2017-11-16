@@ -36,7 +36,7 @@ public class AssignmentUtils {
 			break;
 		default:
 			// add to console
-			System.err.println("ADD TO CONSOLE: JavaRiceValue: Did not find appropriate type!" );
+			System.out.println("CONSOLE [DEBUG]: JavaRiceValue: Did not find appropriate type!" );
 		}
 	}
 

@@ -55,7 +55,7 @@ public class WhileCommand implements IControlledCommand {
 	@Override
 	public void addCommand(ICommand command) {
 		// add to console
-		System.err.println("ADD TO CONSOLE: Added command to WHILE");
+		System.out.println("CONSOLE [DEBUG]: Added command to WHILE");
 		this.commandSequences.add(command);
 	}
 	

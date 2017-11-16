@@ -74,6 +74,7 @@ public class JavaRiceValue {
 			System.err.println(this.primitiveType + " is an array. Cannot directly change value.");
 			break;
 		case NOT_YET_IDENTIFIED:
+			System.err.println("Primitive type not yet identified!");
 			break;
 		}
 	}

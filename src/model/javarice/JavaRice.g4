@@ -203,6 +203,7 @@ localVariableDeclaration
 
 statement
     :   block
+    |	ASSERT expression (':' expression)? ';'
     |   'if' parExpression statement ('else' statement)?
     |   'for' '(' forControl ')' statement
     |   'while' parExpression statement
@@ -399,6 +400,7 @@ scan
 
 // §3.9 Keywords
 
+ASSERT        : 'assert';
 BOOLEAN       : '_boolean';
 BREAK         : 'break';
 CASE          : 'case';
