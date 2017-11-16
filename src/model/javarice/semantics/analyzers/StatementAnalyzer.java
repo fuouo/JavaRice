@@ -172,8 +172,8 @@ public class StatementAnalyzer {
 		ScanContext scanCtx = ctx.scan();
 		
 		ScanCommand scanCommand = new ScanCommand(scanCtx.primitiveType().getText(), 
-				scanCtx.variableDeclaratorId().getText());
-		UndeclaredChecker.verifyVarOrConstForScan(ctx.Identifier().getText(), ctx);
+				scanCtx.Identifier().getText());
+		UndeclaredChecker.verifyVarOrConstForScan(scanCtx.Identifier().getText(), scanCtx);
 		
 		StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
 		//add to conditional controlled command

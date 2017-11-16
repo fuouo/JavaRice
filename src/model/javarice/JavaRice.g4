@@ -393,7 +393,7 @@ arguments
 
 // INPUT
 scan
-    :   'read' '(' primitiveType ',' variableDeclaratorId ')' ';'
+    :   'read' '(' primitiveType ',' Identifier ')' ';'
     ;
 
 // LEXER

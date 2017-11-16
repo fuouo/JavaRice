@@ -5226,9 +5226,7 @@ public class JavaRiceParser extends Parser {
 		public PrimitiveTypeContext primitiveType() {
 			return getRuleContext(PrimitiveTypeContext.class,0);
 		}
-		public VariableDeclaratorIdContext variableDeclaratorId() {
-			return getRuleContext(VariableDeclaratorIdContext.class,0);
-		}
+		public TerminalNode Identifier() { return getToken(JavaRiceParser.Identifier, 0); }
 		public ScanContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -5258,7 +5256,7 @@ public class JavaRiceParser extends Parser {
 			setState(880);
 			match(COMMA);
 			setState(881);
-			variableDeclaratorId();
+			match(Identifier);
 			setState(882);
 			match(RPAREN);
 			setState(883);
@@ -5647,7 +5645,7 @@ public class JavaRiceParser extends Parser {
 		"\3\2\2\2\u0368\u0085\3\2\2\2\u0369\u036b\7?\2\2\u036a\u036c\5l\67\2\u036b"+
 		"\u036a\3\2\2\2\u036b\u036c\3\2\2\2\u036c\u036d\3\2\2\2\u036d\u036e\7@"+
 		"\2\2\u036e\u0087\3\2\2\2\u036f\u0370\7*\2\2\u0370\u0371\7?\2\2\u0371\u0372"+
-		"\5\62\32\2\u0372\u0373\7F\2\2\u0373\u0374\5(\25\2\u0374\u0375\7@\2\2\u0375"+
+		"\5\62\32\2\u0372\u0373\7F\2\2\u0373\u0374\7g\2\2\u0374\u0375\7@\2\2\u0375"+
 		"\u0376\7E\2\2\u0376\u0089\3\2\2\2a\u008b\u0090\u0096\u00a1\u00a6\u00af"+
 		"\u00b4\u00b8\u00c2\u00ce\u00d5\u00dc\u00e0\u00e6\u00ea\u00f2\u00f7\u00fb"+
 		"\u010d\u0117\u0122\u0128\u012f\u0134\u013c\u0140\u0142\u014b\u0153\u0156"+
