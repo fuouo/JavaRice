@@ -15,6 +15,8 @@ import model.javarice.semantics.mapping.IdentifierMapper;
 
 public class WhileCommand implements IControlledCommand {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	// the list of commands inside the WHILE statement
 	protected List<ICommand> commandSequences; 
 	
@@ -57,7 +59,7 @@ public class WhileCommand implements IControlledCommand {
 	@Override
 	public void addCommand(ICommand command) {
 		// add to console
-		Console.log(LogType.DEBUG, "Added command to WHILE");
+		Console.log(LogType.DEBUG, TAG + "Added command to WHILE");
 		this.commandSequences.add(command);
 	}
 	

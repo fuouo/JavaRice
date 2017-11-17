@@ -21,6 +21,8 @@ import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class ParameterAnalyzer implements ParseTreeListener {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private final static String PARAMETER_TYPE_KEY = "PARAMETER_TYPE_KEY";
 	private final static String PARAMETER_IDENTIFIER_KEY = "PARAMETER_IDENTIFIER_KEY";
 	private final static String IS_ARRAY_KEY = "IS_ARRAY_KEY";
@@ -112,7 +114,7 @@ public class ParameterAnalyzer implements ParseTreeListener {
 			JavaRiceValue javaRiceValue = new JavaRiceValue(declaredArray, PrimitiveType.ARRAY);
 			this.declaredJavaRiceFunction.addParameter(identifierString, javaRiceValue);
 			
-			Console.log(LogType.DEBUG, 
+			Console.log(LogType.DEBUG, TAG + 
 					"Created array parameter for " +this.declaredJavaRiceFunction.getFunctionName());
 		}
 		
@@ -123,7 +125,7 @@ public class ParameterAnalyzer implements ParseTreeListener {
 			JavaRiceValue javaRiceValue = JavaRiceValue.createEmptyVariableFromKeywords(typeString);
 			this.declaredJavaRiceFunction.addParameter(identifierString, javaRiceValue);
 
-			Console.log(LogType.DEBUG, 
+			Console.log(LogType.DEBUG, TAG + 
 					"Created array parameter for " +this.declaredJavaRiceFunction.getFunctionName());
 		}
 		

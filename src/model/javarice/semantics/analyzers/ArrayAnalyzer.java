@@ -23,6 +23,8 @@ import model.javarice.semantics.utils.IdentifiedTokens;
 
 public class ArrayAnalyzer implements ParseTreeListener {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private final static String ARRAY_PRIMITIVE_KEY = "ARRAY_PRIMITIVE_KEY";
 	private final static String ARRAY_IDENTIFIER_KEY = "ARRAY_IDENTIFIER_KEY";
 	
@@ -101,7 +103,7 @@ public class ArrayAnalyzer implements ParseTreeListener {
 				JavaRiceValue javaRiceValue = new JavaRiceValue(this.declaredArray, PrimitiveType.ARRAY);
 				
 				this.declaredClassScope.addJavaRiceValue(accessControlString, arrayIdentifierString, javaRiceValue);
-				Console.log(LogType.DEBUG, 
+				Console.log(LogType.DEBUG, TAG + 
 						"Creating array with type " +arrayTypeString+ " variable " +arrayIdentifierString);
 				this.identifiedTokens.clearTokens();
 			}
@@ -115,7 +117,7 @@ public class ArrayAnalyzer implements ParseTreeListener {
 				JavaRiceValue javaRiceValue = new JavaRiceValue(this.declaredArray, PrimitiveType.ARRAY);
 				
 				this.localScope.addJavaRiceValue(arrayIdentifierString, javaRiceValue);
-				Console.log(LogType.DEBUG, 
+				Console.log(LogType.DEBUG, TAG + 
 						"Creating array with type " +arrayTypeString+ " variable " +arrayIdentifierString);
 				
 				this.identifiedTokens.clearTokens();

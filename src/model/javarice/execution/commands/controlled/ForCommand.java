@@ -17,6 +17,8 @@ import model.javarice.semantics.mapping.IdentifierMapper;
 
 public class ForCommand implements IControlledCommand {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private List<ICommand> commandSequences;
 	
 	//a local variable ctx that is evaluated at the start of the for loop
@@ -76,7 +78,7 @@ public class ForCommand implements IControlledCommand {
 	@Override
 	public void addCommand(ICommand command) {
 		// TODO Auto-generated method stub
-		Console.log(LogType.DEBUG, "Added command to FOR");
+		Console.log(LogType.DEBUG, TAG + "Added command to FOR");
 		this.commandSequences.add(command);
 	}
 	

@@ -9,6 +9,8 @@ import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class ClassScope implements IScope {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 
 	private String className;
 	
@@ -58,7 +60,7 @@ public class ClassScope implements IScope {
 			this.privateVariables.put(strIdentifier, javaRiceValue);
 		}
 		
-		Console.log(LogType.DEBUG, strClassModifier + " " + 
+		Console.log(LogType.DEBUG, TAG + strClassModifier + " " + 
 				strPrimitiveType + " " + strIdentifier + " created!");
 	}
 	
@@ -83,7 +85,7 @@ public class ClassScope implements IScope {
 			this.privateVariables.put(strIdentifier, javaRiceValue);
 		}
 		
-		Console.log(LogType.DEBUG, strClassModifier + " " + 
+		Console.log(LogType.DEBUG, TAG + strClassModifier + " " + 
 				strPrimitiveType + " " + strIdentifier + " updated!");
 	}	
 	
@@ -107,13 +109,13 @@ public class ClassScope implements IScope {
 	
 	public void addPrivateJavaRiceFunction(String strIdentifier, JavaRiceFunction javaRiceFunction) {
 		this.privateFunctions.put(strIdentifier, javaRiceFunction);
-		Console.log(LogType.DEBUG, "Created private function " + javaRiceFunction.getReturnType() 
+		Console.log(LogType.DEBUG, TAG + "Created private function " + javaRiceFunction.getReturnType() 
 			+ " " + strIdentifier);
 	}
 	
 	public void addPublicJavaRiceFunction(String strIdentifier, JavaRiceFunction javaRiceFunction) {
 		this.publicFunctions.put(strIdentifier, javaRiceFunction);
-		Console.log(LogType.DEBUG, "Created public function " + javaRiceFunction.getReturnType() 
+		Console.log(LogType.DEBUG, TAG + "Created public function " + javaRiceFunction.getReturnType() 
 			+ " " + strIdentifier);
 	}
 	

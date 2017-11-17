@@ -24,6 +24,8 @@ import model.javarice.semantics.symboltable.scopes.ClassScope;
 
 public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private ExpressionContext exprCtx;
 	private int lineNumber;
 	
@@ -86,7 +88,7 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		if(javaRiceFunction == null) {
 			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_FUNCTION, "", this.lineNumber, functionName);
 		} else {
-			Console.log(LogType.DEBUG, "Function found " + functionName);
+			Console.log(LogType.DEBUG, TAG + "Function found " + functionName);
 		}
 	}
 	

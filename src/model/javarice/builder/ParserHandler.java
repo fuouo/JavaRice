@@ -13,6 +13,8 @@ import model.javarice.semantics.implementors.JavaRiceBaseImplementor;
 
 public class ParserHandler {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private static ParserHandler sharedInstance = null;
 	
 	public static ParserHandler getInstance() {
@@ -40,12 +42,12 @@ public class ParserHandler {
 		this.sharedParser.addErrorListener(BuildChecker.getInstance());
 		
 		ParserRuleContext parserRuleContext = this.sharedParser.compilationUnit();
-		Console.log(LogType.DEBUG, parserRuleContext.toStringTree(this.sharedParser));
+		Console.log(LogType.DEBUG, TAG + parserRuleContext.toStringTree(this.sharedParser));
 		
 		ParseTreeWalker treeWalker = new ParseTreeWalker();
 		treeWalker.walk(new JavaRiceBaseImplementor(), parserRuleContext);
 
-		Console.log(LogType.VERBOSE, "Finished parsing. Compiled executables. Click RUN to execute");
+		Console.log(LogType.VERBOSE, TAG + "Finished parsing. Compiled executables. Click RUN to execute");
 	}
 	
 	/*

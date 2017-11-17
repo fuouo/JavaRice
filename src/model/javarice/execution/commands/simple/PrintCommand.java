@@ -21,6 +21,8 @@ import model.javarice.semantics.utils.StringUtils;
 
 public class PrintCommand implements ICommand, ParseTreeListener{
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private ExpressionContext expressionContext;
 	
 	private String strToPrint = "";
@@ -66,7 +68,7 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 				this.complexExpr = true;
 				
 				// add to console
-				Console.log(LogType.DEBUG, "Complex expression detected: " + expressionContext.getText());
+				Console.log(LogType.DEBUG, TAG + "Complex expression detected: " + expressionContext.getText());
 				
 				EvaluationCommand evaluationCommand = new EvaluationCommand(expressionContext);
 				evaluationCommand.execute();

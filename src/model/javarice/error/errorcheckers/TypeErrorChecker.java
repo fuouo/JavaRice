@@ -17,6 +17,8 @@ import model.javarice.semantics.representations.JavaRiceValue;
 
 public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private JavaRiceValue javaRiceValue;
 	private ExpressionContext expressionContext;
 	private int lineNumber;
@@ -41,7 +43,7 @@ public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 			String expressionString = literalContext.getText();
 			String additionalMessage = "";
 			
-			Console.log(LogType.DEBUG, "primitive type: " + this.javaRiceValue.getPrimitiveType());
+			Console.log(LogType.DEBUG, TAG + "primitive type: " + this.javaRiceValue.getPrimitiveType());
 			
 			switch(this.javaRiceValue.getPrimitiveType()) {
 			case ARRAY:

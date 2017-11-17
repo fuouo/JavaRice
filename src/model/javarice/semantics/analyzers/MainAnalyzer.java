@@ -20,6 +20,8 @@ import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 
 public class MainAnalyzer implements ParseTreeListener {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	public MainAnalyzer() {
 		
 	}
@@ -38,7 +40,7 @@ public class MainAnalyzer implements ParseTreeListener {
 			treeWalker.walk(this, ctx);
 			
 		} else {
-			Console.log(LogType.DEBUG, "Already found main in " +
+			Console.log(LogType.DEBUG, TAG + "Already found main in " +
 					ExecutionManager.getInstance().getEntryClassName());
 		}
 	}

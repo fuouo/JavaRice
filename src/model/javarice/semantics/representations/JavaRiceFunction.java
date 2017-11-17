@@ -19,6 +19,8 @@ import model.javarice.semantics.symboltable.scopes.LocalScope;
 import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class JavaRiceFunction implements IControlledCommand{
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 
 	public enum FunctionType {
 		INT_TYPE,
@@ -216,7 +218,7 @@ public class JavaRiceFunction implements IControlledCommand{
 	
 	public JavaRiceValue getReturnValue() {
 		if(this.returnType == FunctionType.VOID_TYPE) {
-			Console.log(LogType.DEBUG, this.functionName + " is a void function."
+			Console.log(LogType.DEBUG, TAG + this.functionName + " is a void function."
 					+ " Null java rice value is returned.");
 			return null;
 		}

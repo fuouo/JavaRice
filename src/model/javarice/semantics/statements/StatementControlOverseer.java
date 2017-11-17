@@ -11,6 +11,8 @@ import model.javarice.execution.commands.controlled.IControlledCommand;
 
 public class StatementControlOverseer {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private static StatementControlOverseer INSTANCE = null;
 	
 	public static StatementControlOverseer getInstance() {
@@ -93,7 +95,7 @@ public class StatementControlOverseer {
 			IControlledCommand controlledCommand = (IControlledCommand) this.activeControlledCommand;
 			controlledCommand.addCommand(command);
 			
-			Console.log(LogType.DEBUG, "Adding to " +controlledCommand.getControlType());
+			Console.log(LogType.DEBUG, TAG + "Adding to " +controlledCommand.getControlType());
 			
 			this.procedureCallStack.push(command);
 			this.activeControlledCommand = command;

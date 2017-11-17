@@ -25,6 +25,8 @@ import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class LocalVariableAnalyzer implements ParseTreeListener {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private final static String PRIMITIVE_TYPE_KEY = "PRIMITIVE_TYPE_KEY";
 	private final static String IDENTIFIER_KEY = "IDENTIFIER_KEY";
 	private final static String IDENTIFIER_VALUE_KEY = "IDENTIFIER_VALUE_KEY";
@@ -79,11 +81,11 @@ public class LocalVariableAnalyzer implements ParseTreeListener {
 			if(ClassAnalyzer.isPrimitiveDeclaration(typeCtx)) {
 				PrimitiveTypeContext primitiveTypeCtx = typeCtx.primitiveType();
 				this.identifiedTokens.addToken(PRIMITIVE_TYPE_KEY, primitiveTypeCtx.getText());
-				Console.log(LogType.DEBUG, "Primitive type declaration: " + primitiveTypeCtx.getText());
+				Console.log(LogType.DEBUG, TAG + "Primitive type declaration: " + primitiveTypeCtx.getText());
 				
 			} //check if its array declaration
 			else if(ClassAnalyzer.isPrimitiveArrayDeclaration(typeCtx)) {
-				Console.log(LogType.DEBUG, "Primitive array declaration: " +typeCtx.getText());
+				Console.log(LogType.DEBUG, TAG + "Primitive array declaration: " +typeCtx.getText());
 				ArrayAnalyzer arrayAnalyzer = new ArrayAnalyzer(this.identifiedTokens, 
 						LocalScopeCreator.getInstance().getActiveLocalScope());
 				arrayAnalyzer.analyze(typeCtx.getParent());
@@ -129,7 +131,7 @@ public class LocalVariableAnalyzer implements ParseTreeListener {
 				JavaRiceValue declaredJavaRiceValue = localScope.searchVariableIncludingLocal(
 						varCtx.variableDeclaratorId().getText());
 				
-				//type check the mobivalue
+				//type check the java rice value
 				TypeErrorChecker typeChecker = new TypeErrorChecker(
 						declaredJavaRiceValue, varCtx.variableInitializer().expression());
 				typeChecker.verify();

@@ -16,7 +16,7 @@ import controller.Console.LogType;
 
 public class BuildChecker implements ANTLRErrorListener {
 
-private static BuildChecker INSTANCE = null;
+	private static BuildChecker INSTANCE = null;
 	
 	private boolean successful = true;
 	

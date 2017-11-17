@@ -26,6 +26,8 @@ import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 
 public class StatementAnalyzer {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 
 	public StatementAnalyzer() {
 
@@ -79,7 +81,7 @@ public class StatementAnalyzer {
 
 		// an WHILE statement
 		else if(isWHILEStatement(ctx)) {
-			Console.log(LogType.DEBUG, "While par expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, TAG + "While par expression: " +ctx.parExpression().getText());
 			
 			StatementContext statementCtx = ctx.statement(0);
 			
@@ -91,12 +93,12 @@ public class StatementAnalyzer {
 			
 			StatementControlOverseer.getInstance().compileControlledCommand();
 			
-			Console.log(LogType.DEBUG, "End of WHILE expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, TAG + "End of WHILE expression: " +ctx.parExpression().getText());
 		}
 
 		// an DOWHILE statement
 		else if(isDOWHILEStatement(ctx)) {
-			Console.log(LogType.DEBUG, "Do While PAR expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, TAG + "Do While PAR expression: " +ctx.parExpression().getText());
 			
 			StatementContext statementCtx = ctx.statement(0);
 			
@@ -108,13 +110,13 @@ public class StatementAnalyzer {
 			
 			StatementControlOverseer.getInstance().compileControlledCommand();
 			
-			Console.log(LogType.DEBUG, "End of DO-WHILE expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, TAG + "End of DO-WHILE expression: " +ctx.parExpression().getText());
 		}
 
 		// an FOR statement
 		else if(isFORStatement(ctx)) {
-//			Console.log(LogType.DEBUG, "FOR expression: " +ctx.parExpression().getText());
-			Console.log(LogType.DEBUG, "FOR expression: " +ctx.forControl().getText());
+//			Console.log(LogType.DEBUG, TAG + "FOR expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, TAG + "FOR expression: " +ctx.forControl().getText());
 			
 			LocalScopeCreator.getInstance().openLocalScope();
 			
@@ -133,12 +135,12 @@ public class StatementAnalyzer {
 			
 			LocalScopeCreator.getInstance().closeLocalScope();
 			
-			Console.log(LogType.DEBUG, "End of FOR loop");
+			Console.log(LogType.DEBUG, TAG + "End of FOR loop");
 		}
 
 		// an RETURN statement
 		else if(isRETURNStatement(ctx) && ExecutionManager.getInstance().isInFunctionExecution()) {
-			Console.log(LogType.DEBUG, "Detected return expression: " +ctx.expression(0).getText());
+			Console.log(LogType.DEBUG, TAG + "Detected return expression: " +ctx.expression(0).getText());
 			this.handleReturnStatement(ctx.expression(0));
 		}
 	}

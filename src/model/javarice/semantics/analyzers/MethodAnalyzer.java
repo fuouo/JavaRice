@@ -26,6 +26,8 @@ import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class MethodAnalyzer implements ParseTreeListener {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private ClassScope declaredClassScope;
 	private IdentifiedTokens identifiedTokens;
 	private JavaRiceFunction declaredJavaRiceFunction;
@@ -117,7 +119,7 @@ public class MethodAnalyzer implements ParseTreeListener {
 		}
 		// a class identified
 		else {
-			Console.log(LogType.DEBUG, "Class identified: " + classOrInterfaceCtx.getText());
+			Console.log(LogType.DEBUG, TAG + "Class identified: " + classOrInterfaceCtx.getText());
 		}
 	}
 	

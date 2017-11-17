@@ -26,6 +26,8 @@ import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class ClassAnalyzer implements ParseTreeListener {
 	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	
 	private ClassScope declaredClassScope;
 	private IdentifiedTokens identifiedTokens;
 	
@@ -43,7 +45,7 @@ public class ClassAnalyzer implements ParseTreeListener {
 	public void analyze(ClassDeclarationContext ctx) {
 		String className = ctx.Identifier().getText();
 		
-		Console.log(LogType.DEBUG, "Class name is " +className);
+		Console.log(LogType.DEBUG, TAG + "Class name is " +className);
 		
 		ParserHandler.getInstance().setCurrentClassName(className);
 		
@@ -101,7 +103,7 @@ public class ClassAnalyzer implements ParseTreeListener {
 					PrimitiveTypeContext primitiveTypeCtx = typeCtx.primitiveType();
 					this.identifiedTokens.addToken(PRIMITIVE_TYPE_KEY, primitiveTypeCtx.getText());
 					
-					Console.log(LogType.DEBUG, "Primitive field declaration: " + fieldCtx.getText());
+					Console.log(LogType.DEBUG, TAG + "Primitive field declaration: " + fieldCtx.getText());
 					
 					// create a field analyzer to walk through declarations
 					FieldAnalyzer fieldAnalyzer = new FieldAnalyzer(this.identifiedTokens, this.declaredClassScope);
@@ -111,7 +113,7 @@ public class ClassAnalyzer implements ParseTreeListener {
 					this.identifiedTokens.clearTokens();	
 				} //check if its array declaration
 				else if(ClassAnalyzer.isPrimitiveArrayDeclaration(typeCtx)) {
-					Console.log(LogType.DEBUG, "Primitive array declaration: " + fieldCtx.getText());
+					Console.log(LogType.DEBUG, TAG + "Primitive array declaration: " + fieldCtx.getText());
 					ArrayAnalyzer arrayAnalyzer = new ArrayAnalyzer(this.identifiedTokens, this.declaredClassScope);
 					arrayAnalyzer.analyze(fieldCtx);
 				} //this is for class type ctx
@@ -158,15 +160,15 @@ public class ClassAnalyzer implements ParseTreeListener {
 	private void analyzeModifier(ClassOrInterfaceModifierContext ctx) {
 		if(ctx.getTokens(JavaRiceLexer.PUBLIC).size() > 0 || ctx.getTokens(JavaRiceLexer.PRIVATE).size() > 0
 				|| ctx.getTokens(JavaRiceLexer.PROTECTED).size() > 0) {
-			Console.log(LogType.DEBUG, "Detected accessor: " +ctx.getText());
+			Console.log(LogType.DEBUG, TAG + "Detected accessor: " +ctx.getText());
 			this.identifiedTokens.addToken(ACCESS_CONTROL_KEY, ctx.getText());
 		}
 		else if(ctx.getTokens(JavaRiceLexer.FINAL).size() > 0) {
-			Console.log(LogType.DEBUG, "Detected const: " +ctx.getText());
+			Console.log(LogType.DEBUG, TAG + "Detected const: " +ctx.getText());
 			this.identifiedTokens.addToken(CONST_CONTROL_KEY, ctx.getText());
 		}
 		else if(ctx.getTokens(JavaRiceLexer.STATIC).size() > 0) {
-			Console.log(LogType.DEBUG, "Detected static: " +ctx.getText());
+			Console.log(LogType.DEBUG, TAG + "Detected static: " +ctx.getText());
 			this.identifiedTokens.addToken(STATIC_CONTROL_KEY, ctx.getText());
 		}
 	}

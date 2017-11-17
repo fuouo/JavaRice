@@ -9,6 +9,8 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.builder.ParserHandler;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -21,6 +23,8 @@ import model.javarice.semantics.utils.Expression;
 import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class EvaluationCommand implements ICommand, ParseTreeListener {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 	
 	private ExpressionContext parentExpressionContext;
 	private String modifiedExpression;
@@ -115,12 +119,10 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		}
 		
 		javaRiceFunction.execute();
-		System.out.println("CONSOLE [DEBUG]: " + 
-				"Before modified expression function call: " + this.modifiedExpression);
+		Console.log(LogType.DEBUG, TAG + "Before modified expression function call: " + this.modifiedExpression);
 		this.modifiedExpression = this.modifiedExpression.replace(expressionContext.getText(), 
 				javaRiceFunction.getReturnValue().getValue().toString());
-		System.out.println("CONSOLE [DEBUG]: " + 
-				"Afer modified expression function call: " + this.modifiedExpression);
+		Console.log(LogType.DEBUG, TAG + "After modified expression function call: " + this.modifiedExpression);
 		
 	}
 	
