@@ -101,6 +101,8 @@ public class ClassAnalyzer implements ParseTreeListener {
 					PrimitiveTypeContext primitiveTypeCtx = typeCtx.primitiveType();
 					this.identifiedTokens.addToken(PRIMITIVE_TYPE_KEY, primitiveTypeCtx.getText());
 					
+					Console.log(LogType.DEBUG, "Primitive field declaration: " + fieldCtx.getText());
+					
 					// create a field analyzer to walk through declarations
 					FieldAnalyzer fieldAnalyzer = new FieldAnalyzer(this.identifiedTokens, this.declaredClassScope);
 					fieldAnalyzer.analyze(fieldCtx.variableDeclarators());
