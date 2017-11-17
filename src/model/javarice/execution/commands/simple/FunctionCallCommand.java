@@ -4,14 +4,16 @@ import java.util.List;
 
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
+import model.javarice.builder.ParserHandler;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.analyzers.FunctionCallVerifier;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.searching.VariableSearcher;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 
 public class FunctionCallCommand implements ICommand {
@@ -40,8 +42,8 @@ public class FunctionCallCommand implements ICommand {
 	}
 
 	private void searchFunction() {
-		// parser handler shit here
-		ClassScope classScope = null;
+		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+				ParserHandler.getInstance().getCurrentClassName());
 		this.javaRiceFunction = classScope.searchFunction(this.functionName);
 	}
 

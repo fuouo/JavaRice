@@ -6,12 +6,14 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.VariableDeclaratorContext;
-import model.javarice.JavaRiceParser.VariableDeclaratorsContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.error.errorcheckers.MultipleVarDecChecker;
 import model.javarice.error.errorcheckers.TypeErrorChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.MappingCommand;
+import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorContext;
+import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorsContext;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.IdentifiedTokens;
@@ -104,7 +106,7 @@ public class FieldAnalyzer implements ParseTreeListener {
 			String identifierString = this.identifiedTokens.getToken(ClassAnalyzer.IDENTIFIER_KEY);
 			String identifierValueString = null;
 			
-			System.out.println("CONSOLE [DEBUG]: " + "Class modifier: " +classModifierString);
+			Console.log(LogType.DEBUG, "Class modifier: " +classModifierString);
 			
 			if(this.identifiedTokens.containsTokens(ClassAnalyzer.IDENTIFIER_VALUE_KEY)) {
 				identifierValueString = this.identifiedTokens.getToken(ClassAnalyzer.IDENTIFIER_VALUE_KEY);

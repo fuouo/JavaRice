@@ -6,15 +6,17 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ClassOrInterfaceTypeContext;
-import model.javarice.JavaRiceParser.LocalVariableDeclarationContext;
-import model.javarice.JavaRiceParser.PrimitiveTypeContext;
-import model.javarice.JavaRiceParser.TypeTypeContext;
-import model.javarice.JavaRiceParser.VariableDeclaratorContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.error.errorcheckers.MultipleVarDecChecker;
 import model.javarice.error.errorcheckers.TypeErrorChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.MappingCommand;
+import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.LocalVariableDeclarationContext;
+import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.TypeTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorContext;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.symboltable.scopes.LocalScope;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
@@ -80,7 +82,7 @@ public class LocalVariableAnalyzer implements ParseTreeListener {
 				
 			} //check if its array declaration
 			else if(ClassAnalyzer.isPrimitiveArrayDeclaration(typeCtx)) {
-				System.err.println("ADD TO CONSOLE: " + "Primitive array declaration: " +typeCtx.getText());
+				Console.log(LogType.DEBUG, "Primitive array declaration: " +typeCtx.getText());
 				ArrayAnalyzer arrayAnalyzer = new ArrayAnalyzer(this.identifiedTokens, 
 						LocalScopeCreator.getInstance().getActiveLocalScope());
 				arrayAnalyzer.analyze(typeCtx.getParent());

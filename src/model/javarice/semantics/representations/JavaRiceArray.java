@@ -1,5 +1,8 @@
 package model.javarice.semantics.representations;
 
+import controller.Console;
+import controller.Console.LogType;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.utils.RecognizedKeywords;
 
@@ -33,7 +36,7 @@ public class JavaRiceArray {
 	
 	public void initializeSize(int size) {
 		this.javaRiceArray = new JavaRiceValue[size];
-		System.out.println("CONSOLE [DEBUG]: " + "JavaRiceArray initialized to size " + this.javaRiceArray.length);
+		System.out.println("JavaRiceArray initialized to size " + this.javaRiceArray.length);
 	}
 	
 	public int getSize() {
@@ -42,8 +45,8 @@ public class JavaRiceArray {
 	
 	public void updateValueAt(JavaRiceValue javaRiceValue, int index) {
 		if(index >= this.javaRiceArray.length) {
-			// should print error to console
-			System.err.println("CONSOLE [ERROR]: " + "Print to Console: ARRAY OUT OF BOUNDS");
+			Console.log(LogType.ERROR, String.format(ErrorRepository.getErrorMessage(
+					ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS), this.arrayIdentifier));
 			return;
 		}
 		
@@ -52,8 +55,8 @@ public class JavaRiceArray {
 	
 	public JavaRiceValue getValueAt(int index) {
 		if(index >= this.javaRiceArray.length) {
-			// should print error to console
-			System.err.println("CONSOLE [ERROR]: " + "Print to Console: ARRAY OUT OF BOUNDS");
+			Console.log(LogType.ERROR, String.format(ErrorRepository.getErrorMessage(
+					ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS), this.arrayIdentifier));
 			return this.javaRiceArray[this.javaRiceArray.length - 1];
 		}
 		

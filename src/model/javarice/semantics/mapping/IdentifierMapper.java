@@ -1,8 +1,8 @@
 package model.javarice.semantics.mapping;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.ParExpressionContext;
 import model.javarice.execution.FunctionTracker;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 import model.javarice.semantics.representations.JavaRiceValue;
 
 public class IdentifierMapper implements IValueMapper {

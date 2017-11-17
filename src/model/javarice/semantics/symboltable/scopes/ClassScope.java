@@ -2,6 +2,8 @@ package model.javarice.semantics.symboltable.scopes;
 
 import java.util.HashMap;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.utils.RecognizedKeywords;
@@ -52,15 +54,12 @@ public class ClassScope implements IScope {
 		
 		if(isPublic) {
 			this.publicVariables.put(strIdentifier, javaRiceValue);
-			// add to console
-			System.out.println("CONSOLE [DEBUG]: " + strClassModifier + " " + 
-					strPrimitiveType + " " + strIdentifier + " created!");
 		} else {
 			this.privateVariables.put(strIdentifier, javaRiceValue);
-			// add to console
-			System.out.println("CONSOLE [DEBUG]: " + strClassModifier + " " + 
-					strPrimitiveType + " " + strIdentifier + " created!");
 		}
+		
+		Console.log(LogType.DEBUG, strClassModifier + " " + 
+				strPrimitiveType + " " + strIdentifier + " created!");
 	}
 	
 	/*
@@ -79,16 +78,13 @@ public class ClassScope implements IScope {
 		if(isPublic) {
 			JavaRiceValue javaRiceValue = this.publicVariables.get(strIdentifier);
 			this.publicVariables.put(strIdentifier, javaRiceValue);
-			// add to console
-			System.out.println("CONSOLE [DEBUG]: " + strClassModifier + " " + 
-					strPrimitiveType + " " + strIdentifier + " updated!");
 		} else {
 			JavaRiceValue javaRiceValue = this.privateVariables.get(strIdentifier);
 			this.privateVariables.put(strIdentifier, javaRiceValue);
-			// add to console
-			System.out.println("CONSOLE [DEBUG]: " + strClassModifier + " " + 
-					strPrimitiveType + " " + strIdentifier + " updated!");
 		}
+		
+		Console.log(LogType.DEBUG, strClassModifier + " " + 
+				strPrimitiveType + " " + strIdentifier + " updated!");
 	}	
 	
 	public JavaRiceValue getPublicVariable(String strIdentifier) {
@@ -111,15 +107,13 @@ public class ClassScope implements IScope {
 	
 	public void addPrivateJavaRiceFunction(String strIdentifier, JavaRiceFunction javaRiceFunction) {
 		this.privateFunctions.put(strIdentifier, javaRiceFunction);
-		// add to console
-		System.out.println("CONSOLE [DEBUG]: Created private function " + javaRiceFunction.getReturnType() 
+		Console.log(LogType.DEBUG, "Created private function " + javaRiceFunction.getReturnType() 
 			+ " " + strIdentifier);
 	}
 	
 	public void addPublicJavaRiceFunction(String strIdentifier, JavaRiceFunction javaRiceFunction) {
 		this.publicFunctions.put(strIdentifier, javaRiceFunction);
-		// add to console
-		System.out.println("CONSOLE [DEBUG]: Created public function " + javaRiceFunction.getReturnType() 
+		Console.log(LogType.DEBUG, "Created public function " + javaRiceFunction.getReturnType() 
 			+ " " + strIdentifier);
 	}
 	

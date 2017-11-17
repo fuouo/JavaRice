@@ -2,6 +2,8 @@ package model.javarice.semantics.utils;
 
 import java.math.BigDecimal;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.semantics.representations.JavaRiceValue;
 
 public class AssignmentUtils {
@@ -35,8 +37,7 @@ public class AssignmentUtils {
 			
 			break;
 		default:
-			// add to console
-			System.out.println("CONSOLE [DEBUG]: JavaRiceValue: Did not find appropriate type!" );
+			Console.log(LogType.DEBUG, "JavaRiceValue: Did not find appropriate type!");
 		}
 	}
 

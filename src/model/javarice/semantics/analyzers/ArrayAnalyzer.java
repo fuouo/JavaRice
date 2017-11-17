@@ -6,12 +6,14 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ArrayCreatorRestContext;
-import model.javarice.JavaRiceParser.CreatedNameContext;
-import model.javarice.JavaRiceParser.PrimitiveTypeContext;
-import model.javarice.JavaRiceParser.VariableDeclaratorIdContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.ArrayInitializeCommand;
+import model.javarice.generatedexp.JavaRiceParser.ArrayCreatorRestContext;
+import model.javarice.generatedexp.JavaRiceParser.CreatedNameContext;
+import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorIdContext;
 import model.javarice.semantics.representations.JavaRiceArray;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
@@ -59,7 +61,7 @@ public class ArrayAnalyzer implements ParseTreeListener {
 		}
 		else if(ctx instanceof CreatedNameContext) {
 			CreatedNameContext createdNameCtx = (CreatedNameContext) ctx;
-			System.err.println("ADD TO CONSOLE: " + "Array created name: " +createdNameCtx.getText());
+			Console.log(LogType.DEBUG, "Array created name: " +createdNameCtx.getText());
 		}
 		
 		else if(ctx instanceof ArrayCreatorRestContext) {
@@ -99,9 +101,8 @@ public class ArrayAnalyzer implements ParseTreeListener {
 				JavaRiceValue javaRiceValue = new JavaRiceValue(this.declaredArray, PrimitiveType.ARRAY);
 				
 				this.declaredClassScope.addJavaRiceValue(accessControlString, arrayIdentifierString, javaRiceValue);
-				System.out.println("CONSOLE [DEBUG]: " + 
+				Console.log(LogType.DEBUG, 
 						"Creating array with type " +arrayTypeString+ " variable " +arrayIdentifierString);
-				
 				this.identifiedTokens.clearTokens();
 			}
 		} else if(this.localScope != null) {
@@ -114,7 +115,7 @@ public class ArrayAnalyzer implements ParseTreeListener {
 				JavaRiceValue javaRiceValue = new JavaRiceValue(this.declaredArray, PrimitiveType.ARRAY);
 				
 				this.localScope.addJavaRiceValue(arrayIdentifierString, javaRiceValue);
-				System.out.println("CONSOLE [DEBUG]: " + 
+				Console.log(LogType.DEBUG, 
 						"Creating array with type " +arrayTypeString+ " variable " +arrayIdentifierString);
 				
 				this.identifiedTokens.clearTokens();

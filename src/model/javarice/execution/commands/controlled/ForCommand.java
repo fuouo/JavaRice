@@ -3,12 +3,14 @@ package model.javarice.execution.commands.controlled;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.LocalVariableDeclarationContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.utils.ConditionEvaluator;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.LocalVariableDeclarationContext;
 import model.javarice.semantics.analyzers.LocalVariableAnalyzer;
 import model.javarice.semantics.mapping.IValueMapper;
 import model.javarice.semantics.mapping.IdentifierMapper;
@@ -74,7 +76,7 @@ public class ForCommand implements IControlledCommand {
 	@Override
 	public void addCommand(ICommand command) {
 		// TODO Auto-generated method stub
-		System.out.println("CONSOLE [DEBUG]: " + "Added command to FOR");
+		Console.log(LogType.DEBUG, "Added command to FOR");
 		this.commandSequences.add(command);
 	}
 	

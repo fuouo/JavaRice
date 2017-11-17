@@ -6,11 +6,13 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.LiteralContext;
-import model.javarice.JavaRiceParser.PrimaryContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.LiteralContext;
+import model.javarice.generatedexp.JavaRiceParser.PrimaryContext;
 import model.javarice.semantics.representations.JavaRiceArray;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
@@ -36,7 +38,7 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		treeWalker.walk(this, expressionContext);
 		
 		// log to console
-		System.out.println("CONSOLE [VERBOSE]: " + this.strToPrint);
+		Console.log(LogType.DEBUG, this.strToPrint);
 		
 		// rest statement to print
 		this.strToPrint = "";
@@ -64,8 +66,7 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 				this.complexExpr = true;
 				
 				// add to console
-				System.out.println("CONSOLE [DEBUG]: " + 
-						"Complex expression detected: " + expressionContext.getText());
+				Console.log(LogType.DEBUG, "Complex expression detected: " + expressionContext.getText());
 				
 				EvaluationCommand evaluationCommand = new EvaluationCommand(expressionContext);
 				evaluationCommand.execute();

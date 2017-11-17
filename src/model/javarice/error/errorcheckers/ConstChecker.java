@@ -7,12 +7,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
+import model.javarice.builder.ParserHandler;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.searching.VariableSearcher;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 
 public class ConstChecker implements IErrorChecker, ParseTreeListener {
@@ -73,15 +77,15 @@ public class ConstChecker implements IErrorChecker, ParseTreeListener {
 		
 		//if after function finding, java rice value is still null, search class
 		if(javaRiceValue == null) {
-			// parser handler shit here
-			ClassScope classScope = null;
+			ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+					ParserHandler.getInstance().getCurrentClassName());
 			javaRiceValue = VariableSearcher.searchVariableInClassIncludingLocal(
 					classScope, varExprCtx.primary().Identifier().getText());
 		}
 		
 		if(javaRiceValue != null && javaRiceValue.isFinal()) {
-			// report error constant reassignment!!!
-			// BuildChecker.reportCustomError(ErrorRepository.CONST_REASSIGNMENT, "", varExprCtx.getText(), this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.CONST_REASSIGNMENT, "", 
+					varExprCtx.getText(), this.lineNumber);
 		}
 	}
 

@@ -1,8 +1,8 @@
 package model.javarice.execution.commands.evaluation;
 
-import model.javarice.JavaRiceParser.ArrayCreatorRestContext;
-import model.javarice.JavaRiceParser.ExpressionContext;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.generatedexp.JavaRiceParser.ArrayCreatorRestContext;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceArray;
 
 public class ArrayInitializeCommand implements ICommand {

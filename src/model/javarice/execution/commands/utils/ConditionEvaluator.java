@@ -1,8 +1,8 @@
 package model.javarice.execution.commands.utils;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.ParExpressionContext;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 
 public class ConditionEvaluator {
 

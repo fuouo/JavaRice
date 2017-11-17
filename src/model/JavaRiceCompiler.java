@@ -9,9 +9,9 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
 import model.MyTokenFactory;
-import model.javarice.JavaRiceLexer;
-import model.javarice.JavaRiceParser;
 import model.javarice.error.VerboseListener;
+import model.javarice.generatedexp.JavaRiceLexer;
+import model.javarice.generatedexp.JavaRiceParser;
 import model.symboltable.STRow;
 
 import model.javarice.error.Error;

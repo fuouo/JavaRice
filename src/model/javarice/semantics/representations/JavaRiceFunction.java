@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.error.errorcheckers.TypeErrorChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.FunctionTracker;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.symboltable.scopes.LocalScope;
@@ -165,8 +167,7 @@ public class JavaRiceFunction implements IControlledCommand{
 
 	public void addParameter(String strIdentifier, JavaRiceValue javaRiceValue) {
 		this.parameterValues.put(strIdentifier, javaRiceValue);
-		// add to console
-		System.out.println("CONSOLE [DEBUG]: " + this.functionName + " added an empty parameter "
+		Console.log(LogType.DEBUG, this.functionName + " added an empty parameter "
 				+ strIdentifier + " type " + javaRiceValue.getPrimitiveType());
 	}
 
@@ -215,8 +216,7 @@ public class JavaRiceFunction implements IControlledCommand{
 	
 	public JavaRiceValue getReturnValue() {
 		if(this.returnType == FunctionType.VOID_TYPE) {
-			// console pls
-			System.out.println("CONSOLE [DEBUG]: " + this.functionName + " is a void function."
+			Console.log(LogType.DEBUG, this.functionName + " is a void function."
 					+ " Null java rice value is returned.");
 			return null;
 		}

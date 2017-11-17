@@ -2,8 +2,12 @@ package model.javarice.error.errorcheckers;
 
 import org.antlr.v4.runtime.Token;
 
-import model.javarice.JavaRiceParser.MethodDeclarationContext;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
+import model.javarice.builder.ParserHandler;
+import model.javarice.generatedexp.JavaRiceParser.MethodDeclarationContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 
 public class MultipleFuncDecChecker implements IErrorChecker {
@@ -25,13 +29,12 @@ public class MultipleFuncDecChecker implements IErrorChecker {
 	}
 	
 	private void verifyFunctionCall(String identifierString) {
-		// parser handler shit here
-		ClassScope classScope = null;
+		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+				ParserHandler.getInstance().getCurrentClassName());
 		JavaRiceFunction javaRiceFunction = classScope.searchFunction(identifierString);
 		
 		if(javaRiceFunction != null) {
-			// report error here
-			// BuildChecker.reportCustomError(ErrorRepository.MULTIPLE_FUNCTION, "", identifierString, this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.MULTIPLE_FUNCTION, "", identifierString, this.lineNumber);
 		}
 	}
 

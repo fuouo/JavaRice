@@ -4,11 +4,8 @@ import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceLexer;
-import model.javarice.JavaRiceParser.BlockContext;
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.ScanContext;
-import model.javarice.JavaRiceParser.StatementContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.controlled.DoWhileCommand;
@@ -20,6 +17,11 @@ import model.javarice.execution.commands.controlled.WhileCommand;
 import model.javarice.execution.commands.simple.PrintCommand;
 import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.execution.commands.simple.ScanCommand;
+import model.javarice.generatedexp.JavaRiceLexer;
+import model.javarice.generatedexp.JavaRiceParser.BlockContext;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.ScanContext;
+import model.javarice.generatedexp.JavaRiceParser.StatementContext;
 import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 
@@ -77,7 +79,7 @@ public class StatementAnalyzer {
 
 		// an WHILE statement
 		else if(isWHILEStatement(ctx)) {
-			System.out.println("CONSOLE [DEBUG]: " + "While par expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, "While par expression: " +ctx.parExpression().getText());
 			
 			StatementContext statementCtx = ctx.statement(0);
 			
@@ -89,12 +91,12 @@ public class StatementAnalyzer {
 			
 			StatementControlOverseer.getInstance().compileControlledCommand();
 			
-			System.out.println("CONSOLE [DEBUG]: " + "End of WHILE expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, "End of WHILE expression: " +ctx.parExpression().getText());
 		}
 
 		// an DOWHILE statement
 		else if(isDOWHILEStatement(ctx)) {
-			System.out.println("CONSOLE [DEBUG]: " + "Do While par expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, "Do While PAR expression: " +ctx.parExpression().getText());
 			
 			StatementContext statementCtx = ctx.statement(0);
 			
@@ -106,12 +108,12 @@ public class StatementAnalyzer {
 			
 			StatementControlOverseer.getInstance().compileControlledCommand();
 			
-			System.out.println("CONSOLE [DEBUG]: " + "End of DO-WHILE expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, "End of DO-WHILE expression: " +ctx.parExpression().getText());
 		}
 
 		// an FOR statement
 		else if(isFORStatement(ctx)) {
-			System.out.println("CONSOLE [DEBUG]: " + "FOR expression: " +ctx.forControl().getText());
+			Console.log(LogType.DEBUG, "FOR expression: " +ctx.parExpression().getText());
 			
 			LocalScopeCreator.getInstance().openLocalScope();
 			
@@ -130,12 +132,12 @@ public class StatementAnalyzer {
 			
 			LocalScopeCreator.getInstance().closeLocalScope();
 			
-			System.out.println("CONSOLE [DEBUG]: " + "End of FOR loop");
+			Console.log(LogType.DEBUG, "End of FOR loop");
 		}
 
 		// an RETURN statement
 		else if(isRETURNStatement(ctx) && ExecutionManager.getInstance().isInFunctionExecution()) {
-			System.out.println("CONSOLE [DEBUG]: " + "Detected return expression: " +ctx.expression(0).getText());
+			Console.log(LogType.DEBUG, "Detected return expression: " +ctx.expression(0).getText());
 			this.handleReturnStatement(ctx.expression(0));
 		}
 	}

@@ -7,11 +7,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.VariableDeclaratorIdContext;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
+import model.javarice.builder.ParserHandler;
 import model.javarice.execution.ExecutionManager;
+import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorIdContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.searching.VariableSearcher;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 
@@ -75,16 +79,15 @@ public class MultipleVarDecChecker implements IErrorChecker, ParseTreeListener {
 					LocalScopeCreator.getInstance().getActiveLocalScope());
 		}
 		
-		// if mobi value is still null, search class
+		// if java rice value is still null, search class
 		if(javaRiceValue == null) {
-			// parser handler shit here
-			ClassScope classScope = null;
+			ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+					ParserHandler.getInstance().getCurrentClassName());
 			javaRiceValue = VariableSearcher.searchVariableInClass(classScope, identifierString);
 		}
 		
 		if(javaRiceValue != null) {
-			// report error shit here
-			// BuildChecker.reportCustomError(ErrorRepository.MULTIPLE_VARIABLE, "", identifierString, this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.MULTIPLE_VARIABLE, "", identifierString, this.lineNumber);
 		}
 	}
 }

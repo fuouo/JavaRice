@@ -5,10 +5,12 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
+import model.javarice.builder.ParserHandler;
 import model.javarice.error.errorcheckers.ParameterMismatchChecker;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 
 public class FunctionCallVerifier implements ParseTreeListener {
@@ -24,8 +26,8 @@ public class FunctionCallVerifier implements ParseTreeListener {
 				
 				String functionName = exprCtx.expression(0).Identifier().getText();
 
-				// parser handler shit here
-				ClassScope classScope = null;
+				ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+						ParserHandler.getInstance().getCurrentClassName());
 				JavaRiceFunction javaRiceFunction = classScope.searchFunction(functionName);
 				
 				if (exprCtx.arguments() != null) {

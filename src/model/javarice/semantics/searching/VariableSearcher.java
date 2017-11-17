@@ -1,8 +1,10 @@
 package model.javarice.semantics.searching;
 
+import model.javarice.builder.ParserHandler;
 import model.javarice.execution.FunctionTracker;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 
@@ -17,8 +19,8 @@ public class VariableSearcher {
 		}
 		
 		if(javaRiceValue == null) {
-			// parser handler shit here
-			ClassScope classScope = null;
+			ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+					ParserHandler.getInstance().getCurrentClassName());
 			javaRiceValue = searchVariableInClassIncludingLocal(classScope, strIdentifier);
 		}
 		

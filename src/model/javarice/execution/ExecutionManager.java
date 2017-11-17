@@ -105,14 +105,16 @@ public class ExecutionManager {
 	}
 	
 	/*
-	 * Blocks the execution of the thread. Can only be called once. At this point, resumeExecution() must be called by a specific command.
+	 * Blocks the execution of the thread. Can only be called once. 
+	 * At this point, resumeExecution() must be called by a specific command.
 	 */
 	public void blockExecution() {
 		this.executionMonitor.claimExecutionFlag();
 	}
 	
 	/*
-	 * Resumes the execution of thread. Can only be called once. At this point, the execution thread should continue to do other actions.
+	 * Resumes the execution of thread. Can only be called once. 
+	 * At this point, the execution thread should continue to do other actions.
 	 */
 	public void resumeExecution() {
 		this.executionMonitor.releaseExecutionFlag();

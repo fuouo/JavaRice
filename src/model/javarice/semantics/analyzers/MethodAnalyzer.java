@@ -6,15 +6,17 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.BlockContext;
-import model.javarice.JavaRiceParser.ClassOrInterfaceTypeContext;
-import model.javarice.JavaRiceParser.FormalParametersContext;
-import model.javarice.JavaRiceParser.MethodBodyContext;
-import model.javarice.JavaRiceParser.MethodDeclarationContext;
-import model.javarice.JavaRiceParser.PrimitiveTypeContext;
-import model.javarice.JavaRiceParser.TypeTypeContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.error.errorcheckers.MultipleFuncDecChecker;
 import model.javarice.execution.ExecutionManager;
+import model.javarice.generatedexp.JavaRiceParser.BlockContext;
+import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.FormalParametersContext;
+import model.javarice.generatedexp.JavaRiceParser.MethodBodyContext;
+import model.javarice.generatedexp.JavaRiceParser.MethodDeclarationContext;
+import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.TypeTypeContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceFunction.FunctionType;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
@@ -115,7 +117,7 @@ public class MethodAnalyzer implements ParseTreeListener {
 		}
 		// a class identified
 		else {
-			System.out.println("CONSOLE [DEBUG]: " + "Class identified: " + classOrInterfaceCtx.getText());
+			Console.log(LogType.DEBUG, "Class identified: " + classOrInterfaceCtx.getText());
 		}
 	}
 	

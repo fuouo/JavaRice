@@ -2,9 +2,9 @@ package model.javarice.execution.commands.evaluation;
 
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
 import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.analyzers.FunctionCallVerifier;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.searching.VariableSearcher;

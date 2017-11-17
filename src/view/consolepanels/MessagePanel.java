@@ -43,6 +43,10 @@ public class MessagePanel extends Panel {
 		messageTextPane.setText("");
 	}
 	
+	public void appendMessage(String message) {
+		messageTextPane.setText(messageTextPane.getText() + "\n" + message);
+	}
+	
 	@Override
 	public void displayItems(ArrayList<Object> list) {
 		clearMessage();

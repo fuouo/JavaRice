@@ -7,10 +7,11 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.LiteralContext;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.LiteralContext;
 import model.javarice.semantics.representations.JavaRiceValue;
-import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 
 public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 	
@@ -69,8 +70,7 @@ public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 			}
 			
 			if(additionalMessage != "") {
-				// report custom error here:
-				// BuildChecker.reportCustomError(ErrorRepository.TYPE_MISMATCH,  additionalMessage, this.lineNumber);
+				BuildChecker.reportCustomError(ErrorRepository.TYPE_MISMATCH,  additionalMessage, this.lineNumber);
 			}
 					
 				

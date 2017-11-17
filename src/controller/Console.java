@@ -8,23 +8,33 @@ import javax.swing.event.ChangeListener;
 
 import model.JavaRiceCompiler;
 import model.javarice.error.Error;
+import model.javarice.error.ErrorType;
 import model.symboltable.STRow;
 import view.consolepanels.ErrorPanel;
 import view.consolepanels.MessagePanel;
 import view.factory.ConsoleType;
 
 public class Console {
-
-	// ====== SINGLETON ====== //
-	private static Console instance;
-	private Console(){}
-	public static Console getInstance(){
-		if(instance == null){
-			instance = new Console();
-		}
-		return instance;
+	
+	public enum LogType {
+		VERBOSE,
+		DEBUG,
+		ERROR
 	}
-	// ====== SINGLETON ====== //
+	
+	
+	private static Console INSTANCE;
+	
+	private Console() {
+		
+	}
+	
+	public static Console getInstance(){
+		if(INSTANCE == null){
+			INSTANCE = new Console();
+		}
+		return INSTANCE;
+	}
 	
 	private JTabbedPane consoleTabPane;
 	private MessagePanel messagePanel;
@@ -83,7 +93,7 @@ public class Console {
 		
 		ArrayList<Object> list = null;
 		if(activePanel.getId() == ConsoleType.TOKENS){
-			System.out.println("SHOWING TOKENS");
+			System.out.println("SHOWING MESSAGES");
 			list = getMessages("");
 		}else if(activePanel.getId() == ConsoleType.ERRORS){
 			System.out.println("SHOWING ERRORS");
@@ -97,5 +107,45 @@ public class Console {
 		*/
 	}
 	
+	public static void log(final LogType logType, final String message) {
+		if(INSTANCE == null) {
+			System.out.println("Console UI not yet initialized!");
+			return;
+		}
+		
+		switch(logType) {
+		case VERBOSE:
+		case DEBUG:			 // access message panel
+			INSTANCE.messagePanel.appendMessage(logType.toString() + ": " + message);
+			break;
+		case ERROR:			// access error panel
+			
+			// process the message
+			String tokens[] = message.split("\\[SYNTAX\\]|\\[LINE\\]:");
+			String errorMessage = tokens[0];
+			int lineNumber = 0;
+			ErrorType errorType = null;
+			
+			// semantic error
+			if(tokens.length == 2) {
+				lineNumber = Integer.parseInt(tokens[1]);
+				errorType = ErrorType.SYNTAX_ERROR;
+			}
+			
+			// syntax error
+			else if(tokens.length == 3) {
+				lineNumber = Integer.parseInt(tokens[2]);
+				errorType = ErrorType.SEMANTIC_ERROR;
+			}
+			
+			Error error = new Error();
+			error.setErrorType(errorType);
+			error.setMessage(errorMessage);
+			error.setLine(lineNumber);
+			
+			INSTANCE.errorPanel.addRow(error);
+			
+		}
+	}
 	
 }

@@ -6,10 +6,12 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.FormalParameterContext;
-import model.javarice.JavaRiceParser.FormalParameterListContext;
-import model.javarice.JavaRiceParser.PrimitiveTypeContext;
-import model.javarice.JavaRiceParser.TypeTypeContext;
+import controller.Console;
+import controller.Console.LogType;
+import model.javarice.generatedexp.JavaRiceParser.FormalParameterContext;
+import model.javarice.generatedexp.JavaRiceParser.FormalParameterListContext;
+import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.TypeTypeContext;
 import model.javarice.semantics.representations.JavaRiceArray;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
@@ -110,7 +112,7 @@ public class ParameterAnalyzer implements ParseTreeListener {
 			JavaRiceValue javaRiceValue = new JavaRiceValue(declaredArray, PrimitiveType.ARRAY);
 			this.declaredJavaRiceFunction.addParameter(identifierString, javaRiceValue);
 			
-			System.out.println("CONSOLE [DEBUG]: " + 
+			Console.log(LogType.DEBUG, 
 					"Created array parameter for " +this.declaredJavaRiceFunction.getFunctionName());
 		}
 		
@@ -120,9 +122,9 @@ public class ParameterAnalyzer implements ParseTreeListener {
 			
 			JavaRiceValue javaRiceValue = JavaRiceValue.createEmptyVariableFromKeywords(typeString);
 			this.declaredJavaRiceFunction.addParameter(identifierString, javaRiceValue);
-			
-			System.out.println("CONSOLE [DEBUG]: " + 
-					"Created primitive parameter for " +this.declaredJavaRiceFunction.getFunctionName());
+
+			Console.log(LogType.DEBUG, 
+					"Created array parameter for " +this.declaredJavaRiceFunction.getFunctionName());
 		}
 		
 		this.identifiedTokens.clearTokens();

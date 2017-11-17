@@ -7,13 +7,19 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.ScanContext;
+import controller.Console;
+import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
+import model.javarice.builder.ParserHandler;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.ScanContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.searching.VariableSearcher;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 
 public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
@@ -73,15 +79,14 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 	
 		String functionName = funcExprCtx.expression(0).Identifier().getText();
 		
-		// parser handler shit here
-		ClassScope classScope = null;
+		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+				ParserHandler.getInstance().getCurrentClassName());
 		JavaRiceFunction javaRiceFunction = classScope.searchFunction(functionName);
 		
 		if(javaRiceFunction == null) {
-			// report error shit here
-			// BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_FUNCTION, "", functionName, this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_FUNCTION, "", functionName, this.lineNumber);
 		} else {
-			System.out.println("CONSOLE [DEBUG]: Function found " + functionName);
+			Console.log(LogType.DEBUG, "Function found " + functionName);
 		}
 	}
 	
@@ -96,16 +101,16 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		
 		// if java rice value is still null, search class
 		if(javaRiceValue == null) {
-			// parser handler shit here
-			ClassScope classScope = null;
+			ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+					ParserHandler.getInstance().getCurrentClassName());
 			javaRiceValue = VariableSearcher.searchVariableInClass(classScope, 
 					varExprCtx.primary().Identifier().getText());
 		}
 		
 		// after second pass, we conclude if it cannot be found already
 		if(javaRiceValue == null) {
-			// report error shit here
-			// BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", varExprCtx.getText(), this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", 
+					varExprCtx.getText(), this.lineNumber);
 		}
 	}
 	
@@ -113,13 +118,14 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 	 * Verifies a var or const identifier from a scan statement since scan grammar is different.
 	 */
 	public static void verifyVarOrConstForScan(String identifier, ScanContext statementCtx) {
-		// parser handler shit here
-		ClassScope classScope = null;
+		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+				ParserHandler.getInstance().getCurrentClassName());
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariableInClassIncludingLocal(classScope, identifier);
 		
+		Token firstToken = statementCtx.getStart();
+		
 		if(javaRiceValue == null) {
-			// report error shit here
-			// BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", identifier, firstToken.getLine());
+			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", identifier, firstToken.getLine());
 		}
 	}
 }

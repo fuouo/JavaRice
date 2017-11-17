@@ -2,8 +2,10 @@ package model.javarice.error.errorcheckers;
 
 import java.util.List;
 
-import model.javarice.JavaRiceParser.ArgumentsContext;
-import model.javarice.JavaRiceParser.ExpressionContext;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
+import model.javarice.generatedexp.JavaRiceParser.ArgumentsContext;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 
 public class ParameterMismatchChecker implements IErrorChecker {
@@ -30,13 +32,12 @@ public class ParameterMismatchChecker implements IErrorChecker {
 		}
 		
 		if(this.exprCtxList == null && this.javaRiceFunction.getParameterValueSize() != 0) {
-			
-			// report error shit here
-			// BuildChecker.reportCustomError(ErrorRepository.PARAMETER_COUNT_MISMATCH, "", this.mobiFunction.getFunctionName(), this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.PARAMETER_COUNT_MISMATCH, "", 
+					this.javaRiceFunction.getFunctionName(), this.lineNumber);
 		}
 		else if(this.exprCtxList != null && this.exprCtxList.size() != this.javaRiceFunction.getParameterValueSize()) {
-			// report error shit here
-			// BuildChecker.reportCustomError(ErrorRepository.PARAMETER_COUNT_MISMATCH, "", this.mobiFunction.getFunctionName(), this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.PARAMETER_COUNT_MISMATCH, "", 
+					this.javaRiceFunction.getFunctionName(), this.lineNumber);
 		}
 	}
 

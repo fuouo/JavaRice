@@ -6,10 +6,14 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.BlockContext;
-import model.javarice.JavaRiceParser.MainDeclarationContext;
-import model.javarice.JavaRiceParser.MethodBodyContext;
+import controller.Console;
+import controller.Console.LogType;
+import model.javarice.builder.ParserHandler;
 import model.javarice.execution.ExecutionManager;
+import model.javarice.generatedexp.JavaRiceParser.BlockContext;
+import model.javarice.generatedexp.JavaRiceParser.MainDeclarationContext;
+import model.javarice.generatedexp.JavaRiceParser.MethodBodyContext;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.symboltable.scopes.LocalScope;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
@@ -22,12 +26,10 @@ public class MainAnalyzer implements ParseTreeListener {
 	
 	public void analyze(MainDeclarationContext ctx) {
 		if(!ExecutionManager.getInstance().hasFoundEntryPoint()) {
-			// parser handler shit here
-			// report found entry point
-			// ExecutionManager.getInstance().reportFoundEntryPoint(ParserHandler.getInstance().getCurrentClassName());
+			ExecutionManager.getInstance().reportFoundEntryPoint(ParserHandler.getInstance().getCurrentClassName());
 			
-			// parser handler shit here
-			ClassScope classScope = null;
+			ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+					ParserHandler.getInstance().getCurrentClassName());
 			LocalScope localScope = LocalScopeCreator.getInstance().openLocalScope();
 			localScope.setParent(classScope);
 			classScope.setParentLocalScope(localScope);
@@ -36,7 +38,7 @@ public class MainAnalyzer implements ParseTreeListener {
 			treeWalker.walk(this, ctx);
 			
 		} else {
-			System.out.println("CONSOLE [DEBUG]: " + "Already found main in " +
+			Console.log(LogType.DEBUG, "Already found main in " +
 					ExecutionManager.getInstance().getEntryClassName());
 		}
 	}

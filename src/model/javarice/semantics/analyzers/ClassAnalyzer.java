@@ -8,14 +8,17 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceLexer;
-import model.javarice.JavaRiceParser.ClassDeclarationContext;
-import model.javarice.JavaRiceParser.ClassOrInterfaceModifierContext;
-import model.javarice.JavaRiceParser.ClassOrInterfaceTypeContext;
-import model.javarice.JavaRiceParser.PrimitiveTypeContext;
-import model.javarice.JavaRiceParser.TypeTypeContext;
-import model.javarice.JavaRiceParser.VariableDeclarationContext;
+import controller.Console;
+import controller.Console.LogType;
+import model.javarice.builder.ParserHandler;
 import model.javarice.error.errorcheckers.ClassNameChecker;
+import model.javarice.generatedexp.JavaRiceLexer;
+import model.javarice.generatedexp.JavaRiceParser.ClassDeclarationContext;
+import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceModifierContext;
+import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.TypeTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.VariableDeclarationContext;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.IdentifiedTokens;
@@ -40,7 +43,10 @@ public class ClassAnalyzer implements ParseTreeListener {
 	public void analyze(ClassDeclarationContext ctx) {
 		String className = ctx.Identifier().getText();
 		
-		System.out.println("CONSOLE [DEBUG] " + "Class name is " +className);
+		Console.log(LogType.DEBUG, "Class name is " +className);
+		
+		ParserHandler.getInstance().setCurrentClassName(className);
+		
 		ClassNameChecker classNameChecker = new ClassNameChecker(className);
 		classNameChecker.verify();
 		
@@ -103,7 +109,7 @@ public class ClassAnalyzer implements ParseTreeListener {
 					this.identifiedTokens.clearTokens();	
 				} //check if its array declaration
 				else if(ClassAnalyzer.isPrimitiveArrayDeclaration(typeCtx)) {
-					System.out.println("CONSOLE [DEBUG]: " + "Primitive array declaration: " + fieldCtx.getText());
+					Console.log(LogType.DEBUG, "Primitive array declaration: " + fieldCtx.getText());
 					ArrayAnalyzer arrayAnalyzer = new ArrayAnalyzer(this.identifiedTokens, this.declaredClassScope);
 					arrayAnalyzer.analyze(fieldCtx);
 				} //this is for class type ctx

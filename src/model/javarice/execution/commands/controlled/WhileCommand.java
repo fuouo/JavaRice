@@ -3,11 +3,13 @@ package model.javarice.execution.commands.controlled;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.javarice.JavaRiceParser.ParExpressionContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.utils.ConditionEvaluator;
+import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 import model.javarice.semantics.mapping.IValueMapper;
 import model.javarice.semantics.mapping.IdentifierMapper;
 
@@ -55,7 +57,7 @@ public class WhileCommand implements IControlledCommand {
 	@Override
 	public void addCommand(ICommand command) {
 		// add to console
-		System.out.println("CONSOLE [DEBUG]: Added command to WHILE");
+		Console.log(LogType.DEBUG, "Added command to WHILE");
 		this.commandSequences.add(command);
 	}
 	

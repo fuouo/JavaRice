@@ -1,5 +1,9 @@
 package model.javarice.error.errorcheckers;
 
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
+import model.javarice.builder.ParserHandler;
+
 public class ClassNameChecker implements IErrorChecker {
 
 	private String className;
@@ -11,16 +15,12 @@ public class ClassNameChecker implements IErrorChecker {
 
 	@Override
 	public void verify() {
-		// TODO Auto-generated method stub
-		// parser handler shit here
-
-		/*
-		 * if(this.className.equals(ParserHandler.getInstance().getCurrentClassName()) == false) {
+		if(this.className.equals(ParserHandler.getInstance().getCurrentClassName()) == false) {
 			this.successful = false;
-			String additionalMsg = "Class name is " +this.className+ " while file name is " +ParserHandler.getInstance().getCurrentClassName();
+			String additionalMsg = "Class name is " +this.className+ " while file name is " +
+					ParserHandler.getInstance().getCurrentClassName();
 			BuildChecker.reportCustomError(ErrorRepository.INCONSISTENT_CLASS_NAME, additionalMsg);
 		}
-		 */
 	}
 
 	/*
@@ -30,10 +30,9 @@ public class ClassNameChecker implements IErrorChecker {
 		if(this.successful) {
 			return this.className;
 		}
-
-		// parser handler shit here
-		return "";
-		// return ParserHandler.getInstance().getCurrentClassName();
+		else {
+			return ParserHandler.getInstance().getCurrentClassName();
+		}
 	}
 
 }

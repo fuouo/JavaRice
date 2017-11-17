@@ -9,11 +9,13 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
+import model.javarice.builder.ParserHandler;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.searching.VariableSearcher;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.Expression;
 import model.javarice.semantics.utils.RecognizedKeywords;
@@ -92,8 +94,8 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private void evaluateFunctionCall(ExpressionContext expressionContext) {
 		String functionName = expressionContext.expression(0).Identifier().getText();
 		
-		// parser handler shit here
-		ClassScope classScope = null;
+		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+				ParserHandler.getInstance().getCurrentClassName());
 		
 		JavaRiceFunction javaRiceFunction = classScope.searchFunction(functionName);
 		

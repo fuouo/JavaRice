@@ -1,9 +1,9 @@
 package model.javarice.execution.commands.controlled;
 
-import model.javarice.JavaRiceParser.ParExpressionContext;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 
 public class DoWhileCommand extends WhileCommand {
 

@@ -1,8 +1,8 @@
 package model.javarice.execution.commands.simple;
 
-import model.javarice.JavaRiceLexer;
-import model.javarice.JavaRiceParser.ExpressionContext;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.generatedexp.JavaRiceLexer;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.mapping.IValueMapper;
 import model.javarice.semantics.mapping.IdentifierMapper;
 import model.javarice.semantics.representations.JavaRiceValue;

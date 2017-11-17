@@ -2,10 +2,10 @@ package model.javarice.semantics.analyzers;
 
 import java.util.List;
 
-import model.javarice.JavaRiceParser.BlockContext;
-import model.javarice.JavaRiceParser.BlockStatementContext;
-import model.javarice.JavaRiceParser.LocalVariableDeclarationStatementContext;
-import model.javarice.JavaRiceParser.StatementContext;
+import model.javarice.generatedexp.JavaRiceParser.BlockContext;
+import model.javarice.generatedexp.JavaRiceParser.BlockStatementContext;
+import model.javarice.generatedexp.JavaRiceParser.LocalVariableDeclarationStatementContext;
+import model.javarice.generatedexp.JavaRiceParser.StatementContext;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 
 public class BlockAnalyzer {

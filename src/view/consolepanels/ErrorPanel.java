@@ -41,7 +41,7 @@ public class ErrorPanel extends Panel {
 				new Object[][] {
 				},
 				new String[] {
-					"Type", "SubType", "Line", "Message", 
+					"Type", "Line", "Message", 
 				}
 			));
 		
@@ -77,10 +77,17 @@ public class ErrorPanel extends Panel {
 		
 	}
 	
-	public void addRow(String type, String subType, int line, String message){
+	public void addRow(Error error) {
 		DefaultTableModel model = (DefaultTableModel) errorTable.getModel();
 		model.addRow(new Object[]{
-				type, subType, line, message
+				error.getErrorType(), error.getLine(), error.getMessage()
+				});
+	}
+	
+	public void addRow(String type, int line, String message){
+		DefaultTableModel model = (DefaultTableModel) errorTable.getModel();
+		model.addRow(new Object[]{
+				type, line, message
 				});
 	}
 
@@ -105,12 +112,9 @@ public class ErrorPanel extends Panel {
 			Error error = ((Error)list.get(i));
 			addRow(
 				error.getErrorType().toString(),
-				error.getSubErrorType().toString(),
 				error.getLine(),
 				error.getMessage()
 					);
-			
-			
 		}
 		
 		

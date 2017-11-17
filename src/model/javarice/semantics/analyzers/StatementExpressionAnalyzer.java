@@ -8,9 +8,8 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceLexer;
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.StatementExpressionContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IConditionalCommand;
@@ -18,6 +17,9 @@ import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.execution.commands.evaluation.AssignmentCommand;
 import model.javarice.execution.commands.simple.FunctionCallCommand;
 import model.javarice.execution.commands.simple.IncDecCommand;
+import model.javarice.generatedexp.JavaRiceLexer;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.StatementExpressionContext;
 import model.javarice.semantics.statements.StatementControlOverseer;
 
 public class StatementExpressionAnalyzer implements ParseTreeListener {
@@ -50,7 +52,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			ExpressionContext exprCtx = (ExpressionContext) ctx;
 			
 			if(isAssignmentExpression(exprCtx)) {
-				System.out.println("CONSOLE [DEBUG]: " + "Assignment expr detected: " +exprCtx.getText());
+				Console.log(LogType.DEBUG, "Assignment expr detected: " +exprCtx.getText());
 				
 				List<ExpressionContext> exprListCtx = exprCtx.expression();
 				AssignmentCommand assignmentCommand = new AssignmentCommand(exprListCtx.get(0), exprListCtx.get(1));
@@ -60,7 +62,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			} 
 			
 			else if(isIncrementExpression(exprCtx)) {
-				System.out.println("CONSOLE [DEBUG]: " + "Increment expr detected: " +exprCtx.getText());
+				Console.log(LogType.DEBUG, "Increment expr detected: " +exprCtx.getText());
 				
 				List<ExpressionContext> exprListCtx = exprCtx.expression();
 				
@@ -69,7 +71,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			}
 			
 			else if(isDecrementExpression(exprCtx)) {
-				System.out.println("CONSOLE [DEBUG]: " + "Decrement expr detected: " +exprCtx.getText());
+				Console.log(LogType.DEBUG, "Decrement expr detected: " +exprCtx.getText());
 				
 				List<ExpressionContext> exprListCtx = exprCtx.expression();
 				
@@ -113,7 +115,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 		FunctionCallCommand functionCallCommand = new FunctionCallCommand(functionName, funcExprCtx);
 		this.handleStatementExecution(functionCallCommand);
 		
-		System.out.println("CONSOLE [DEBUG]: " + "Function call with params detected: " +functionName);
+		Console.log(LogType.DEBUG, "Function call with params detected: " +functionName);
 	}
 
 	private void handleFunctionCallWithNoParams(ExpressionContext funcExprCtx) {
@@ -122,7 +124,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 		FunctionCallCommand functionCallCommand = new FunctionCallCommand(functionName, funcExprCtx);
 		this.handleStatementExecution(functionCallCommand);
 
-		System.out.println("CONSOLE [DEBUG]: " +  "Function call with no params detected: " +functionName);
+		Console.log(LogType.DEBUG, "Function call with no params detected: " +functionName);
 	}
 
 	private void handleStatementExecution(ICommand command) {

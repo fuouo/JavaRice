@@ -2,6 +2,8 @@ package model.javarice.semantics.statements;
 
 import java.util.Stack;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IConditionalCommand;
@@ -91,7 +93,7 @@ public class StatementControlOverseer {
 			IControlledCommand controlledCommand = (IControlledCommand) this.activeControlledCommand;
 			controlledCommand.addCommand(command);
 			
-			System.out.println("CONSOLE [DEBUG]: " + "Adding to " +controlledCommand.getControlType());
+			Console.log(LogType.DEBUG, "Adding to " +controlledCommand.getControlType());
 			
 			this.procedureCallStack.push(command);
 			this.activeControlledCommand = command;

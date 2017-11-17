@@ -6,15 +6,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceLexer;
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.ForControlContext;
-import model.javarice.JavaRiceParser.ForInitContext;
-import model.javarice.JavaRiceParser.ForUpdateContext;
-import model.javarice.JavaRiceParser.LocalVariableDeclarationContext;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.evaluation.AssignmentCommand;
 import model.javarice.execution.commands.simple.IncDecCommand;
+import model.javarice.generatedexp.JavaRiceLexer;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.ForControlContext;
+import model.javarice.generatedexp.JavaRiceParser.ForInitContext;
+import model.javarice.generatedexp.JavaRiceParser.ForUpdateContext;
+import model.javarice.generatedexp.JavaRiceParser.LocalVariableDeclarationContext;
 
 public class ForControlAnalyzer implements ParseTreeListener {
 	
