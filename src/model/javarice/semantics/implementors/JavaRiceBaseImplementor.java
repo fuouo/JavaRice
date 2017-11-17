@@ -5,74 +5,7 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import model.javarice.generatedexp.JavaRiceListener;
-import model.javarice.generatedexp.JavaRiceParser.ArgumentsContext;
-import model.javarice.generatedexp.JavaRiceParser.ArrayCreatorRestContext;
-import model.javarice.generatedexp.JavaRiceParser.ArrayInitializerContext;
-import model.javarice.generatedexp.JavaRiceParser.BlockContext;
-import model.javarice.generatedexp.JavaRiceParser.BlockStatementContext;
-import model.javarice.generatedexp.JavaRiceParser.CatchClauseContext;
-import model.javarice.generatedexp.JavaRiceParser.CatchTypeContext;
-import model.javarice.generatedexp.JavaRiceParser.ClassBodyContext;
-import model.javarice.generatedexp.JavaRiceParser.ClassBodyDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.ClassCreatorRestContext;
-import model.javarice.generatedexp.JavaRiceParser.ClassDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceModifierContext;
-import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceTypeContext;
-import model.javarice.generatedexp.JavaRiceParser.ConstDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.ConstantDeclaratorContext;
-import model.javarice.generatedexp.JavaRiceParser.ConstantExpressionContext;
-import model.javarice.generatedexp.JavaRiceParser.CreatedNameContext;
-import model.javarice.generatedexp.JavaRiceParser.CreatorContext;
-import model.javarice.generatedexp.JavaRiceParser.EnhancedForControlContext;
-import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
-import model.javarice.generatedexp.JavaRiceParser.ExpressionListContext;
-import model.javarice.generatedexp.JavaRiceParser.FinallyBlockContext;
-import model.javarice.generatedexp.JavaRiceParser.ForControlContext;
-import model.javarice.generatedexp.JavaRiceParser.ForInitContext;
-import model.javarice.generatedexp.JavaRiceParser.ForUpdateContext;
-import model.javarice.generatedexp.JavaRiceParser.FormalParameterContext;
-import model.javarice.generatedexp.JavaRiceParser.FormalParameterListContext;
-import model.javarice.generatedexp.JavaRiceParser.FormalParametersContext;
-import model.javarice.generatedexp.JavaRiceParser.ImportDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.InnerCreatorContext;
-import model.javarice.generatedexp.JavaRiceParser.LastFormalParameterContext;
-import model.javarice.generatedexp.JavaRiceParser.LiteralContext;
-import model.javarice.generatedexp.JavaRiceParser.LocalVariableDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.LocalVariableDeclarationStatementContext;
-import model.javarice.generatedexp.JavaRiceParser.MainDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.MemberDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.MethodBodyContext;
-import model.javarice.generatedexp.JavaRiceParser.MethodDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.NonWildcardTypeArgumentsContext;
-import model.javarice.generatedexp.JavaRiceParser.NonWildcardTypeArgumentsOrDiamondContext;
-import model.javarice.generatedexp.JavaRiceParser.PackageDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
-import model.javarice.generatedexp.JavaRiceParser.PrimaryContext;
-import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
-import model.javarice.generatedexp.JavaRiceParser.ProgramContext;
-import model.javarice.generatedexp.JavaRiceParser.QualifiedNameContext;
-import model.javarice.generatedexp.JavaRiceParser.QualifiedNameListContext;
-import model.javarice.generatedexp.JavaRiceParser.ResourceContext;
-import model.javarice.generatedexp.JavaRiceParser.ResourceSpecificationContext;
-import model.javarice.generatedexp.JavaRiceParser.ResourcesContext;
-import model.javarice.generatedexp.JavaRiceParser.ScanContext;
-import model.javarice.generatedexp.JavaRiceParser.StatementContext;
-import model.javarice.generatedexp.JavaRiceParser.StatementExpressionContext;
-import model.javarice.generatedexp.JavaRiceParser.SwitchBlockStatementGroupContext;
-import model.javarice.generatedexp.JavaRiceParser.SwitchLabelContext;
-import model.javarice.generatedexp.JavaRiceParser.TypeArgumentContext;
-import model.javarice.generatedexp.JavaRiceParser.TypeArgumentsContext;
-import model.javarice.generatedexp.JavaRiceParser.TypeArgumentsOrDiamondContext;
-import model.javarice.generatedexp.JavaRiceParser.TypeListContext;
-import model.javarice.generatedexp.JavaRiceParser.TypeParameterContext;
-import model.javarice.generatedexp.JavaRiceParser.TypeParametersContext;
-import model.javarice.generatedexp.JavaRiceParser.TypeTypeContext;
-import model.javarice.generatedexp.JavaRiceParser.VariableDeclarationContext;
-import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorContext;
-import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorIdContext;
-import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorsContext;
-import model.javarice.generatedexp.JavaRiceParser.VariableInitializerContext;
-import model.javarice.generatedexp.JavaRiceParser.VariableModifierContext;
+import model.javarice.generatedexp.JavaRiceParser.*;
 import model.javarice.semantics.analyzers.ClassAnalyzer;
 import model.javarice.semantics.analyzers.MainAnalyzer;
 
@@ -103,13 +36,13 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 	}
 
 	@Override
-	public void enterProgram(ProgramContext ctx) {
+	public void enterCompilationUnit(CompilationUnitContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void exitProgram(ProgramContext ctx) {
+	public void exitCompilationUnit(CompilationUnitContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -134,6 +67,30 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 
 	@Override
 	public void exitImportDeclaration(ImportDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterTypeDeclaration(TypeDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitTypeDeclaration(TypeDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterModifier(ModifierContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitModifier(ModifierContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -200,6 +157,78 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 	}
 
 	@Override
+	public void enterTypeBound(TypeBoundContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitTypeBound(TypeBoundContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEnumDeclaration(EnumDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEnumDeclaration(EnumDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEnumConstants(EnumConstantsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEnumConstants(EnumConstantsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEnumConstant(EnumConstantContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEnumConstant(EnumConstantContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEnumBodyDeclarations(EnumBodyDeclarationsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEnumBodyDeclarations(EnumBodyDeclarationsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitInterfaceDeclaration(InterfaceDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void enterTypeList(TypeListContext ctx) {
 		// TODO Auto-generated method stub
 		
@@ -219,6 +248,18 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 
 	@Override
 	public void exitClassBody(ClassBodyContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterInterfaceBody(InterfaceBodyContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitInterfaceBody(InterfaceBodyContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -273,13 +314,73 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 	}
 
 	@Override
-	public void enterVariableDeclaration(VariableDeclarationContext ctx) {
+	public void enterGenericMethodDeclaration(GenericMethodDeclarationContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void exitVariableDeclaration(VariableDeclarationContext ctx) {
+	public void exitGenericMethodDeclaration(GenericMethodDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterConstructorDeclaration(ConstructorDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitConstructorDeclaration(ConstructorDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterGenericConstructorDeclaration(GenericConstructorDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitGenericConstructorDeclaration(GenericConstructorDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterFieldDeclaration(FieldDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitFieldDeclaration(FieldDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterInterfaceBodyDeclaration(InterfaceBodyDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitInterfaceBodyDeclaration(InterfaceBodyDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterInterfaceMemberDeclaration(InterfaceMemberDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitInterfaceMemberDeclaration(InterfaceMemberDeclarationContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -304,6 +405,30 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 
 	@Override
 	public void exitConstantDeclarator(ConstantDeclaratorContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterInterfaceMethodDeclaration(InterfaceMethodDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitInterfaceMethodDeclaration(InterfaceMethodDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterGenericInterfaceMethodDeclaration(GenericInterfaceMethodDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitGenericInterfaceMethodDeclaration(GenericInterfaceMethodDeclarationContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -364,6 +489,18 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 
 	@Override
 	public void exitArrayInitializer(ArrayInitializerContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEnumConstantName(EnumConstantNameContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEnumConstantName(EnumConstantNameContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -501,6 +638,18 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 	}
 
 	@Override
+	public void enterConstructorBody(ConstructorBodyContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitConstructorBody(ConstructorBodyContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void enterQualifiedName(QualifiedNameContext ctx) {
 		// TODO Auto-generated method stub
 		
@@ -520,6 +669,174 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 
 	@Override
 	public void exitLiteral(LiteralContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotation(AnnotationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotation(AnnotationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotationName(AnnotationNameContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotationName(AnnotationNameContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterElementValuePairs(ElementValuePairsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitElementValuePairs(ElementValuePairsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterElementValuePair(ElementValuePairContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitElementValuePair(ElementValuePairContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterElementValue(ElementValueContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitElementValue(ElementValueContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterElementValueArrayInitializer(ElementValueArrayInitializerContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitElementValueArrayInitializer(ElementValueArrayInitializerContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotationTypeDeclaration(AnnotationTypeDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotationTypeDeclaration(AnnotationTypeDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotationTypeBody(AnnotationTypeBodyContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotationTypeBody(AnnotationTypeBodyContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotationTypeElementDeclaration(AnnotationTypeElementDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotationTypeElementDeclaration(AnnotationTypeElementDeclarationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotationTypeElementRest(AnnotationTypeElementRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotationTypeElementRest(AnnotationTypeElementRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotationMethodOrConstantRest(AnnotationMethodOrConstantRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotationMethodOrConstantRest(AnnotationMethodOrConstantRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotationMethodRest(AnnotationMethodRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotationMethodRest(AnnotationMethodRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAnnotationConstantRest(AnnotationConstantRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAnnotationConstantRest(AnnotationConstantRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDefaultValue(DefaultValueContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitDefaultValue(DefaultValueContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -837,6 +1154,42 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 	}
 
 	@Override
+	public void enterArrayCreatorRest(ArrayCreatorRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitArrayCreatorRest(ArrayCreatorRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterClassCreatorRest(ClassCreatorRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitClassCreatorRest(ClassCreatorRestContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterExplicitGenericInvocation(ExplicitGenericInvocationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitExplicitGenericInvocation(ExplicitGenericInvocationContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void enterNonWildcardTypeArguments(NonWildcardTypeArgumentsContext ctx) {
 		// TODO Auto-generated method stub
 		
@@ -873,25 +1226,25 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 	}
 
 	@Override
-	public void enterArrayCreatorRest(ArrayCreatorRestContext ctx) {
+	public void enterSuperSuffix(SuperSuffixContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void exitArrayCreatorRest(ArrayCreatorRestContext ctx) {
+	public void exitSuperSuffix(SuperSuffixContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void enterClassCreatorRest(ClassCreatorRestContext ctx) {
+	public void enterExplicitGenericInvocationSuffix(ExplicitGenericInvocationSuffixContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void exitClassCreatorRest(ClassCreatorRestContext ctx) {
+	public void exitExplicitGenericInvocationSuffix(ExplicitGenericInvocationSuffixContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -919,5 +1272,6 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	
 }

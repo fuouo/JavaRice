@@ -49,20 +49,20 @@ public class MessagePanel extends Panel {
 	
 	@Override
 	public void displayItems(ArrayList<Object> list) {
-		clearMessage();
-		
-		if(list==null)
-			return;
-		
-		
-		String console = "";
-		for(int i=0; i<list.size(); i++){
-			STRow symbol = ((STRow)list.get(i));
-			console += symbol.getLexeme() + " = " + symbol.getTokenId();
-			console+= "\n";
-		}
-		
-		messageTextPane.setText(console);
+//		clearMessage();
+//		
+//		if(list==null)
+//			return;
+//		
+//		
+//		String console = "";
+//		for(int i=0; i<list.size(); i++){
+//			STRow symbol = ((STRow)list.get(i));
+//			console += symbol.getLexeme() + " = " + symbol.getTokenId();
+//			console+= "\n";
+//		}
+//		
+//		messageTextPane.setText(console);
 		
 	}
 	

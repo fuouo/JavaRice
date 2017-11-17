@@ -79,6 +79,7 @@ public class LocalVariableAnalyzer implements ParseTreeListener {
 			if(ClassAnalyzer.isPrimitiveDeclaration(typeCtx)) {
 				PrimitiveTypeContext primitiveTypeCtx = typeCtx.primitiveType();
 				this.identifiedTokens.addToken(PRIMITIVE_TYPE_KEY, primitiveTypeCtx.getText());
+				Console.log(LogType.DEBUG, "Primitive type declaration: " + primitiveTypeCtx.getText());
 				
 			} //check if its array declaration
 			else if(ClassAnalyzer.isPrimitiveArrayDeclaration(typeCtx)) {

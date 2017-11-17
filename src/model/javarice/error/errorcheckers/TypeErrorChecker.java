@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.builder.BuildChecker;
 import model.javarice.builder.ErrorRepository;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -38,6 +40,8 @@ public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 			LiteralContext literalContext = (LiteralContext) ctx;
 			String expressionString = literalContext.getText();
 			String additionalMessage = "";
+			
+			Console.log(LogType.DEBUG, "primitive type: " + this.javaRiceValue.getPrimitiveType());
 			
 			switch(this.javaRiceValue.getPrimitiveType()) {
 			case ARRAY:

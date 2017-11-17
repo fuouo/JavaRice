@@ -24,7 +24,7 @@ public class BlockAnalyzer {
 				StatementAnalyzer statementAnalyzer = new StatementAnalyzer();
 				statementAnalyzer.analyze(statementCtx);
 			}
-			else if(blockStatementCtx.localVariableDeclarationStatement() != null) {
+			else if(blockStatementCtx.localVariableDeclarationStatement() != null) {				
 				LocalVariableDeclarationStatementContext localVarDecStatementCtx = 
 						blockStatementCtx.localVariableDeclarationStatement();
 				

@@ -17,13 +17,13 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProgram(JavaRiceParser.ProgramContext ctx) { }
+	@Override public void enterCompilationUnit(JavaRiceParser.CompilationUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProgram(JavaRiceParser.ProgramContext ctx) { }
+	@Override public void exitCompilationUnit(JavaRiceParser.CompilationUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -48,6 +48,30 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitImportDeclaration(JavaRiceParser.ImportDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeDeclaration(JavaRiceParser.TypeDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeDeclaration(JavaRiceParser.TypeDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterModifier(JavaRiceParser.ModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitModifier(JavaRiceParser.ModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -113,6 +137,78 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTypeBound(JavaRiceParser.TypeBoundContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeBound(JavaRiceParser.TypeBoundContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEnumDeclaration(JavaRiceParser.EnumDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEnumDeclaration(JavaRiceParser.EnumDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEnumConstants(JavaRiceParser.EnumConstantsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEnumConstants(JavaRiceParser.EnumConstantsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEnumConstant(JavaRiceParser.EnumConstantContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEnumConstant(JavaRiceParser.EnumConstantContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEnumBodyDeclarations(JavaRiceParser.EnumBodyDeclarationsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEnumBodyDeclarations(JavaRiceParser.EnumBodyDeclarationsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInterfaceDeclaration(JavaRiceParser.InterfaceDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInterfaceDeclaration(JavaRiceParser.InterfaceDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTypeList(JavaRiceParser.TypeListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -132,6 +228,18 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitClassBody(JavaRiceParser.ClassBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInterfaceBody(JavaRiceParser.InterfaceBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInterfaceBody(JavaRiceParser.InterfaceBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -185,13 +293,73 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableDeclaration(JavaRiceParser.VariableDeclarationContext ctx) { }
+	@Override public void enterGenericMethodDeclaration(JavaRiceParser.GenericMethodDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableDeclaration(JavaRiceParser.VariableDeclarationContext ctx) { }
+	@Override public void exitGenericMethodDeclaration(JavaRiceParser.GenericMethodDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstructorDeclaration(JavaRiceParser.ConstructorDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructorDeclaration(JavaRiceParser.ConstructorDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGenericConstructorDeclaration(JavaRiceParser.GenericConstructorDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGenericConstructorDeclaration(JavaRiceParser.GenericConstructorDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFieldDeclaration(JavaRiceParser.FieldDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFieldDeclaration(JavaRiceParser.FieldDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInterfaceBodyDeclaration(JavaRiceParser.InterfaceBodyDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInterfaceBodyDeclaration(JavaRiceParser.InterfaceBodyDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInterfaceMemberDeclaration(JavaRiceParser.InterfaceMemberDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInterfaceMemberDeclaration(JavaRiceParser.InterfaceMemberDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -216,6 +384,30 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitConstantDeclarator(JavaRiceParser.ConstantDeclaratorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInterfaceMethodDeclaration(JavaRiceParser.InterfaceMethodDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInterfaceMethodDeclaration(JavaRiceParser.InterfaceMethodDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGenericInterfaceMethodDeclaration(JavaRiceParser.GenericInterfaceMethodDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGenericInterfaceMethodDeclaration(JavaRiceParser.GenericInterfaceMethodDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -276,6 +468,18 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArrayInitializer(JavaRiceParser.ArrayInitializerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEnumConstantName(JavaRiceParser.EnumConstantNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEnumConstantName(JavaRiceParser.EnumConstantNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -413,6 +617,18 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConstructorBody(JavaRiceParser.ConstructorBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructorBody(JavaRiceParser.ConstructorBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterQualifiedName(JavaRiceParser.QualifiedNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -432,6 +648,174 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLiteral(JavaRiceParser.LiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation(JavaRiceParser.AnnotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation(JavaRiceParser.AnnotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationName(JavaRiceParser.AnnotationNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationName(JavaRiceParser.AnnotationNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElementValuePairs(JavaRiceParser.ElementValuePairsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElementValuePairs(JavaRiceParser.ElementValuePairsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElementValuePair(JavaRiceParser.ElementValuePairContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElementValuePair(JavaRiceParser.ElementValuePairContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElementValue(JavaRiceParser.ElementValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElementValue(JavaRiceParser.ElementValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElementValueArrayInitializer(JavaRiceParser.ElementValueArrayInitializerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElementValueArrayInitializer(JavaRiceParser.ElementValueArrayInitializerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationTypeDeclaration(JavaRiceParser.AnnotationTypeDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationTypeDeclaration(JavaRiceParser.AnnotationTypeDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationTypeBody(JavaRiceParser.AnnotationTypeBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationTypeBody(JavaRiceParser.AnnotationTypeBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationTypeElementDeclaration(JavaRiceParser.AnnotationTypeElementDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationTypeElementDeclaration(JavaRiceParser.AnnotationTypeElementDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationTypeElementRest(JavaRiceParser.AnnotationTypeElementRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationTypeElementRest(JavaRiceParser.AnnotationTypeElementRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationMethodOrConstantRest(JavaRiceParser.AnnotationMethodOrConstantRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationMethodOrConstantRest(JavaRiceParser.AnnotationMethodOrConstantRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationMethodRest(JavaRiceParser.AnnotationMethodRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationMethodRest(JavaRiceParser.AnnotationMethodRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotationConstantRest(JavaRiceParser.AnnotationConstantRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotationConstantRest(JavaRiceParser.AnnotationConstantRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDefaultValue(JavaRiceParser.DefaultValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDefaultValue(JavaRiceParser.DefaultValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -749,6 +1133,42 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArrayCreatorRest(JavaRiceParser.ArrayCreatorRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrayCreatorRest(JavaRiceParser.ArrayCreatorRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterClassCreatorRest(JavaRiceParser.ClassCreatorRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitClassCreatorRest(JavaRiceParser.ClassCreatorRestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExplicitGenericInvocation(JavaRiceParser.ExplicitGenericInvocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExplicitGenericInvocation(JavaRiceParser.ExplicitGenericInvocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNonWildcardTypeArguments(JavaRiceParser.NonWildcardTypeArgumentsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -785,25 +1205,25 @@ public class JavaRiceBaseListener implements JavaRiceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrayCreatorRest(JavaRiceParser.ArrayCreatorRestContext ctx) { }
+	@Override public void enterSuperSuffix(JavaRiceParser.SuperSuffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArrayCreatorRest(JavaRiceParser.ArrayCreatorRestContext ctx) { }
+	@Override public void exitSuperSuffix(JavaRiceParser.SuperSuffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClassCreatorRest(JavaRiceParser.ClassCreatorRestContext ctx) { }
+	@Override public void enterExplicitGenericInvocationSuffix(JavaRiceParser.ExplicitGenericInvocationSuffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClassCreatorRest(JavaRiceParser.ClassCreatorRestContext ctx) { }
+	@Override public void exitExplicitGenericInvocationSuffix(JavaRiceParser.ExplicitGenericInvocationSuffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

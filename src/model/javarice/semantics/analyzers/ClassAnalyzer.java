@@ -16,9 +16,9 @@ import model.javarice.generatedexp.JavaRiceLexer;
 import model.javarice.generatedexp.JavaRiceParser.ClassDeclarationContext;
 import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceModifierContext;
 import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceTypeContext;
+import model.javarice.generatedexp.JavaRiceParser.FieldDeclarationContext;
 import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
 import model.javarice.generatedexp.JavaRiceParser.TypeTypeContext;
-import model.javarice.generatedexp.JavaRiceParser.VariableDeclarationContext;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.IdentifiedTokens;
@@ -87,11 +87,11 @@ public class ClassAnalyzer implements ParseTreeListener {
 	}
 	
 	private void analyzeClassMembers(ParserRuleContext ctx) {
-		if(ctx instanceof ClassOrInterfaceModifierContext) {
+		if(ctx instanceof ClassOrInterfaceModifierContext) {			
 			ClassOrInterfaceModifierContext classModifierCtx = (ClassOrInterfaceModifierContext) ctx;
 			this.analyzeModifier(classModifierCtx);
-		} else if(ctx instanceof VariableDeclarationContext) {
-			VariableDeclarationContext fieldCtx = (VariableDeclarationContext) ctx;
+		} else if(ctx instanceof FieldDeclarationContext) {
+			FieldDeclarationContext fieldCtx = (FieldDeclarationContext) ctx;
 			
 			if(fieldCtx.typeType() != null) {
 				TypeTypeContext typeCtx = fieldCtx.typeType();
@@ -124,7 +124,7 @@ public class ClassAnalyzer implements ParseTreeListener {
 					FieldAnalyzer fieldAnalyzer = new FieldAnalyzer(this.identifiedTokens, this.declaredClassScope);
 					fieldAnalyzer.analyze(fieldCtx.variableDeclarators());
 					
-					//clear tokens for reause
+					//clear tokens for reuse
 					this.identifiedTokens.clearTokens();
 				}
 			}
@@ -156,15 +156,15 @@ public class ClassAnalyzer implements ParseTreeListener {
 	private void analyzeModifier(ClassOrInterfaceModifierContext ctx) {
 		if(ctx.getTokens(JavaRiceLexer.PUBLIC).size() > 0 || ctx.getTokens(JavaRiceLexer.PRIVATE).size() > 0
 				|| ctx.getTokens(JavaRiceLexer.PROTECTED).size() > 0) {
-			System.err.println("ADD TO CONSOLE: " +  "Detected accessor: " +ctx.getText());
+			Console.log(LogType.DEBUG, "Detected accessor: " +ctx.getText());
 			this.identifiedTokens.addToken(ACCESS_CONTROL_KEY, ctx.getText());
 		}
 		else if(ctx.getTokens(JavaRiceLexer.FINAL).size() > 0) {
-			System.err.println("ADD TO CONSOLE: " + "Detected const: " +ctx.getText());
+			Console.log(LogType.DEBUG, "Detected const: " +ctx.getText());
 			this.identifiedTokens.addToken(CONST_CONTROL_KEY, ctx.getText());
 		}
 		else if(ctx.getTokens(JavaRiceLexer.STATIC).size() > 0) {
-			System.err.println("ADD TO CONSOLE: " + "Detected static: " +ctx.getText());
+			Console.log(LogType.DEBUG, "Detected static: " +ctx.getText());
 			this.identifiedTokens.addToken(STATIC_CONTROL_KEY, ctx.getText());
 		}
 	}

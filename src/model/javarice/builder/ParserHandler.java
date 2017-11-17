@@ -39,7 +39,7 @@ public class ParserHandler {
 		this.sharedParser.removeErrorListeners();
 		this.sharedParser.addErrorListener(BuildChecker.getInstance());
 		
-		ParserRuleContext parserRuleContext = this.sharedParser.program();
+		ParserRuleContext parserRuleContext = this.sharedParser.compilationUnit();
 		Console.log(LogType.DEBUG, parserRuleContext.toStringTree(this.sharedParser));
 		
 		ParseTreeWalker treeWalker = new ParseTreeWalker();

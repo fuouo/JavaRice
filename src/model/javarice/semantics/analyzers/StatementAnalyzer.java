@@ -113,7 +113,8 @@ public class StatementAnalyzer {
 
 		// an FOR statement
 		else if(isFORStatement(ctx)) {
-			Console.log(LogType.DEBUG, "FOR expression: " +ctx.parExpression().getText());
+//			Console.log(LogType.DEBUG, "FOR expression: " +ctx.parExpression().getText());
+			Console.log(LogType.DEBUG, "FOR expression: " +ctx.forControl().getText());
 			
 			LocalScopeCreator.getInstance().openLocalScope();
 			

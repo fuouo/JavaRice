@@ -88,7 +88,7 @@ public class JavaRiceCompiler extends ModelInterface {
 		parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
 
 		// Create a parser tree starting from the first rule
-		JavaRiceParser.ProgramContext tree = parser.program();
+		JavaRiceParser.CompilationUnitContext tree = parser.compilationUnit();
 
 		//print all tokens of the input
 		MyTokenFactory factory = new MyTokenFactory(input);
