@@ -100,9 +100,10 @@ public class IDEView extends ViewInterface{
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("[MAIN] ... Running the code!!");
+				Console.getInstance().clear();
 				controller.runCode(codeTextArea.getText());
 				codeTextArea.removeAllLineHighlights();
-				Console.getInstance().UpdateConsolePanel();
+				// Console.getInstance().UpdateConsolePanel();
 				//call compiler from here
 			}
 		});
@@ -174,15 +175,18 @@ public class IDEView extends ViewInterface{
 		//=========== TABS FOR CONSOLE ========//
 		consoleTabPane = new JTabbedPane();
 		consoleTabPane.setBorder(new EmptyBorder(2, 20, 50, 20));
-		JComponent messageTab = (JComponent) new MessagePanel(ConsoleType.TOKENS, controller);
-		consoleTabPane.addTab("Console", messageTab);
-		JComponent errorTab = (JComponent) new ErrorPanel(ConsoleType.ERRORS, controller);
-		consoleTabPane.addTab("Error/s", errorTab);
+		MessagePanel messagePanel = new MessagePanel(ConsoleType.TOKENS, controller);
+		JComponent messageTab = (JComponent) messagePanel;
+		consoleTabPane.addTab("DEBUG", messageTab);
+		ErrorPanel errorPanel = new ErrorPanel(ConsoleType.ERRORS, controller);
+		JComponent errorTab = (JComponent) errorPanel;
+		consoleTabPane.addTab("ERRORS", errorTab);
 		bottomPanel.add(consoleTabPane);
-		
 	
 		//NO MORE CODE AFTER HERE PLEASE :)
 		Console.getInstance().setConsoleTabPane(consoleTabPane);
+		Console.getInstance().setMessagePanel(messagePanel);
+		Console.getInstance().setErrorPanel(errorPanel);
 		myView.setVisible(true);
 		myView.setResizable(false);
 	}

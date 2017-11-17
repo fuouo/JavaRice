@@ -35,30 +35,30 @@ public class ErrorRepository {
 	private void populateErrorMessages() {
 		// syntax errors
 		this.errorMessageDictionary.put(EXTRANEOUS_INPUT, 
-				"There's an extra %s found; we're expecting %s. [SYNTAX][LINE]:%d");
+				"%d[LINE] [SYNTAX] There's an extra %s found; we're expecting %s.");
 		this.errorMessageDictionary.put(MISSING_TOKEN, 
-				"Did you forget %s before %s? [SYNTAX][LINE]:%d");
+				"%d[LINE] [SYNTAX] Did you forget %s before %s?");
 		this.errorMessageDictionary.put(MISMATCHED_INPUT, 
-				"There's an input mismatch for %s; we're expecting %s. [SYNTAX][LINE]:%d");
+				"%d[LINE] [SYNTAX] There's an input mismatch for %s; we're expecting %s.");
 		this.errorMessageDictionary.put(NO_VIABLE_ALT, 
-				"Sorry, we can't decide which path to take based on your input %s. [SYNTAX][LINE]:%d");
+				"%d[LINE] [SYNTAX] Sorry, we can't decide which path to take based on your input %s.");
 		this.errorMessageDictionary.put(UNRECOG_TOKEN, 
-				"Oh no! We don't recognize this token %s! [SYNTAX][LINE]:%d");
-		this.errorMessageDictionary.put(CUSTOM, "%s [SYNTAX][LINE]:%d");
+				"%d[LINE] [SYNTAX] Oh no! We don't recognize this token %s! [SYNTAX]");
+		this.errorMessageDictionary.put(CUSTOM, "%d[LINE] [SYNTAX] %s");
 		
 		// semantic errors
 		this.errorMessageDictionary.put(ErrorRepository.INCONSISTENT_CLASS_NAME, "Inconsistent class name. ");
-		this.errorMessageDictionary.put(TYPE_MISMATCH, "Data type mismatch detected! [LINE]:%d ");
-		this.errorMessageDictionary.put(UNDECLARED_VARIABLE, "Variable %s is not declared yet. [LINE]:%d");
-		this.errorMessageDictionary.put(UNDECLARED_FUNCTION, "Function %s is not declared yet. [LINE]:%d");
+		this.errorMessageDictionary.put(TYPE_MISMATCH, "%d[LINE] Data type mismatch detected! ");
+		this.errorMessageDictionary.put(UNDECLARED_VARIABLE, "%d[LINE] Variable %s is not declared yet. ");
+		this.errorMessageDictionary.put(UNDECLARED_FUNCTION, "%d[LINE] Function %s is not declared yet. ");
 		this.errorMessageDictionary.put(CONST_REASSIGNMENT, 
-				"Oops! You can't reassign a new value to constant %s! [LINE]:%d");
+				"%d[LINE] Oops! You can't reassign a new value to constant %s! ");
 		this.errorMessageDictionary.put(MULTIPLE_VARIABLE, 
-				"There's a duplicate declaration of variable %s. [LINE]:%d");
+				"%d[LINE] There's a duplicate declaration of variable %s. ");
 		this.errorMessageDictionary.put(MULTIPLE_FUNCTION, 
-				"There's a duplicate method declaration %s. [LINE]:%d");
+				"%d[LINE] There's a duplicate method declaration %s. ");
 		this.errorMessageDictionary.put(PARAMETER_COUNT_MISMATCH, 
-				"Number of parameters for method %s does not match with its declaration. [LINE]:%d");
+				"%d[LINE] Number of parameters for method %s does not match with its declaration. ");
 		this.errorMessageDictionary.put(RUNTIME_ARRAY_OUT_OF_BOUNDS, "Array %s out of bounds. Aborting operation. ");
 	}
 	

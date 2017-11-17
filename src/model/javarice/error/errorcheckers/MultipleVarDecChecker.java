@@ -87,7 +87,7 @@ public class MultipleVarDecChecker implements IErrorChecker, ParseTreeListener {
 		}
 		
 		if(javaRiceValue != null) {
-			BuildChecker.reportCustomError(ErrorRepository.MULTIPLE_VARIABLE, "", identifierString, this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.MULTIPLE_VARIABLE, "", this.lineNumber, identifierString);
 		}
 	}
 }

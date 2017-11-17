@@ -32,7 +32,7 @@ public class ParserHandler {
 		
 	}
 	
-	public void parseText(String className, String textToParse) {		
+	public void parseText(String textToParse) {		
 		this.sharedLexer = new JavaRiceLexer(new ANTLRInputStream(textToParse));
 		CommonTokenStream tokens = new CommonTokenStream(this.sharedLexer);
 		this.sharedParser = new JavaRiceParser(tokens);

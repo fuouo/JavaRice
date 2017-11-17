@@ -107,6 +107,11 @@ public class Console {
 		*/
 	}
 	
+	public void clear() {
+		this.messagePanel.clearMessage();
+		this.errorPanel.removeAllRow();
+	}
+	
 	public static void log(final LogType logType, final String message) {
 		if(INSTANCE == null) {
 			System.out.println("Console UI not yet initialized!");
@@ -121,21 +126,23 @@ public class Console {
 		case ERROR:			// access error panel
 			
 			// process the message
-			String tokens[] = message.split("\\[SYNTAX\\]|\\[LINE\\]:");
-			String errorMessage = tokens[0];
+			String tokens[] = message.split("\\[LINE\\]|\\[SYNTAX\\]");
+			String errorMessage = "";
 			int lineNumber = 0;
 			ErrorType errorType = null;
 			
-			// semantic error
-			if(tokens.length == 2) {
-				lineNumber = Integer.parseInt(tokens[1]);
-				errorType = ErrorType.SYNTAX_ERROR;
-			}
-			
-			// syntax error
-			else if(tokens.length == 3) {
-				lineNumber = Integer.parseInt(tokens[2]);
+			// semantic error with no line number
+			if(tokens.length == 1) {
+				errorMessage = tokens[0];
 				errorType = ErrorType.SEMANTIC_ERROR;
+			} else if(tokens.length == 2) { // semantic error with line number
+				lineNumber = Integer.parseInt(tokens[0].trim());
+				errorMessage = tokens[1];
+				errorType = ErrorType.SEMANTIC_ERROR;
+			} else if(tokens.length == 3) { // syntax error
+				lineNumber = Integer.parseInt(tokens[0].trim());
+				errorMessage = tokens[2];
+				errorType = ErrorType.SYNTAX_ERROR;
 			}
 			
 			Error error = new Error();

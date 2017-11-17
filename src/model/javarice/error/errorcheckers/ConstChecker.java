@@ -85,7 +85,7 @@ public class ConstChecker implements IErrorChecker, ParseTreeListener {
 		
 		if(javaRiceValue != null && javaRiceValue.isFinal()) {
 			BuildChecker.reportCustomError(ErrorRepository.CONST_REASSIGNMENT, "", 
-					varExprCtx.getText(), this.lineNumber);
+					this.lineNumber, varExprCtx.getText());
 		}
 	}
 

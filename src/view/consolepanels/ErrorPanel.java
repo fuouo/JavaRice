@@ -47,7 +47,7 @@ public class ErrorPanel extends Panel {
 		
 		errorTable.getColumnModel().getColumn(0).setPreferredWidth(130);
 		errorTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-		errorTable.getColumnModel().getColumn(3).setPreferredWidth(1020);
+		errorTable.getColumnModel().getColumn(2).setPreferredWidth(1020);
 		JScrollPane scrollPane = new JScrollPane(errorTable);
 		
 		errorTable.setCellSelectionEnabled(false);
@@ -62,7 +62,7 @@ public class ErrorPanel extends Panel {
 				if(errorTable.getSelectedRow() <= -1){
 					return;
 				}
-				int line = Integer.parseInt(errorTable.getValueAt(errorTable.getSelectedRow(), 2).toString());
+				int line = Integer.parseInt(errorTable.getValueAt(errorTable.getSelectedRow(), 1).toString());
 				if(line < 0)
 					return;
 				System.out.println("LINE: " + line);
@@ -99,25 +99,26 @@ public class ErrorPanel extends Panel {
 	public void removeAllRow(){
 		DefaultTableModel model = (DefaultTableModel) errorTable.getModel();
 		model.setRowCount(0);
+		errorTable.revalidate();
 	}
 	
 	@Override
 	public void displayItems(ArrayList<Object> list) {
-		if(list==null)
-			return;
-		removeAllRow();
-		errorTable.revalidate();
-		
-		for(int i=0; i<list.size(); i++){
-			Error error = ((Error)list.get(i));
-			addRow(
-				error.getErrorType().toString(),
-				error.getLine(),
-				error.getMessage()
-					);
-		}
-		
-		
+//		if(list==null)
+//			return;
+//		removeAllRow();
+//		errorTable.revalidate();
+//		
+//		for(int i=0; i<list.size(); i++){
+//			Error error = ((Error)list.get(i));
+//			addRow(
+//				error.getErrorType().toString(),
+//				error.getLine(),
+//				error.getMessage()
+//					);
+//		}
+//		
+//		
 	}
 	
 }

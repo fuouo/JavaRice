@@ -33,11 +33,11 @@ public class ParameterMismatchChecker implements IErrorChecker {
 		
 		if(this.exprCtxList == null && this.javaRiceFunction.getParameterValueSize() != 0) {
 			BuildChecker.reportCustomError(ErrorRepository.PARAMETER_COUNT_MISMATCH, "", 
-					this.javaRiceFunction.getFunctionName(), this.lineNumber);
+					this.lineNumber, this.javaRiceFunction.getFunctionName());
 		}
 		else if(this.exprCtxList != null && this.exprCtxList.size() != this.javaRiceFunction.getParameterValueSize()) {
 			BuildChecker.reportCustomError(ErrorRepository.PARAMETER_COUNT_MISMATCH, "", 
-					this.javaRiceFunction.getFunctionName(), this.lineNumber);
+					this.lineNumber, this.javaRiceFunction.getFunctionName());
 		}
 	}
 

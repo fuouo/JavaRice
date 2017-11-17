@@ -84,7 +84,7 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		JavaRiceFunction javaRiceFunction = classScope.searchFunction(functionName);
 		
 		if(javaRiceFunction == null) {
-			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_FUNCTION, "", functionName, this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_FUNCTION, "", this.lineNumber, functionName);
 		} else {
 			Console.log(LogType.DEBUG, "Function found " + functionName);
 		}
@@ -110,7 +110,7 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		// after second pass, we conclude if it cannot be found already
 		if(javaRiceValue == null) {
 			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", 
-					varExprCtx.getText(), this.lineNumber);
+					this.lineNumber, varExprCtx.getText());
 		}
 	}
 	
@@ -125,7 +125,7 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		Token firstToken = statementCtx.getStart();
 		
 		if(javaRiceValue == null) {
-			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", identifier, firstToken.getLine());
+			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", firstToken.getLine(), identifier);
 		}
 	}
 }

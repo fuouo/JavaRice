@@ -54,19 +54,19 @@ private static BuildChecker INSTANCE = null;
 		
 		if(msg.contains("extraneous input")) {
 			tokens = msg.split("extraneous input | expecting ");
-			reportCustomError(ErrorRepository.EXTRANEOUS_INPUT, "", tokens[1], tokens[2], line);
+			reportCustomError(ErrorRepository.EXTRANEOUS_INPUT, "", line, tokens[1], tokens[2]);
 		} else if(msg.contains("mismatched input")) {
 			tokens = msg.split("mismatched input | expecting ");
-			reportCustomError(ErrorRepository.MISMATCHED_INPUT, "", tokens[1], tokens[2], line);
+			reportCustomError(ErrorRepository.MISMATCHED_INPUT, "", line, tokens[1], tokens[2]);
 		} else if(msg.contains("no viable alternative")) {
 			tokens = msg.split("no viable alternative at input ");
-			reportCustomError(ErrorRepository.NO_VIABLE_ALT, "", tokens[1], line);
+			reportCustomError(ErrorRepository.NO_VIABLE_ALT, "", line, tokens[1]);
 		} else if(msg.contains("missing")) {
 			tokens = msg.split("missing | at ");
-			reportCustomError(ErrorRepository.MISSING_TOKEN, "", tokens[1], tokens[2], line);
+			reportCustomError(ErrorRepository.MISSING_TOKEN, "", line, tokens[1], tokens[2]);
 		} else if(msg.contains("token recognition error")) {
 			tokens = msg.split("token recognition error at: ");
-			reportCustomError(ErrorRepository.UNRECOG_TOKEN, "", tokens[1], line);
+			reportCustomError(ErrorRepository.UNRECOG_TOKEN, "", line, tokens[1]);
 		} else {
 			
 		}

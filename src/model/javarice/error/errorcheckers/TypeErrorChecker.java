@@ -70,7 +70,7 @@ public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 			}
 			
 			if(additionalMessage != "") {
-				BuildChecker.reportCustomError(ErrorRepository.TYPE_MISMATCH,  additionalMessage, this.lineNumber);
+				BuildChecker.reportCustomError(ErrorRepository.TYPE_MISMATCH, "", this.lineNumber, additionalMessage);
 			}
 					
 				

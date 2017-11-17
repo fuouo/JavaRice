@@ -34,7 +34,7 @@ public class MultipleFuncDecChecker implements IErrorChecker {
 		JavaRiceFunction javaRiceFunction = classScope.searchFunction(identifierString);
 		
 		if(javaRiceFunction != null) {
-			BuildChecker.reportCustomError(ErrorRepository.MULTIPLE_FUNCTION, "", identifierString, this.lineNumber);
+			BuildChecker.reportCustomError(ErrorRepository.MULTIPLE_FUNCTION, "", this.lineNumber, identifierString);
 		}
 	}
 
