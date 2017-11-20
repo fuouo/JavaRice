@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.error.errorcheckers.ConstChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IConditionalCommand;
@@ -56,7 +57,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			if(isAssignmentExpression(exprCtx)) {
 				Console.log(LogType.DEBUG, TAG + "Assignment expr detected: " +exprCtx.getText());
 				
-				List<ExpressionContext> exprListCtx = exprCtx.expression();
+				List<ExpressionContext> exprListCtx = exprCtx.expression();				
 				AssignmentCommand assignmentCommand = new AssignmentCommand(exprListCtx.get(0), exprListCtx.get(1));
 				
 				this.readRightHandExprCtx = exprListCtx.get(1);
@@ -68,6 +69,9 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 				
 				List<ExpressionContext> exprListCtx = exprCtx.expression();
 				
+				ConstChecker constChecker = new ConstChecker(exprListCtx.get(0));
+				constChecker.verify();
+				
 				IncDecCommand incDecCommand = new IncDecCommand(exprListCtx.get(0), JavaRiceLexer.INC);
 				this.handleStatementExecution(incDecCommand);
 			}
@@ -76,6 +80,9 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 				Console.log(LogType.DEBUG, TAG + "Decrement expr detected: " +exprCtx.getText());
 				
 				List<ExpressionContext> exprListCtx = exprCtx.expression();
+				
+				ConstChecker constChecker = new ConstChecker(exprListCtx.get(0));
+				constChecker.verify();
 				
 				IncDecCommand incDecCommand = new IncDecCommand(exprListCtx.get(0),JavaRiceLexer.DEC);
 				this.handleStatementExecution(incDecCommand);

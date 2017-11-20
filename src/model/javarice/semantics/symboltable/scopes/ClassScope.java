@@ -176,7 +176,7 @@ public class ClassScope implements IScope {
 	public JavaRiceValue searchVariable(String identifier) {
 		JavaRiceValue javaRiceValue = null;
 		
-		if(this.containsPrivateFunction(identifier)) {
+		if(this.containsPrivateVariable(identifier)) {
 			javaRiceValue = this.getPrivateVariable(identifier);
 		} else if(this.containsPublicVariable(identifier)) {
 			javaRiceValue = this.getPublicVariable(identifier);

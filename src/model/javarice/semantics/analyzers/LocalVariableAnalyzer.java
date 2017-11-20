@@ -176,6 +176,7 @@ public class LocalVariableAnalyzer implements ParseTreeListener {
 			}
 			else {
 				localScope.addEmptyVariableFromKeywords(primitiveTypeString, identifierString);
+				Console.log(LogType.DEBUG, TAG + identifierString + " is added to local scope.");
 			}
 			
 			//remove the following tokens

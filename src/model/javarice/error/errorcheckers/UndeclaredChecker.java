@@ -97,14 +97,35 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		
 		if(ExecutionManager.getInstance().isInFunctionExecution()) {
 			JavaRiceFunction javaRiceFunction = ExecutionManager.getInstance().getCurrentFunction();
+			
+			Console.log(LogType.DEBUG, TAG + "searching " + varExprCtx.primary().Identifier().getText() + 
+					" in " + javaRiceFunction.getFunctionName());
+			
 			javaRiceValue = VariableSearcher.searchVariableInFunction(
 					javaRiceFunction, varExprCtx.primary().Identifier().getText());
+		}
+		
+		// if main
+		if(ExecutionManager.getInstance().isInMainExecution()) {
+			ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+					ParserHandler.getInstance().getCurrentClassName());
+			
+			Console.log(LogType.DEBUG, TAG + "searching " + varExprCtx.primary().Identifier().getText() + 
+					" in main");
+			
+			javaRiceValue = VariableSearcher.searchVariableInClassIncludingLocal(classScope, 
+					varExprCtx.primary().Identifier().getText());
 		}
 		
 		// if java rice value is still null, search class
 		if(javaRiceValue == null) {
 			ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
 					ParserHandler.getInstance().getCurrentClassName());
+			
+			Console.log(LogType.DEBUG, TAG + "searching " + varExprCtx.primary().Identifier().getText() + 
+					" in " + classScope.getClassName());
+			
+			
 			javaRiceValue = VariableSearcher.searchVariableInClass(classScope, 
 					varExprCtx.primary().Identifier().getText());
 		}
