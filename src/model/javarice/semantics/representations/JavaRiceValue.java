@@ -2,6 +2,8 @@ package model.javarice.semantics.representations;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.semantics.utils.RecognizedKeywords;
 import model.javarice.semantics.utils.StringUtils;
 
@@ -91,17 +93,23 @@ public class JavaRiceValue {
 	private Object attemptTypeCast(String value) {
 		
 		Console.log(LogType.DEBUG, TAG + "Value is " + value);
+		Console.log(LogType.DEBUG, TAG + "TYPE  " + this.primitiveType);
 		
-		switch(this.primitiveType) {
-			case BOOLEAN: return Boolean.valueOf(value);
-			case CHAR: return Character.valueOf(value.charAt(0)); //only get first char at value
-			case INT: return Integer.valueOf(value);
-			case LONG: return Long.valueOf(value);
-			case SHORT: return Short.valueOf(value);
-			case FLOAT: return Float.valueOf(value);
-			case DOUBLE: return Double.valueOf(value);
-			case STRING: return value;
-			default: return null;
+		try{ 
+			switch(this.primitiveType) {
+				case BOOLEAN: return Boolean.valueOf(value);
+				case CHAR: return Character.valueOf(value.charAt(0)); //only get first char at value
+				case INT: return Integer.valueOf(value);
+				case LONG: return Long.valueOf(value);
+				case SHORT: return Short.valueOf(value);
+				case FLOAT: return Float.valueOf(value);
+				case DOUBLE: return Double.valueOf(value);
+				case STRING: return value;
+				default: return null;
+			}
+		}catch(NumberFormatException e){
+			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NUMBER_FORMAT, "", value);
+			return null;
 		}
 	}
 	

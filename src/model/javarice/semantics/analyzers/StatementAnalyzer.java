@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.error.errorcheckers.ConstChecker;
 import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.controlled.DoWhileCommand;
@@ -22,7 +23,6 @@ import model.javarice.generatedexp.JavaRiceParser.BlockContext;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.ScanContext;
 import model.javarice.generatedexp.JavaRiceParser.StatementContext;
-import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 
@@ -36,7 +36,7 @@ public class StatementAnalyzer {
 
 	public void analyze(StatementContext ctx) {
 		// print statement
-		if(ctx.WRITE() != null) {
+		if(ctx.WRITE() != null || ctx.WRITELN() != null) {
 			this.handlePrintStatement(ctx);
 		}
 
@@ -180,9 +180,9 @@ public class StatementAnalyzer {
 		
 		ScanContext scanCtx = ctx.scan();
 		
-		ScanCommand scanCommand = new ScanCommand(scanCtx.primitiveType().getText(), 
-				scanCtx.Identifier().getText());
+		ScanCommand scanCommand = new ScanCommand(scanCtx.Identifier().getText());
 		UndeclaredChecker.verifyVarOrConstForScan(scanCtx.Identifier().getText(), scanCtx);
+		ConstChecker.verifyConstForScan(scanCtx.Identifier().getText(), scanCtx);
 		
 		StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
 		//add to conditional controlled command

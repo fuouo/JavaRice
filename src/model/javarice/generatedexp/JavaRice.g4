@@ -576,7 +576,7 @@ arguments
     
 // INPUT
 scan
-    :   'read' '(' primitiveType ',' Identifier ')' ';'
+    :   'read' '(' Identifier ')' ';'
     ;
 
 // LEXER

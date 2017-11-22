@@ -21,7 +21,11 @@ public class ErrorRepository {
 	public final static int MULTIPLE_VARIABLE = 2600;
 	public final static int MULTIPLE_FUNCTION = 2700;
 	public final static int PARAMETER_COUNT_MISMATCH = 2800;
-	public final static int RUNTIME_ARRAY_OUT_OF_BOUNDS = 2900;
+	public final static int MISSING_RETURN = 2900;
+	
+	// runtime errors
+	public final static int RUNTIME_ARRAY_OUT_OF_BOUNDS = 3100;
+	public final static int RUNTIME_NUMBER_FORMAT = 3200;
 	
 	private static ErrorRepository INSTANCE = null;
 	
@@ -59,7 +63,13 @@ public class ErrorRepository {
 				"%d[LINE] There's a duplicate method declaration %s. ");
 		this.errorMessageDictionary.put(PARAMETER_COUNT_MISMATCH, 
 				"%d[LINE] Number of parameters for method %s does not match with its declaration. ");
+		this.errorMessageDictionary.put(MISSING_RETURN, 
+				"%d[LINE] This method must return a result of type %. ");
+		
+		
 		this.errorMessageDictionary.put(RUNTIME_ARRAY_OUT_OF_BOUNDS, "Array %s out of bounds. Aborting operation. ");
+		this.errorMessageDictionary.put(RUNTIME_NUMBER_FORMAT, 
+				"Number format exception for input: %s. Aborting operation. ");
 	}
 	
 	public static void initialize() {

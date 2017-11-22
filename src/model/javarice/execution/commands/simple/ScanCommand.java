@@ -1,17 +1,18 @@
 package model.javarice.execution.commands.simple;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValueSearcher;
+import view.ScanDialog;
 
 public class ScanCommand implements ICommand {
 	
-	private String typeString;
 	private String identifierString;
 	
-	public ScanCommand(String typeString, String identifierString) {
-		this.typeString = typeString;
+	public ScanCommand(String identifierString) {
 		this.identifierString = identifierString;
 	}
 
@@ -23,12 +24,16 @@ public class ScanCommand implements ICommand {
 		ExecutionManager.getInstance().blockExecution();
 		
 		// open dialog box here
+		new ScanDialog(this).setVisible(true);
 	}
 	
 	/*
 	 * called when dialog box is dismissed
 	 */
-	private void acquireInputFromUser(String input) {
+	public void acquireInputFromUser(String input) {
+		
+		Console.log(LogType.PRINT, input);
+		
 		// create java rice value
 		JavaRiceValue javaRiceValue = JavaRiceValueSearcher.searchJavaRiceValue(this.identifierString);
 		javaRiceValue.setValue(input);

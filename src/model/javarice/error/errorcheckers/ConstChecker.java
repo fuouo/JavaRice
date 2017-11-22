@@ -13,6 +13,7 @@ import model.javarice.builder.ParserHandler;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.ScanContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.searching.VariableSearcher;
@@ -86,6 +87,34 @@ public class ConstChecker implements IErrorChecker, ParseTreeListener {
 		if(javaRiceValue != null && javaRiceValue.isFinal()) {
 			BuildChecker.reportCustomError(ErrorRepository.CONST_REASSIGNMENT, "", 
 					this.lineNumber, varExprCtx.getText());
+		}
+	}
+	
+	/*
+	 * Verifies a const identifier from a scan statement since scan grammar is different.
+	 */
+	public static void verifyConstForScan(String identifier, ScanContext statementCtx) {		
+		JavaRiceValue javaRiceValue = null;
+		
+		if(ExecutionManager.getInstance().isInFunctionExecution()) {
+			JavaRiceFunction javaRiceFunction = ExecutionManager.getInstance().getCurrentFunction();
+			javaRiceValue = VariableSearcher.searchVariableInFunction(
+					javaRiceFunction, identifier);
+		}
+		
+		//if after function finding, java rice value is still null, search class
+		if(javaRiceValue == null) {
+			ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+					ParserHandler.getInstance().getCurrentClassName());
+			javaRiceValue = VariableSearcher.searchVariableInClassIncludingLocal(
+					classScope, identifier);
+		}
+		
+		Token firstToken = statementCtx.getStart();
+		
+		if(javaRiceValue != null && javaRiceValue.isFinal()) {
+			BuildChecker.reportCustomError(ErrorRepository.CONST_REASSIGNMENT, "", 
+					firstToken.getLine(), identifier);
 		}
 	}
 
