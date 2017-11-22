@@ -150,7 +150,7 @@ public class StatementAnalyzer {
 		
 		Console.log(LogType.DEBUG, TAG + "Print detected!");
 		
-		PrintCommand printCommand = new PrintCommand(ctx.expression(0));
+		PrintCommand printCommand = new PrintCommand(ctx);
 		
 		StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
 		//add to conditional controlled command

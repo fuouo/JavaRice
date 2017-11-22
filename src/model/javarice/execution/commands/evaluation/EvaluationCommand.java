@@ -6,7 +6,6 @@ import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
@@ -16,11 +15,13 @@ import model.javarice.execution.commands.ICommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
+import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.searching.VariableSearcher;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.Expression;
 import model.javarice.semantics.utils.RecognizedKeywords;
+import model.javarice.semantics.utils.StringUtils;
 
 public class EvaluationCommand implements ICommand, ParseTreeListener {
 	
@@ -29,6 +30,9 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private ExpressionContext parentExpressionContext;
 	private String modifiedExpression;
 	private BigDecimal resultValue;
+
+	private boolean isNumeric;
+	private String strResult;
 	
 	public EvaluationCommand(ExpressionContext expressionContext) {
 		this.parentExpressionContext = expressionContext;
@@ -36,10 +40,18 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 
 	@Override
 	public void enterEveryRule(ParserRuleContext ctx) {
+
+		System.out.println("EvaluationCommand: entering every rule");
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext expressionContext = (ExpressionContext) ctx;
 			
+			System.out.println("exprCtx.getText(): " + expressionContext.getText());
+            System.out.println("exprCtx.Identifier(): " + expressionContext.Identifier());
+            System.out.println("exprCtx.arguments(): " + expressionContext.arguments());
+            System.out.println("exprCtx.arguments().expressionList(): " + 
+            		expressionContext.arguments().expressionList());
+
 			if(EvaluationCommand.isFunctionCall(expressionContext)) {
 				this.evaluateFunctionCall(expressionContext);
 			} else if(EvaluationCommand.isVariableOrConstant(expressionContext)) {
@@ -69,20 +81,32 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 
 	@Override
 	public void execute() {
+
+		Console.log(LogType.DEBUG, TAG + "executing");
 		
 		this.modifiedExpression = this.parentExpressionContext.getText();
 		
+		this.isNumeric = !this.modifiedExpression.contains("\"");
+
 		// catch rules if the value has direct boolean flags
 		if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_TRUE)) {
 			this.resultValue = new BigDecimal(1);
-		} else if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_FALSE)) {
+			this.strResult = this.resultValue.toEngineeringString();
+		} 
+
+		else if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_FALSE)) {
 			this.resultValue = new BigDecimal(0);
-		} else {
-			ParseTreeWalker treeWalker = new ParseTreeWalker();
-			treeWalker.walk(this, this.parentExpressionContext);
-			
+			this.strResult = this.resultValue.toEngineeringString();
+		} 
+
+		else if(!this.isNumeric) {
+			this.strResult = StringUtils.removeQuotes(this.modifiedExpression);
+		}
+
+		else {
 			Expression evalExpression = new Expression(this.modifiedExpression);
 			this.resultValue = evalExpression.eval();
+			this.strResult = this.resultValue.toEngineeringString();
 		}
 		
 	}
@@ -103,6 +127,11 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		JavaRiceFunction javaRiceFunction = classScope.searchFunction(functionName);
 		
+
+		if(javaRiceFunction == null) {
+			return;
+		}
+
 		if(expressionContext.arguments().expressionList() != null) {
 			List<ExpressionContext> expressionContextList = 
 					expressionContext.arguments().expressionList().expression();
@@ -129,8 +158,18 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private void evaluateVariable(ExpressionContext expressionContext) {
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(expressionContext.getText());
 		
+		if(javaRiceValue == null) {
+			return;
+		}
+
 		this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
 				javaRiceValue.getValue().toString());
+
+		if(javaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
+			this.modifiedExpression = "\"" + modifiedExpression + "\"";
+		}
+
+		Console.log(LogType.DEBUG, TAG + "Evaluated: " + modifiedExpression);
 	}
 	
 	/*
@@ -138,6 +177,14 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	 */
 	public BigDecimal getResult() {
 		return this.resultValue;
+	}
+
+	public String getStringResult() {
+		return this.strResult;
+	}
+
+	public boolean isNumericResult() {
+		return this.isNumeric;
 	}
 
 }
