@@ -69,7 +69,7 @@ public class ErrorRepository {
 		this.errorMessageDictionary.put(PARAMETER_COUNT_MISMATCH, 
 				"SEMANTIC[TYPE]%d[LINE]Number of parameters for method %s does not match with its declaration. ");
 		this.errorMessageDictionary.put(MISSING_RETURN, 
-				"SEMANTIC[TYPE]%d[LINE]This method must return a result of type %. ");
+				"SEMANTIC[TYPE]%d[LINE]This method must return a result of type %s. ");
 		
 		// runtime errors
 		this.errorMessageDictionary.put(RUNTIME_ARRAY_OUT_OF_BOUNDS, 

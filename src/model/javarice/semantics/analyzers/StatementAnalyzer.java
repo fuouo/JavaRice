@@ -236,6 +236,7 @@ public class StatementAnalyzer {
 			controlledCommand.addCommand(returnCommand);
 		}
 		else {
+			ExecutionManager.getInstance().getCurrentFunction().setValidReturn(true);
 			ExecutionManager.getInstance().addCommand(returnCommand);
 		}
 		

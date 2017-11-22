@@ -50,6 +50,8 @@ public class JavaRiceFunction implements IControlledCommand{
 
 	// the return value of the function, null if it's a void type
 	private JavaRiceValue returnValue;
+	
+	private boolean hasReturnValue;
 
 	// the return type of the function
 	private FunctionType returnType = FunctionType.VOID_TYPE;
@@ -224,6 +226,14 @@ public class JavaRiceFunction implements IControlledCommand{
 		}
 		
 		return this.returnValue;
+	}
+	
+	public boolean hasReturnValue() {
+		return this.hasReturnValue;
+	}
+	
+	public void setValidReturn(boolean hasReturnValue) {
+		this.hasReturnValue = hasReturnValue;
 	}
 
 	@Override

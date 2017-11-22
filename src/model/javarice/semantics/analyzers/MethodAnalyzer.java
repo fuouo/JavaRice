@@ -8,6 +8,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.error.errorcheckers.MultipleFuncDecChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.generatedexp.JavaRiceParser.BlockContext;
@@ -65,6 +67,21 @@ public class MethodAnalyzer implements ParseTreeListener {
 	@Override
 	public void exitEveryRule(ParserRuleContext ctx) {
 		if(ctx instanceof MethodDeclarationContext) {
+			
+			MethodDeclarationContext mthdCtx = (MethodDeclarationContext) ctx;
+			
+			if(!this.declaredJavaRiceFunction.hasReturnValue() && 
+					this.declaredJavaRiceFunction.getReturnType() != FunctionType.VOID_TYPE) {
+				int lineNumber = -1;
+				
+				if(mthdCtx.Identifier() != null) {
+					lineNumber = mthdCtx.Identifier().getSymbol().getLine();
+				}
+				
+				BuildChecker.reportCustomError(ErrorRepository.MISSING_RETURN, "", 
+						lineNumber, this.declaredJavaRiceFunction.getReturnType());
+			}
+			
 			ExecutionManager.getInstance().closeFunctionExecution();
 		}
 	}
