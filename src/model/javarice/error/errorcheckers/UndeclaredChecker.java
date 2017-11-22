@@ -18,7 +18,6 @@ import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.ScanContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
-import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.searching.VariableSearcher;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
@@ -30,11 +29,14 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 	private ExpressionContext exprCtx;
 	private int lineNumber;
 	
+	private String prevFunctionName = "";
+	
 	public UndeclaredChecker(ExpressionContext exprCtx) {
 		this.exprCtx = exprCtx;
 		
 		Token firstToken = this.exprCtx.getStart();
 		this.lineNumber = firstToken.getLine();
+		this.prevFunctionName = "";
 	}
 
 	@Override
@@ -46,12 +48,16 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 			if(EvaluationCommand.isFunctionCall(exprCtx)) {
 				Console.log(LogType.DEBUG, TAG + "Function call detected! "
 						+ exprCtx.getText());
+				String s[] = exprCtx.getText().split("\\(");
+				this.prevFunctionName = s[0];
 				this.verifyFunctionCall(exprCtx);
 			}
 			else if(EvaluationCommand.isVariableOrConstant(exprCtx)) {
-				Console.log(LogType.DEBUG, TAG + "variable or constant detected! " 
-						+ exprCtx.getText());
-				this.verifyVariableOrConst(exprCtx);
+				if(!this.prevFunctionName.equals(exprCtx.getText())) {
+					Console.log(LogType.DEBUG, TAG + "variable or constant detected! " 
+							+ exprCtx.getText());
+					this.verifyVariableOrConst(exprCtx);
+				}
 			}
 		}
 	}
@@ -82,6 +88,11 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 	}
 
 	private void verifyFunctionCall(ExpressionContext funcExprCtx) {		
+		
+		if(funcExprCtx.expression(0).primary().Identifier() != null) {
+			Console.log(LogType.DEBUG, TAG + "Function found " + funcExprCtx.expression(0).primary().Identifier());
+		}
+		
 		if(funcExprCtx.expression(0).primary().Identifier() == null)
 			return;
 	

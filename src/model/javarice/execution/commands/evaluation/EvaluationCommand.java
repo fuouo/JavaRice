@@ -2,6 +2,7 @@ package model.javarice.execution.commands.evaluation;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -112,7 +113,15 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	}
 	
 	public static boolean isFunctionCall(ExpressionContext expressionContext) {
-		return expressionContext.arguments() != null;
+		Pattern functionPattern = Pattern.compile("([a-zA-Z0-9]+)\\(([ ,.a-zA-Z0-9]*)\\)");
+		
+		if(expressionContext.arguments() != null || 
+				functionPattern.matcher(expressionContext.getText()).matches()) {
+			return true;
+		}
+		
+		return false;
+//		return expressionContext.arguments() != null;
 	}
 	
 	public static boolean isVariableOrConstant(ExpressionContext expressionContext) {

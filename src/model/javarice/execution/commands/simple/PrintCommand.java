@@ -2,6 +2,7 @@ package model.javarice.execution.commands.simple;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -11,6 +12,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -27,16 +29,14 @@ import model.javarice.semantics.utils.StringUtils;
 public class PrintCommand implements ICommand, ParseTreeListener{
 	
 	private final String TAG = this.getClass().getSimpleName() + ": ";
+	private final Pattern functionPattern = Pattern.compile("([a-zA-Z0-9]+)\\(([ ,.a-zA-Z0-9]*)\\)");
 	
 	private ExpressionContext expressionContext;
 	
 	private String strToPrint = "";
 	private boolean complexExpr = false;
 	private boolean arrayAccess = false;
-	private boolean containString = false;
-	private boolean containArith = false;
 	private boolean isLN = false;
-	private boolean evaluatedExpr = false;
 
 	private List<Object> printExpr = new ArrayList<>();
 	
@@ -45,16 +45,9 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		isLN = sCtx.WRITELN() != null;
 		
 		this.expressionContext = sCtx.expression(0);
-
-		containString = this.expressionContext.getText().contains("\"");
-
-		containArith = this.expressionContext.getText().contains("+") ||
-                        this.expressionContext.getText().contains("-") ||
-                        this.expressionContext.getText().contains("*") ||
-                        this.expressionContext.getText().contains("/");
 		
-		// UndeclaredChecker undeclaredChecker = new UndeclaredChecker(this.expressionContext);
-		// undeclaredChecker.verify();
+		 UndeclaredChecker undeclaredChecker = new UndeclaredChecker(this.expressionContext);
+		 undeclaredChecker.verify();
 	}
 
 	@Override
@@ -73,14 +66,13 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		
 		// rest statement to print
 		this.strToPrint = "";
-		evaluatedExpr = false;
 	}
 
 	@Override
 	public void enterEveryRule(ParserRuleContext context) {
 		// TODO Auto-generated method stub
 		
-		if(context instanceof LiteralContext && (containString || containArith)) {
+		if(context instanceof LiteralContext) {
 			LiteralContext literalContext = (LiteralContext) context;
 			
 			if(literalContext.StringLiteral() != null) {
@@ -93,9 +85,16 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 				ParserRuleContext prCtx = literalContext;
 
 				// if it belongs to complex
-				while(!(prCtx instanceof StatementContext) && 
-						!(prCtx.getText().startsWith("(") && prCtx.getText().endsWith(")")))
+				while(!(prCtx instanceof StatementContext)) {
 					prCtx = prCtx.getParent();
+					
+					// if function
+					if ( (prCtx.getText().startsWith("(") && prCtx.getText().endsWith(")") ) ||
+                            functionPattern.matcher(prCtx.getText()).matches()) {
+						break;
+					}
+					
+				}
 
 				// if it does not belong to complex
 				if(prCtx instanceof StatementContext) {
@@ -119,34 +118,44 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 			}
 		}
 
-		else if(context instanceof ExpressionContext && !containString && !containArith) {
+		else if(context instanceof ExpressionContext) {
+			
+			try {
+                Integer.parseInt(context.getText());
+                return;
+            }catch (NumberFormatException ex) {
+
+            }
+			
+			ExpressionContext exprCtx = (ExpressionContext) context;
+			
 			ParserRuleContext prCtx = context;
 
-			while(!(prCtx instanceof StatementContext) &&
-					!(prCtx.getText().startsWith("[") && prCtx.getText().endsWith("]"))) 
+			while(!(prCtx instanceof StatementContext)) {
 				prCtx = prCtx.getParent();
+				if(prCtx.getText().endsWith("]") || functionPattern.matcher(prCtx.getText()).matches()) {
+					break;
+				}
+			}
 
-			if(!(prCtx instanceof StatementContext)) {
+			if(prCtx instanceof StatementContext && 
+					!context.getText().contains(("\"")) &&
+					functionPattern.matcher(context.getText()).matches()) {
 				try {
-					ExpressionContext expCtx = (ExpressionContext) context;
-
-					EvaluationCommand evalComm = new EvaluationCommand(expCtx);
+					EvaluationCommand evalComm = new EvaluationCommand(exprCtx);
 					evalComm.execute();
 
 					this.strToPrint += evalComm.getStringResult();
-
-					evaluatedExpr = true;
 				} catch(ClassCastException | Expression.ExpressionException ex) {
 					
 				}
 			}
 		}
 		
-		else if(context instanceof PrimaryContext && !evaluatedExpr) {
+		else if(context instanceof PrimaryContext) {
 			PrimaryContext primaryContext = (PrimaryContext) context;
 			
-			if(primaryContext.expression() != null && !primaryContext.getText().contains("\"")) {
-				
+			if(primaryContext.expression() != null && !primaryContext.getText().contains("\"")) {				
 
 				ParserRuleContext prCtx = primaryContext;
 
@@ -179,12 +188,14 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 				
 				JavaRiceValue value = JavaRiceValueSearcher.searchJavaRiceValue(identifier);
 				
-				if(value.getPrimitiveType() == PrimitiveType.ARRAY) {
-					this.arrayAccess = true;
-					this.evaluateArrayPrint(value, primaryContext);
-				} else if(this.arrayAccess == false) {
-					this.strToPrint += value.getValue();
-					printExpr.add(value.getValue());
+				if(value != null) {
+					if(value.getPrimitiveType() == PrimitiveType.ARRAY) {
+						this.arrayAccess = true;
+						this.evaluateArrayPrint(value, primaryContext);
+					} else if(this.arrayAccess == false) {
+						this.strToPrint += value.getValue();
+						printExpr.add(value.getValue());
+					}
 				}
 				
 			}

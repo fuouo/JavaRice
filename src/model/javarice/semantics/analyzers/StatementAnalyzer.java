@@ -61,6 +61,9 @@ public class StatementAnalyzer {
 
 		// an IF statement
 		else if(isIFStatement(ctx)) {
+			
+			Console.log(LogType.DEBUG, TAG + "IF statement detected!");
+			
 			StatementContext statementCtx = ctx.statement(0);
 			
 			IfCommand ifCommand = new IfCommand(ctx.parExpression());
