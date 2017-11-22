@@ -131,32 +131,56 @@ public class Console {
 		
 		switch(logType) {
 		case VERBOSE:
-		case DEBUG:			 // access message panel
+		case DEBUG:
 			INSTANCE.messagePanel.appendMessage(logType.toString() + ": " + message);
 			break;
 		case PRINT:
 			INSTANCE.printPanel.print(message);
 			break;
-		case ERROR:			// access error panel
+		case ERROR:
 			
-			// process the message
-			String tokens[] = message.split("\\[LINE\\]|\\[SYNTAX\\]");
+			// get the type first
+			String[] tokens = message.split("\\[LINE\\]|\\[TYPE\\]");
+			String strErrorType = tokens[0];
+			
 			String errorMessage = "";
-			int lineNumber = 0;
+			int lineNumber = -1;
 			ErrorType errorType = null;
 			
-			// semantic error with no line number
-			if(tokens.length == 1) {
-				errorMessage = tokens[0];
-				errorType = ErrorType.SEMANTIC_ERROR;
-			} else if(tokens.length == 2) { // semantic error with line number
-				lineNumber = Integer.parseInt(tokens[0].trim());
-				errorMessage = tokens[1];
-				errorType = ErrorType.SEMANTIC_ERROR;
-			} else if(tokens.length == 3) { // syntax error
-				lineNumber = Integer.parseInt(tokens[0].trim());
+			switch(strErrorType) {
+			case "SYNTAX":
+				
+				// error type
+				errorType = ErrorType.SYNTAX;
+				
+				// get line number
+				lineNumber = Integer.parseInt(tokens[1]);
+				
+				// get message
 				errorMessage = tokens[2];
-				errorType = ErrorType.SYNTAX_ERROR;
+				
+				break;
+			case "SEMANTIC":
+				
+				// error type
+				errorType = ErrorType.SEMANTIC;
+				
+				// get line number and message
+				if(tokens.length == 3) {
+					lineNumber = Integer.parseInt(tokens[1]);
+					errorMessage = tokens[2];
+				} else {
+					errorMessage = tokens[1];
+				}
+				
+				break;
+			case "RUNTIME":
+				
+				// error type
+				errorType = ErrorType.RUNTIME;
+				errorMessage = tokens[1];
+				
+				break;
 			}
 			
 			Error error = new Error();
@@ -165,10 +189,10 @@ public class Console {
 			error.setLine(lineNumber);
 			
 			INSTANCE.errorPanel.addRow(error);
+			INSTANCE.messagePanel.appendMessage("ERROR at line " + lineNumber + ": "
+					+ errorMessage);
 			
-			// temporary
-			INSTANCE.messagePanel.appendMessage(logType.toString() + ": " + errorMessage + " at line " + lineNumber);
-			
+			break;
 		}
 	}
 	
