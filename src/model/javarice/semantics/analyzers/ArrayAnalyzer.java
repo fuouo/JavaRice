@@ -9,10 +9,12 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import controller.Console;
 import controller.Console.LogType;
 import model.javarice.error.errorcheckers.MultipleVarDecChecker;
+import model.javarice.error.errorcheckers.TypeErrorChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.ArrayInitializeCommand;
 import model.javarice.generatedexp.JavaRiceParser.ArrayCreatorRestContext;
 import model.javarice.generatedexp.JavaRiceParser.CreatedNameContext;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
 import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorIdContext;
 import model.javarice.semantics.representations.JavaRiceArray;
@@ -74,6 +76,14 @@ public class ArrayAnalyzer implements ParseTreeListener {
 		
 		else if(ctx instanceof ArrayCreatorRestContext) {
 			ArrayCreatorRestContext arrayCreatorCtx = (ArrayCreatorRestContext) ctx;
+			
+			ExpressionContext exprCtx = arrayCreatorCtx.expression(0);
+			
+			// dummy variable
+			JavaRiceValue javaRiceValue = new JavaRiceValue(0, PrimitiveType.INT);
+			
+			TypeErrorChecker typeErrorChecker = new TypeErrorChecker(javaRiceValue, exprCtx);
+			typeErrorChecker.verify();
 			
 			this.createInitializeCommand(arrayCreatorCtx);
 		}
