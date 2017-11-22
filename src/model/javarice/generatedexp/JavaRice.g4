@@ -386,6 +386,7 @@ statement
     |   statementExpression ';'
     |   Identifier ':' statement
     |	WRITE '(' expression ')' ';'
+    |	WRITELN '(' expression ')' ';'
     |   scan
     ;
 
@@ -636,6 +637,7 @@ VOID          : '_void';
 VOLATILE      : 'volatile';
 WHILE         : 'while';
 WRITE		  : 'write';
+WRITELN		  : 'writeln';
 
 // §3.10.1 Integer Literals
 
