@@ -126,7 +126,7 @@ public class ParameterAnalyzer implements ParseTreeListener {
 			this.declaredJavaRiceFunction.addParameter(identifierString, javaRiceValue);
 
 			Console.log(LogType.DEBUG, TAG + 
-					"Created array parameter for " +this.declaredJavaRiceFunction.getFunctionName());
+					"Created parameter for " +this.declaredJavaRiceFunction.getFunctionName());
 		}
 		
 		this.identifiedTokens.clearTokens();

@@ -37,6 +37,7 @@ import controller.Console;
 import controller.ControllerInterface;
 import view.consolepanels.ErrorPanel;
 import view.consolepanels.MessagePanel;
+import view.consolepanels.PrintPanel;
 import view.factory.ConsolePanelFactory;
 import view.factory.ConsoleType;
 
@@ -181,12 +182,16 @@ public class IDEView extends ViewInterface{
 		ErrorPanel errorPanel = new ErrorPanel(ConsoleType.ERRORS, controller);
 		JComponent errorTab = (JComponent) errorPanel;
 		consoleTabPane.addTab("ERRORS", errorTab);
+		PrintPanel printPanel = new PrintPanel(ConsoleType.PRINT, controller);
+		JComponent printTab = (JComponent) printPanel;
+		consoleTabPane.addTab("PRINT", printTab);
 		bottomPanel.add(consoleTabPane);
 	
 		//NO MORE CODE AFTER HERE PLEASE :)
 		Console.getInstance().setConsoleTabPane(consoleTabPane);
 		Console.getInstance().setMessagePanel(messagePanel);
 		Console.getInstance().setErrorPanel(errorPanel);
+		Console.getInstance().setPrintPanel(printPanel);
 		myView.setVisible(true);
 		myView.setResizable(false);
 	}

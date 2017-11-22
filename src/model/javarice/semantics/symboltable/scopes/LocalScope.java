@@ -75,6 +75,22 @@ public class LocalScope implements IScope {
 		javaRiceValue.setValue(strValue);
 	}
 	
+	public void addFinalEmptyVariableFromKeywords(String strPrimitiveType, String strIdentifier) {
+		this.initLocalVariableMap();
+		
+		JavaRiceValue javaRiceValue = JavaRiceValue.createEmptyVariableFromKeywords(strPrimitiveType);
+		javaRiceValue.markFinal();
+		this.localVariables.put(strIdentifier, javaRiceValue);
+	}
+	
+	public void addFinalInitializedVariableFromKeywords(String strPrimitiveType, String strIdentifier, String strValue) {
+		this.initLocalVariableMap();
+		
+		this.addFinalEmptyVariableFromKeywords(strPrimitiveType, strIdentifier);
+		JavaRiceValue javaRiceValue = this.localVariables.get(strIdentifier);
+		javaRiceValue.setValue(strValue);
+	}
+	
 	public void addJavaRiceValue(String strIdentifier, JavaRiceValue javaRiceValue) {
 		this.initLocalVariableMap();
 		this.localVariables.put(strIdentifier, javaRiceValue);

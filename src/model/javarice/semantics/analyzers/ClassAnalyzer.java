@@ -17,6 +17,7 @@ import model.javarice.generatedexp.JavaRiceParser.ClassDeclarationContext;
 import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceModifierContext;
 import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceTypeContext;
 import model.javarice.generatedexp.JavaRiceParser.FieldDeclarationContext;
+import model.javarice.generatedexp.JavaRiceParser.MethodDeclarationContext;
 import model.javarice.generatedexp.JavaRiceParser.PrimitiveTypeContext;
 import model.javarice.generatedexp.JavaRiceParser.TypeTypeContext;
 import model.javarice.semantics.symboltable.SymbolTableManager;
@@ -132,6 +133,18 @@ public class ClassAnalyzer implements ParseTreeListener {
 					this.identifiedTokens.clearTokens();
 				}
 			}
+		}
+		
+		else if(ctx instanceof MethodDeclarationContext) {
+			
+			Console.log(LogType.DEBUG, TAG + "Method Declaration detected!");
+			
+			MethodDeclarationContext methodDecCtx = (MethodDeclarationContext) ctx;
+			MethodAnalyzer methodAnalyzer = new MethodAnalyzer(this.identifiedTokens, this.declaredClassScope);
+			methodAnalyzer.analyze(methodDecCtx);
+			
+			//reuse tokens
+			this.identifiedTokens.clearTokens();
 		}
 	}
 	

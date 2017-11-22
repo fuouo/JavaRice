@@ -1,5 +1,5 @@
 package view.factory;
 
 public enum ConsoleType {
-	ERRORS, TOKENS
+	ERRORS, TOKENS, PRINT
 }

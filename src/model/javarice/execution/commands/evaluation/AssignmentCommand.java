@@ -31,12 +31,8 @@ public class AssignmentCommand implements ICommand {
 		this.leftHandExprCtx = leftHandExprCtx;
 		this.rightHandExprCtx = rightHandExprCtx;
 		
-		Console.log(LogType.DEBUG, TAG + "Before UndeclaredChecker");
-		
 		UndeclaredChecker undeclaredChecker = new UndeclaredChecker(this.leftHandExprCtx);
 		undeclaredChecker.verify();
-		
-		Console.log(LogType.DEBUG, TAG + "After UndeclaredChecker");
 		
 		ConstChecker constChecker = new ConstChecker(this.leftHandExprCtx);
 		constChecker.verify();

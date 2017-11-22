@@ -22,6 +22,7 @@ import model.javarice.generatedexp.JavaRiceParser.BlockContext;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.ScanContext;
 import model.javarice.generatedexp.JavaRiceParser.StatementContext;
+import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 
@@ -146,6 +147,9 @@ public class StatementAnalyzer {
 	}
 	
 	private void handlePrintStatement(StatementContext ctx) {
+		
+		Console.log(LogType.DEBUG, TAG + "Print detected!");
+		
 		PrintCommand printCommand = new PrintCommand(ctx.expression(0));
 		
 		StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
@@ -204,7 +208,7 @@ public class StatementAnalyzer {
 		
 	}
 	
-	private void handleReturnStatement(ExpressionContext exprCtx) {
+	private void handleReturnStatement(ExpressionContext exprCtx) {		
 		ReturnCommand returnCommand = new ReturnCommand
 				(exprCtx, ExecutionManager.getInstance().getCurrentFunction());
 		/*

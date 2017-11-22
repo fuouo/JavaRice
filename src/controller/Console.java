@@ -12,11 +12,13 @@ import model.javarice.error.ErrorType;
 import model.symboltable.STRow;
 import view.consolepanels.ErrorPanel;
 import view.consolepanels.MessagePanel;
+import view.consolepanels.PrintPanel;
 import view.factory.ConsoleType;
 
 public class Console {
 	
 	public enum LogType {
+		PRINT,
 		VERBOSE,
 		DEBUG,
 		ERROR
@@ -39,6 +41,7 @@ public class Console {
 	private JTabbedPane consoleTabPane;
 	private MessagePanel messagePanel;
 	private ErrorPanel errorPanel;
+	private PrintPanel printPanel;
 	
 	public void setConsoleTabPane(JTabbedPane consoleTabPane){
 		this.consoleTabPane = consoleTabPane;
@@ -57,6 +60,10 @@ public class Console {
 
 	public void setErrorPanel(ErrorPanel errorPanel) {
 		this.errorPanel = errorPanel;
+	}
+	
+	public void setPrintPanel(PrintPanel printPanel) {
+		this.printPanel = printPanel;
 	}
 	
 	public ArrayList<Object> getErrors(String code) {
@@ -98,6 +105,9 @@ public class Console {
 		}else if(activePanel.getId() == ConsoleType.ERRORS){
 			System.out.println("SHOWING ERRORS");
 			list = getErrors("");
+		}else if(activePanel.getId() == ConsoleType.PRINT){
+			System.out.println("SHOWING PRINT");
+			list = getErrors("");
 		}
 		activePanel.displayItems(list);
 		
@@ -110,6 +120,7 @@ public class Console {
 	public void clear() {
 		this.messagePanel.clearMessage();
 		this.errorPanel.removeAllRow();
+		this.printPanel.clearMessage();
 	}
 	
 	public static void log(final LogType logType, final String message) {
@@ -122,6 +133,9 @@ public class Console {
 		case VERBOSE:
 		case DEBUG:			 // access message panel
 			INSTANCE.messagePanel.appendMessage(logType.toString() + ": " + message);
+			break;
+		case PRINT:
+			INSTANCE.printPanel.print(message);
 			break;
 		case ERROR:			// access error panel
 			
@@ -151,6 +165,9 @@ public class Console {
 			error.setLine(lineNumber);
 			
 			INSTANCE.errorPanel.addRow(error);
+			
+			// temporary
+			INSTANCE.messagePanel.appendMessage(logType.toString() + ": " + errorMessage + " at line " + lineNumber);
 			
 		}
 	}

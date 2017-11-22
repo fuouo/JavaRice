@@ -34,7 +34,7 @@ public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 	@Override
 	public void enterEveryRule(ParserRuleContext ctx) {
 		// TODO Auto-generated method stub
-		if(ctx instanceof LiteralContext) {
+		if(ctx instanceof LiteralContext) {			
 			if(this.javaRiceValue == null) {
 				return;
 			}
@@ -81,7 +81,6 @@ public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 					
 				
 		}
-
 	}
 
 	@Override

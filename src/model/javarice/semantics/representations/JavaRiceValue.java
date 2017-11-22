@@ -1,9 +1,13 @@
 package model.javarice.semantics.representations;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.semantics.utils.RecognizedKeywords;
 import model.javarice.semantics.utils.StringUtils;
 
 public class JavaRiceValue {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 
 	//these are the accepted primitive types
 	public enum PrimitiveType {
@@ -25,7 +29,8 @@ public class JavaRiceValue {
 	private boolean finalFlag = false;
 	
 	public JavaRiceValue(Object value, PrimitiveType primitiveType) {
-		if(value == null || checkValueType(value, primitiveType)) {
+		
+		if(value == null || checkValueType(value, primitiveType)) {					
 			this.value = value;
 			this.primitiveType = primitiveType;
 		} else {
@@ -84,6 +89,9 @@ public class JavaRiceValue {
 	}
 	
 	private Object attemptTypeCast(String value) {
+		
+		Console.log(LogType.DEBUG, TAG + "Value is " + value);
+		
 		switch(this.primitiveType) {
 			case BOOLEAN: return Boolean.valueOf(value);
 			case CHAR: return Character.valueOf(value.charAt(0)); //only get first char at value

@@ -32,6 +32,8 @@ public class MethodAnalyzer implements ParseTreeListener {
 	private IdentifiedTokens identifiedTokens;
 	private JavaRiceFunction declaredJavaRiceFunction;
 	
+	private boolean isInParams = false;
+	
 	public MethodAnalyzer(IdentifiedTokens identifiedTokens, ClassScope declaredClassScope) {
 		this.identifiedTokens = identifiedTokens;
 		this.declaredClassScope = declaredClassScope;
@@ -80,7 +82,7 @@ public class MethodAnalyzer implements ParseTreeListener {
 	}
 	
 	private void analyzeMethod(ParserRuleContext ctx) {
-		if(ctx instanceof TypeTypeContext) {
+		if(ctx instanceof TypeTypeContext && !isInParams) {
 			TypeTypeContext typeCtx = (TypeTypeContext) ctx;
 			
 			//return type is a primitive type
@@ -96,6 +98,9 @@ public class MethodAnalyzer implements ParseTreeListener {
 		}
 		
 		else if(ctx instanceof FormalParametersContext) {
+			
+			isInParams = true;
+			
 			FormalParametersContext formalParamsCtx = (FormalParametersContext) ctx;
 			this.analyzeParameters(formalParamsCtx);
 			this.storeJavaRiceFunction();

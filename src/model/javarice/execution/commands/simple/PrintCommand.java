@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -31,6 +32,9 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 	
 	public PrintCommand(ExpressionContext expressionContext) {
 		this.expressionContext = expressionContext;
+		
+		UndeclaredChecker undeclaredChecker = new UndeclaredChecker(this.expressionContext);
+		undeclaredChecker.verify();
 	}
 
 	@Override
@@ -40,7 +44,8 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		treeWalker.walk(this, expressionContext);
 		
 		// log to console
-		Console.log(LogType.DEBUG, this.strToPrint);
+		Console.log(LogType.VERBOSE, this.strToPrint);
+		Console.log(LogType.PRINT, this.strToPrint);
 		
 		// rest statement to print
 		this.strToPrint = "";

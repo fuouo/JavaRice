@@ -169,7 +169,7 @@ public class JavaRiceFunction implements IControlledCommand{
 
 	public void addParameter(String strIdentifier, JavaRiceValue javaRiceValue) {
 		this.parameterValues.put(strIdentifier, javaRiceValue);
-		Console.log(LogType.DEBUG, this.functionName + " added an empty parameter "
+		Console.log(LogType.DEBUG, TAG + this.functionName + " added an empty parameter "
 				+ strIdentifier + " type " + javaRiceValue.getPrimitiveType());
 	}
 
@@ -216,7 +216,7 @@ public class JavaRiceFunction implements IControlledCommand{
 		return null;
 	}
 	
-	public JavaRiceValue getReturnValue() {
+	public JavaRiceValue getReturnValue() {		
 		if(this.returnType == FunctionType.VOID_TYPE) {
 			Console.log(LogType.DEBUG, TAG + this.functionName + " is a void function."
 					+ " Null java rice value is returned.");

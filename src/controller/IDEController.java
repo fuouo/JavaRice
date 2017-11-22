@@ -3,6 +3,7 @@ package controller;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import controller.Console.LogType;
 import model.JavaRiceCompiler;
 import model.ModelInterface;
 import model.javarice.builder.BuildChecker;
@@ -45,13 +46,18 @@ public class IDEController extends ControllerInterface{
 	
 	@Override
 	public void runCode(String code){
-//		JavaRiceCompiler cmp = (JavaRiceCompiler) model;
-//		cmp.compile(code);
 		
 		// reset components
 		this.performResetComponents();
 		
 		ParserHandler.getInstance().parseText(code);
+		if(BuildChecker.getInstance().canExecute()) {
+			ExecutionManager.getInstance().executeAllActions();
+		}
+		else {
+			Console.log(LogType.ERROR, "Fix identified errors before executing!");
+		}
+		
 	}
 
 	@Override

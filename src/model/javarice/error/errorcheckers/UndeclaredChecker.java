@@ -18,6 +18,7 @@ import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.ScanContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
+import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.searching.VariableSearcher;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
@@ -39,12 +40,17 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 	@Override
 	public void enterEveryRule(ParserRuleContext ctx) {
 		// TODO Auto-generated method stub
+		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext exprCtx = (ExpressionContext) ctx;
 			if(EvaluationCommand.isFunctionCall(exprCtx)) {
+				Console.log(LogType.DEBUG, TAG + "Function call detected! "
+						+ exprCtx.getText());
 				this.verifyFunctionCall(exprCtx);
 			}
 			else if(EvaluationCommand.isVariableOrConstant(exprCtx)) {
+				Console.log(LogType.DEBUG, TAG + "variable or constant detected! " 
+						+ exprCtx.getText());
 				this.verifyVariableOrConst(exprCtx);
 			}
 		}
@@ -75,11 +81,11 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		treeWalker.walk(this, this.exprCtx);
 	}
 
-	private void verifyFunctionCall(ExpressionContext funcExprCtx) {
-		if(funcExprCtx.expression(0).Identifier() == null)
+	private void verifyFunctionCall(ExpressionContext funcExprCtx) {		
+		if(funcExprCtx.expression(0).primary().Identifier() == null)
 			return;
 	
-		String functionName = funcExprCtx.expression(0).Identifier().getText();
+		String functionName = funcExprCtx.expression(0).primary().Identifier().getText();
 		
 		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
 				ParserHandler.getInstance().getCurrentClassName());

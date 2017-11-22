@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.error.errorcheckers.MultipleVarDecChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.evaluation.ArrayInitializeCommand;
 import model.javarice.generatedexp.JavaRiceParser.ArrayCreatorRestContext;
@@ -57,6 +58,11 @@ public class ArrayAnalyzer implements ParseTreeListener {
 		}
 		else if(ctx instanceof VariableDeclaratorIdContext) {
 			VariableDeclaratorIdContext varDecIdCtx = (VariableDeclaratorIdContext) ctx;
+			
+			MultipleVarDecChecker multipleDeclaredChecker = 
+					new MultipleVarDecChecker(varDecIdCtx);
+			multipleDeclaredChecker.verify();
+			
 			this.identifiedTokens.addToken(ARRAY_IDENTIFIER_KEY, varDecIdCtx.getText());
 			
 			this.analyzeArray();
@@ -68,6 +74,7 @@ public class ArrayAnalyzer implements ParseTreeListener {
 		
 		else if(ctx instanceof ArrayCreatorRestContext) {
 			ArrayCreatorRestContext arrayCreatorCtx = (ArrayCreatorRestContext) ctx;
+			
 			this.createInitializeCommand(arrayCreatorCtx);
 		}
 	}
