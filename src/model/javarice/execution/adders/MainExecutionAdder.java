@@ -14,7 +14,6 @@ public class MainExecutionAdder implements IExecutionAdder {
 
 	@Override
 	public void addCommand(ICommand command) {
-		// TODO Auto-generated method stub
 		this.mainExecutionList.add(command);
 	}
 

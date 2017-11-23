@@ -2,6 +2,8 @@ package model.javarice.execution;
 
 import java.util.ArrayList;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.adders.FunctionExecutionAdder;
 import model.javarice.execution.adders.IExecutionAdder;
 import model.javarice.execution.adders.MainExecutionAdder;
@@ -9,6 +11,8 @@ import model.javarice.execution.commands.ICommand;
 import model.javarice.semantics.representations.JavaRiceFunction;
 
 public class ExecutionManager {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 
 	private static ExecutionManager INSTANCE = null;
 	
@@ -79,6 +83,13 @@ public class ExecutionManager {
 	/*
 	 * Returns true if the execution manager currently points to a function control flow.
 	 */
+	public boolean isInMainExecution() {
+		return this.activeExecutionAdder instanceof MainExecutionAdder;
+	}
+	
+	/*
+	 * Returns true if the execution manager currently points to a function control flow.
+	 */
 	public boolean isInFunctionExecution() {
 		return this.activeExecutionAdder instanceof FunctionExecutionAdder;
 	}
@@ -91,9 +102,11 @@ public class ExecutionManager {
 			FunctionExecutionAdder functionExecutionAdder = (FunctionExecutionAdder) this.activeExecutionAdder;
 			
 			return functionExecutionAdder.getAssignedFunction();
+		} else if(this.isInMainExecution()) {
+			Console.log(LogType.DEBUG, TAG + "current execution is in main");
 		}
 		
-		System.err.println("Execution Manager is not in a function!");
+		System.out.println("Execution Manager is not in a function!");
 		return null;
 	}
 	
@@ -105,14 +118,16 @@ public class ExecutionManager {
 	}
 	
 	/*
-	 * Blocks the execution of the thread. Can only be called once. At this point, resumeExecution() must be called by a specific command.
+	 * Blocks the execution of the thread. Can only be called once. 
+	 * At this point, resumeExecution() must be called by a specific command.
 	 */
 	public void blockExecution() {
 		this.executionMonitor.claimExecutionFlag();
 	}
 	
 	/*
-	 * Resumes the execution of thread. Can only be called once. At this point, the execution thread should continue to do other actions.
+	 * Resumes the execution of thread. Can only be called once. 
+	 * At this point, the execution thread should continue to do other actions.
 	 */
 	public void resumeExecution() {
 		this.executionMonitor.releaseExecutionFlag();

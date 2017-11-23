@@ -11,6 +11,8 @@ public class ConsolePanelFactory {
 			return new view.consolepanels.MessagePanel(ConsoleType.TOKENS, controller);
 		case ERRORS:
 			return new view.consolepanels.ErrorPanel(ConsoleType.ERRORS, controller);
+		case PRINT:
+			return new view.consolepanels.ErrorPanel(ConsoleType.ERRORS, controller);
 		
 		default:
 			return null;

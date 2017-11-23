@@ -2,6 +2,7 @@ package model.javarice.execution.commands.evaluation;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -9,20 +10,31 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
+import controller.Console;
+import controller.Console.LogType;
+import model.javarice.builder.ParserHandler;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
+import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.searching.VariableSearcher;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.Expression;
 import model.javarice.semantics.utils.RecognizedKeywords;
+import model.javarice.semantics.utils.StringUtils;
 
 public class EvaluationCommand implements ICommand, ParseTreeListener {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 	
 	private ExpressionContext parentExpressionContext;
 	private String modifiedExpression;
 	private BigDecimal resultValue;
+
+	private boolean isNumeric;
+	private String strResult;
 	
 	public EvaluationCommand(ExpressionContext expressionContext) {
 		this.parentExpressionContext = expressionContext;
@@ -33,7 +45,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext expressionContext = (ExpressionContext) ctx;
-			
+
 			if(EvaluationCommand.isFunctionCall(expressionContext)) {
 				this.evaluateFunctionCall(expressionContext);
 			} else if(EvaluationCommand.isVariableOrConstant(expressionContext)) {
@@ -63,26 +75,52 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 
 	@Override
 	public void execute() {
+
+		Console.log(LogType.DEBUG, TAG + "executing");
 		
 		this.modifiedExpression = this.parentExpressionContext.getText();
 		
+		this.isNumeric = !this.modifiedExpression.contains("\"");
+
 		// catch rules if the value has direct boolean flags
 		if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_TRUE)) {
 			this.resultValue = new BigDecimal(1);
-		} else if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_FALSE)) {
+			this.strResult = this.resultValue.toEngineeringString();
+		} 
+
+		else if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_FALSE)) {
 			this.resultValue = new BigDecimal(0);
-		} else {
+			this.strResult = this.resultValue.toEngineeringString();
+		} 
+
+		else if(!this.isNumeric) {
+			this.strResult = StringUtils.removeQuotes(this.modifiedExpression);
+		}
+
+		else {
+			Console.log(LogType.DEBUG, TAG + "Numeric!!!");
+			
+			// can't handle function variable
 			ParseTreeWalker treeWalker = new ParseTreeWalker();
 			treeWalker.walk(this, this.parentExpressionContext);
 			
 			Expression evalExpression = new Expression(this.modifiedExpression);
 			this.resultValue = evalExpression.eval();
+			this.strResult = this.resultValue.toEngineeringString();
 		}
 		
 	}
 	
 	public static boolean isFunctionCall(ExpressionContext expressionContext) {
-		return expressionContext.arguments() != null;
+		Pattern functionPattern = Pattern.compile("([a-zA-Z0-9]+)\\(([ ,.a-zA-Z0-9]*)\\)");
+		
+		if(expressionContext.arguments() != null || 
+				functionPattern.matcher(expressionContext.getText()).matches()) {
+			return true;
+		}
+		
+		return false;
+//		return expressionContext.arguments() != null;
 	}
 	
 	public static boolean isVariableOrConstant(ExpressionContext expressionContext) {
@@ -92,11 +130,16 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private void evaluateFunctionCall(ExpressionContext expressionContext) {
 		String functionName = expressionContext.expression(0).Identifier().getText();
 		
-		// parser handler shit here
-		ClassScope classScope = null;
+		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+				ParserHandler.getInstance().getCurrentClassName());
 		
 		JavaRiceFunction javaRiceFunction = classScope.searchFunction(functionName);
 		
+
+		if(javaRiceFunction == null) {
+			return;
+		}
+
 		if(expressionContext.arguments().expressionList() != null) {
 			List<ExpressionContext> expressionContextList = 
 					expressionContext.arguments().expressionList().expression();
@@ -113,18 +156,28 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		}
 		
 		javaRiceFunction.execute();
-		System.err.println("Before modified expression function call: " + this.modifiedExpression);
+		Console.log(LogType.DEBUG, TAG + "Before modified expression function call: " + this.modifiedExpression);
 		this.modifiedExpression = this.modifiedExpression.replace(expressionContext.getText(), 
 				javaRiceFunction.getReturnValue().getValue().toString());
-		System.err.println("Afer modified expression function call: " + this.modifiedExpression);
+		Console.log(LogType.DEBUG, TAG + "After modified expression function call: " + this.modifiedExpression);
 		
 	}
 	
 	private void evaluateVariable(ExpressionContext expressionContext) {
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(expressionContext.getText());
 		
+		if(javaRiceValue == null) {
+			return;
+		}
+
 		this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
 				javaRiceValue.getValue().toString());
+
+		if(javaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
+			this.modifiedExpression = "\"" + modifiedExpression + "\"";
+		}
+
+		Console.log(LogType.DEBUG, TAG + "Evaluated: " + modifiedExpression);
 	}
 	
 	/*
@@ -132,6 +185,14 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	 */
 	public BigDecimal getResult() {
 		return this.resultValue;
+	}
+
+	public String getStringResult() {
+		return this.strResult;
+	}
+
+	public boolean isNumericResult() {
+		return this.isNumeric;
 	}
 
 }

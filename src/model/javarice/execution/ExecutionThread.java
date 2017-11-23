@@ -16,7 +16,8 @@ public class ExecutionThread extends Thread {
 	
 	/*
 	 * Runs the thread by executing all actions provided that the execution flag isn't acquired by any other commands.
-	 * If a command attempts to acquire the flag, this thread will block until its flag is released(presumably by the command 
+	 * If a command attempts to acquire the flag, this thread will block 
+	 * until its flag is released(presumably by the command 
 	 * who acquired it or another command).
 	 * (non-Javadoc)
 	 * @see java.lang.Thread#run()

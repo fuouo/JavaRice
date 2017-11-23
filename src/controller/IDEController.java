@@ -3,9 +3,17 @@ package controller;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import controller.Console.LogType;
 import model.JavaRiceCompiler;
 import model.ModelInterface;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ParserHandler;
 import model.javarice.error.Error;
+import model.javarice.execution.ExecutionManager;
+import model.javarice.execution.FunctionTracker;
+import model.javarice.semantics.statements.StatementControlOverseer;
+import model.javarice.semantics.symboltable.SymbolTableManager;
+import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 import model.symboltable.STRow;
 import view.IDEView;
 import view.ViewInterface;
@@ -14,6 +22,7 @@ public class IDEController extends ControllerInterface{
 	
 	public IDEController(ModelInterface model, ViewInterface view) {
 		super(model, view);
+		this.initializeComponents();
 	}
 
 	@Override
@@ -37,8 +46,18 @@ public class IDEController extends ControllerInterface{
 	
 	@Override
 	public void runCode(String code){
-		JavaRiceCompiler cmp = (JavaRiceCompiler) model;
-		cmp.compile(code);
+		
+		// reset components
+		this.performResetComponents();
+		
+		ParserHandler.getInstance().parseText(code);
+		if(BuildChecker.getInstance().canExecute()) {
+			ExecutionManager.getInstance().executeAllActions();
+		}
+		else {
+			Console.log(LogType.ERROR, "Fix identified errors before executing!");
+		}
+		
 	}
 
 	@Override
@@ -70,6 +89,24 @@ public class IDEController extends ControllerInterface{
 		}catch(Exception e){}
 		
 		return null;
+	}
+	
+	private void initializeComponents() {
+		SymbolTableManager.initialize();
+		BuildChecker.initialize();
+		ExecutionManager.initialize();
+		LocalScopeCreator.initialize();
+		StatementControlOverseer.initialize();
+		FunctionTracker.initialize();
+	}
+	
+	private void performResetComponents() {
+		ExecutionManager.reset();
+		LocalScopeCreator.reset();
+		SymbolTableManager.reset();
+		BuildChecker.reset();
+		StatementControlOverseer.reset();
+		FunctionTracker.reset();
 	}
 
 }

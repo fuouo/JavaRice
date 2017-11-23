@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.semantics.representations.JavaRiceValue;
 
 public class LocalScopeCreator {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 	
 	private static LocalScopeCreator INSTANCE = null;
 	private LocalScope activeLocalScope = null;
@@ -98,7 +102,7 @@ public class LocalScopeCreator {
 			}
 		}
 		
-		System.err.println(strIdentifier + " not found in any local scope!");
+		Console.log(LogType.DEBUG, "LocalScopeCreator: " + strIdentifier + " not found in any local scope!");
 		return null;
 	}
 	

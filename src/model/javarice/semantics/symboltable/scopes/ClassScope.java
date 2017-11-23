@@ -2,11 +2,15 @@ package model.javarice.semantics.symboltable.scopes;
 
 import java.util.HashMap;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class ClassScope implements IScope {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 
 	private String className;
 	
@@ -52,15 +56,12 @@ public class ClassScope implements IScope {
 		
 		if(isPublic) {
 			this.publicVariables.put(strIdentifier, javaRiceValue);
-			// add to console
-			System.err.println("ADD TO CONSOLE: " + strClassModifier + " " + 
-					strPrimitiveType + " " + strIdentifier + " created!");
 		} else {
 			this.privateVariables.put(strIdentifier, javaRiceValue);
-			// add to console
-			System.err.println("ADD TO CONSOLE: " + strClassModifier + " " + 
-					strPrimitiveType + " " + strIdentifier + " created!");
 		}
+		
+		Console.log(LogType.DEBUG, TAG + strClassModifier + " " + 
+				strPrimitiveType + " " + strIdentifier + " created!");
 	}
 	
 	/*
@@ -79,16 +80,13 @@ public class ClassScope implements IScope {
 		if(isPublic) {
 			JavaRiceValue javaRiceValue = this.publicVariables.get(strIdentifier);
 			this.publicVariables.put(strIdentifier, javaRiceValue);
-			// add to console
-			System.err.println("ADD TO CONSOLE: " + strClassModifier + " " + 
-					strPrimitiveType + " " + strIdentifier + " updated!");
 		} else {
 			JavaRiceValue javaRiceValue = this.privateVariables.get(strIdentifier);
 			this.privateVariables.put(strIdentifier, javaRiceValue);
-			// add to console
-			System.err.println("ADD TO CONSOLE: " + strClassModifier + " " + 
-					strPrimitiveType + " " + strIdentifier + " updated!");
 		}
+		
+		Console.log(LogType.DEBUG, TAG + strClassModifier + " " + 
+				strPrimitiveType + " " + strIdentifier + " updated!");
 	}	
 	
 	public JavaRiceValue getPublicVariable(String strIdentifier) {
@@ -111,15 +109,13 @@ public class ClassScope implements IScope {
 	
 	public void addPrivateJavaRiceFunction(String strIdentifier, JavaRiceFunction javaRiceFunction) {
 		this.privateFunctions.put(strIdentifier, javaRiceFunction);
-		// add to console
-		System.err.println("ADD TO CONSOLE: Created private function " + javaRiceFunction.getReturnType() 
+		Console.log(LogType.DEBUG, TAG + "Created private function " + javaRiceFunction.getReturnType() 
 			+ " " + strIdentifier);
 	}
 	
 	public void addPublicJavaRiceFunction(String strIdentifier, JavaRiceFunction javaRiceFunction) {
 		this.publicFunctions.put(strIdentifier, javaRiceFunction);
-		// add to console
-		System.err.println("ADD TO CONSOLE: Created public function " + javaRiceFunction.getReturnType() 
+		Console.log(LogType.DEBUG, TAG + "Created public function " + javaRiceFunction.getReturnType() 
 			+ " " + strIdentifier);
 	}
 	
@@ -180,7 +176,7 @@ public class ClassScope implements IScope {
 	public JavaRiceValue searchVariable(String identifier) {
 		JavaRiceValue javaRiceValue = null;
 		
-		if(this.containsPrivateFunction(identifier)) {
+		if(this.containsPrivateVariable(identifier)) {
 			javaRiceValue = this.getPrivateVariable(identifier);
 		} else if(this.containsPublicVariable(identifier)) {
 			javaRiceValue = this.getPublicVariable(identifier);
@@ -211,7 +207,7 @@ public class ClassScope implements IScope {
 	public JavaRiceValue searchVariableIncludingLocal(String identifier) {
 		JavaRiceValue javaRiceValue = null;
 		
-		if(this.containsPrivateFunction(identifier)) {
+		if(this.containsPrivateVariable(identifier)) {
 			javaRiceValue = this.getPrivateVariable(identifier);
 		} else if(this.containsPublicVariable(identifier)) {
 			javaRiceValue = this.getPublicVariable(identifier);

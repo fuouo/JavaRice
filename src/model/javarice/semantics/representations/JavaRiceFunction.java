@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.error.errorcheckers.TypeErrorChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.FunctionTracker;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.symboltable.scopes.LocalScope;
 import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class JavaRiceFunction implements IControlledCommand{
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 
 	public enum FunctionType {
 		INT_TYPE,
@@ -46,6 +50,8 @@ public class JavaRiceFunction implements IControlledCommand{
 
 	// the return value of the function, null if it's a void type
 	private JavaRiceValue returnValue;
+	
+	private boolean hasReturnValue;
 
 	// the return type of the function
 	private FunctionType returnType = FunctionType.VOID_TYPE;
@@ -140,7 +146,7 @@ public class JavaRiceFunction implements IControlledCommand{
 		JavaRiceArray newArray = new JavaRiceArray(javaRiceArray.getPrimitiveType(), strIdentifier);
 		JavaRiceValue newValue = new JavaRiceValue(newArray, PrimitiveType.ARRAY);
 
-		newArray.initSize(javaRiceArray.getSize());
+		newArray.initializeSize(javaRiceArray.getSize());
 
 		for(int i = 0; i < newArray.getSize(); i ++) {
 			newArray.updateValueAt(javaRiceArray.getValueAt(i), i);
@@ -165,8 +171,7 @@ public class JavaRiceFunction implements IControlledCommand{
 
 	public void addParameter(String strIdentifier, JavaRiceValue javaRiceValue) {
 		this.parameterValues.put(strIdentifier, javaRiceValue);
-		// add to console
-		System.err.println("ADD TO CONSOLE: " + this.functionName + " added an empty parameter "
+		Console.log(LogType.DEBUG, TAG + this.functionName + " added an empty parameter "
 				+ strIdentifier + " type " + javaRiceValue.getPrimitiveType());
 	}
 
@@ -213,15 +218,22 @@ public class JavaRiceFunction implements IControlledCommand{
 		return null;
 	}
 	
-	public JavaRiceValue getReturnValue() {
+	public JavaRiceValue getReturnValue() {		
 		if(this.returnType == FunctionType.VOID_TYPE) {
-			// console pls
-			System.err.println("ADD TO CONSOLE: " + this.functionName + " is a void function."
+			Console.log(LogType.DEBUG, TAG + this.functionName + " is a void function."
 					+ " Null java rice value is returned.");
 			return null;
 		}
 		
 		return this.returnValue;
+	}
+	
+	public boolean hasReturnValue() {
+		return this.hasReturnValue;
+	}
+	
+	public void setValidReturn(boolean hasReturnValue) {
+		this.hasReturnValue = hasReturnValue;
 	}
 
 	@Override

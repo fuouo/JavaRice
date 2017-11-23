@@ -18,11 +18,11 @@ public class FunctionTracker {
 		this.callStack = new Stack<>();
 	}
 	
-	public void initialize() {
+	public static void initialize() {
 		INSTANCE = new FunctionTracker();
 	}
 	
-	public void reset() { }
+	public static void reset() { }
 	
 	public void reportEnterFunction(JavaRiceFunction javaRiceFunction) {
 		this.callStack.push(javaRiceFunction);

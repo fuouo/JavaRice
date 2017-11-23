@@ -6,11 +6,13 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import model.javarice.JavaRiceParser.ExpressionContext;
-import model.javarice.JavaRiceParser.ParExpressionContext;
-import model.javarice.JavaRiceParser.PrimaryContext;
+import model.javarice.builder.ParserHandler;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.PrimaryContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
+import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.symboltable.scopes.LocalScope;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
@@ -103,8 +105,8 @@ public class FunctionIdentifierMapper implements ParseTreeListener, IValueMapper
 				this.modExpression = 
 						this.modExpression.replace(strIdentifier, this.javaRiceValue.getValue().toString());
 			} else {
-				// parser handler shit here
-				ClassScope classScope = null;
+				ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
+						ParserHandler.getInstance().getCurrentClassName());
 				this.javaRiceValue = classScope.searchVariableIncludingLocal(strIdentifier);
 				
 				this.modExpression = 

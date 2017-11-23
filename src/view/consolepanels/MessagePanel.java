@@ -43,22 +43,26 @@ public class MessagePanel extends Panel {
 		messageTextPane.setText("");
 	}
 	
+	public void appendMessage(String message) {
+		messageTextPane.setText(messageTextPane.getText() + "\n" + message);
+	}
+	
 	@Override
 	public void displayItems(ArrayList<Object> list) {
-		clearMessage();
-		
-		if(list==null)
-			return;
-		
-		
-		String console = "";
-		for(int i=0; i<list.size(); i++){
-			STRow symbol = ((STRow)list.get(i));
-			console += symbol.getLexeme() + " = " + symbol.getTokenId();
-			console+= "\n";
-		}
-		
-		messageTextPane.setText(console);
+//		clearMessage();
+//		
+//		if(list==null)
+//			return;
+//		
+//		
+//		String console = "";
+//		for(int i=0; i<list.size(); i++){
+//			STRow symbol = ((STRow)list.get(i));
+//			console += symbol.getLexeme() + " = " + symbol.getTokenId();
+//			console+= "\n";
+//		}
+//		
+//		messageTextPane.setText(console);
 		
 	}
 	

@@ -9,9 +9,9 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
 import model.MyTokenFactory;
-import model.javarice.JavaRiceLexer;
-import model.javarice.JavaRiceParser;
 import model.javarice.error.VerboseListener;
+import model.javarice.generatedexp.JavaRiceLexer;
+import model.javarice.generatedexp.JavaRiceParser;
 import model.symboltable.STRow;
 
 import model.javarice.error.Error;
@@ -88,7 +88,7 @@ public class JavaRiceCompiler extends ModelInterface {
 		parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
 
 		// Create a parser tree starting from the first rule
-		JavaRiceParser.ProgramContext tree = parser.program();
+		JavaRiceParser.CompilationUnitContext tree = parser.compilationUnit();
 
 		//print all tokens of the input
 		MyTokenFactory factory = new MyTokenFactory(input);

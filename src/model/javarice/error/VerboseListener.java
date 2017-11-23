@@ -40,7 +40,7 @@ public class VerboseListener extends BaseErrorListener {
 		String message = generateErrorMessage(msg, subErrorType);
 		
 		error = new Error();
-		error.setErrorType(ErrorType.SYNTAX_ERROR);
+		error.setErrorType(ErrorType.SYNTAX);
 		error.setSubErrorType(subErrorType);
 		error.setLine(line);
 		error.setMessage(message);

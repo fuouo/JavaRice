@@ -1,9 +1,15 @@
 package model.javarice.semantics.representations;
 
+import controller.Console;
+import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.semantics.utils.RecognizedKeywords;
 import model.javarice.semantics.utils.StringUtils;
 
 public class JavaRiceValue {
+	
+	private final String TAG = this.getClass().getSimpleName() + ": ";
 
 	//these are the accepted primitive types
 	public enum PrimitiveType {
@@ -25,7 +31,8 @@ public class JavaRiceValue {
 	private boolean finalFlag = false;
 	
 	public JavaRiceValue(Object value, PrimitiveType primitiveType) {
-		if(value == null || checkValueType(value, primitiveType)) {
+		
+		if(value == null || checkValueType(value, primitiveType)) {					
 			this.value = value;
 			this.primitiveType = primitiveType;
 		} else {
@@ -74,6 +81,7 @@ public class JavaRiceValue {
 			System.err.println(this.primitiveType + " is an array. Cannot directly change value.");
 			break;
 		case NOT_YET_IDENTIFIED:
+			System.err.println("Primitive type not yet identified!");
 			break;
 		}
 	}
@@ -83,16 +91,25 @@ public class JavaRiceValue {
 	}
 	
 	private Object attemptTypeCast(String value) {
-		switch(this.primitiveType) {
-			case BOOLEAN: return Boolean.valueOf(value);
-			case CHAR: return Character.valueOf(value.charAt(0)); //only get first char at value
-			case INT: return Integer.valueOf(value);
-			case LONG: return Long.valueOf(value);
-			case SHORT: return Short.valueOf(value);
-			case FLOAT: return Float.valueOf(value);
-			case DOUBLE: return Double.valueOf(value);
-			case STRING: return value;
-			default: return null;
+		
+		Console.log(LogType.DEBUG, TAG + "Value is " + value);
+		Console.log(LogType.DEBUG, TAG + "TYPE  " + this.primitiveType);
+		
+		try{ 
+			switch(this.primitiveType) {
+				case BOOLEAN: return Boolean.valueOf(value);
+				case CHAR: return Character.valueOf(value.charAt(0)); //only get first char at value
+				case INT: return Integer.valueOf(value);
+				case LONG: return Long.valueOf(value);
+				case SHORT: return Short.valueOf(value);
+				case FLOAT: return Float.valueOf(value);
+				case DOUBLE: return Double.valueOf(value);
+				case STRING: return value;
+				default: return null;
+			}
+		}catch(NumberFormatException e){
+			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NUMBER_FORMAT, "", value);
+			return null;
 		}
 	}
 	
