@@ -239,6 +239,8 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
 		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
 		
+		Console.log(LogType.DEBUG, TAG + "arrayJavaRiceValue: " + arrayJavaRiceValue.getValue());
+		
 		this.strToPrint += arrayJavaRiceValue.getValue().toString();
 	}
 	

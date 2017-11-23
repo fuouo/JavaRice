@@ -4,8 +4,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import controller.Console;
-import controller.Console.LogType;
 import model.javarice.generatedexp.JavaRiceListener;
 import model.javarice.generatedexp.JavaRiceParser.*;
 import model.javarice.semantics.analyzers.ClassAnalyzer;
@@ -126,6 +124,7 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 		// TODO Auto-generated method stub
 		ClassAnalyzer classAnalyzer = new ClassAnalyzer();
 		classAnalyzer.analyze(ctx);
+		
 	}
 
 	@Override
@@ -1274,6 +1273,5 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 		// TODO Auto-generated method stub
 		
 	}
-	
 	
 }
