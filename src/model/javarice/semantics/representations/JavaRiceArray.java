@@ -64,7 +64,7 @@ public class JavaRiceArray {
 	}
 	
 	public JavaRiceValue getValueAt(int index) {
-		if(index >= this.javaRiceArray.length) {
+		if(index >= this.javaRiceArray.length || index < 0) {
 			Console.log(LogType.ERROR, String.format(ErrorRepository.getErrorMessage(
 					ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS), this.arrayIdentifier));
 			return this.javaRiceArray[this.javaRiceArray.length - 1];
