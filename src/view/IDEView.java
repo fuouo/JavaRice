@@ -136,7 +136,7 @@ public class IDEView extends ViewInterface{
 	    ctm.addTemplate(ct);
 	    ct = new StaticCodeTemplate("mainf", "\tpublic _void main(){\n\t\t", "\n\t}");
 	    ctm.addTemplate(ct);
-	    ct = new StaticCodeTemplate("floop", "for (int i=0; i<", "; i++) {\n\t\n}\n");
+	    ct = new StaticCodeTemplate("floop", "for (_int i=0; i<", "; i++) {\n\t\n}\n");
 	    ctm.addTemplate(ct);
 	    
 	    
