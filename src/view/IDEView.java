@@ -164,16 +164,19 @@ public class IDEView extends ViewInterface{
 	        		
 	        	}
 	        	
-	        	if(e.getKeyChar() == '('){
+	        	if(e.getKeyChar() == '(' || e.getKeyChar() == '"' || e.getKeyChar() == '\''){
+	        		String ch = e.getKeyChar() + "";
+	        		if(ch.equals("("))
+	        			ch = ")";
 	        		int caretPos = codeTextArea.getCaretPosition();
 	        		String start = codeTextArea.getText().substring(0, codeTextArea.getCaretPosition());
 	        		String end = codeTextArea.getText().substring(codeTextArea.getCaretPosition()+1, codeTextArea.getText().length());
-	        		System.out.println(start);
-	        		System.out.println(end);
-	        		codeTextArea.setText(start + ")\n" + end);
+	        		codeTextArea.setText(start + ch + "\n" + end);
 	        		codeTextArea.setCaretPosition(caretPos);
 	        	}
+	        	
 	        	if(e.getKeyChar() == '~'){
+	        		//TODO: This is for debug. Please remove this after :) 
 	        		ac.doCompletion();
 	        	}
 	        }
