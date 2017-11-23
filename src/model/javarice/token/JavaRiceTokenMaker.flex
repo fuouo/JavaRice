@@ -354,10 +354,10 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 	"throws" |
 	"transient" |
 	"try"	 |
-	"void"	 |
+	"_void"   |
 	"volatile" |
 	"write"	 |
-	
+	"writeln" |
 	"while"					{ addToken(Token.RESERVED_WORD); }
 	"return"				{ addToken(Token.RESERVED_WORD_2); }
 
@@ -369,7 +369,8 @@ URL						= (((https?|f(tp|ile))"://"|"www.")({URLCharacters}{URLEndCharacter})?)
 	"_float" |
 	"_int" |
 	"_long" |
-	"_short"					{ addToken(Token.DATA_TYPE); }
+	"_short" |
+	"_String"					{ addToken(Token.DATA_TYPE); }
 
 	/* Booleans. */
 	{BooleanLiteral}			{ addToken(Token.LITERAL_BOOLEAN); }
