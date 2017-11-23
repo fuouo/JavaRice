@@ -26,6 +26,7 @@ import org.fife.ui.autocomplete.ShorthandCompletion;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
 import org.fife.ui.rsyntaxtextarea.folding.FoldParserManager;
@@ -128,15 +129,23 @@ public class IDEView extends ViewInterface{
 		// === Code Templates === //
 		RSyntaxTextArea.setTemplatesEnabled(true);
 		CodeTemplateManager ctm = RSyntaxTextArea.getCodeTemplateManager();
-		CodeTemplate ct = new StaticCodeTemplate("wr", "write(",");");
+		CodeTemplate ct;
+		ct = new StaticCodeTemplate("wf", "write(",");");
 	    ctm.addTemplate(ct);
+		ct = new StaticCodeTemplate("rf", "read(",");");
+	    ctm.addTemplate(ct);
+	    ct = new StaticCodeTemplate("mainf", "\tpublic _void main(){\n\t\t", "\n\t}");
+	    ctm.addTemplate(ct);
+	    ct = new StaticCodeTemplate("floop", "for (int i=0; i<", "; i++) {\n\t\n}\n");
+	    ctm.addTemplate(ct);
+	    
 	    
 	    // A CompletionProvider is what knows of all possible completions, and
 	    // analyzes the contents of the text area at the caret position to
 	    // determine what completion choices should be presented. Most instances
 	    // of CompletionProvider (such as DefaultCompletionProvider) are designed
 	    // so that they can be shared among multiple text components.
-	    CompletionProvider provider = createCompletionProvider();
+	    //CompletionProvider provider = createCompletionProvider();
 
 	    // An AutoCompletion acts as a "middle-man" between a text component
 	    // and a CompletionProvider. It manages any options associated with
@@ -144,8 +153,8 @@ public class IDEView extends ViewInterface{
 	    // documentation window along with completion choices, etc.). Unlike
 	    // CompletionProviders, instances of AutoCompletion cannot be shared
 	    // among multiple text components.
-	    AutoCompletion ac = new AutoCompletion(provider);
-	    ac.install(codeTextArea);
+	    //AutoCompletion ac = new AutoCompletion(provider);
+	    //ac.install(codeTextArea);
 	    
 	 // === Code Templates === //
 		
