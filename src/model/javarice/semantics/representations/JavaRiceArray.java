@@ -2,6 +2,7 @@ package model.javarice.semantics.representations;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
 import model.javarice.builder.ErrorRepository;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.utils.RecognizedKeywords;
@@ -35,6 +36,14 @@ public class JavaRiceArray {
 	}
 	
 	public void initializeSize(int size) {
+		
+		if(size < 0) {
+			Console.log(LogType.DEBUG, "negative size array detected! " + size);
+			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, 
+					"", this.arrayIdentifier);
+			return;
+		}
+		
 		this.javaRiceArray = new JavaRiceValue[size];
 		System.out.println("JavaRiceArray initialized to size " + this.javaRiceArray.length);
 	}
@@ -45,8 +54,9 @@ public class JavaRiceArray {
 	
 	public void updateValueAt(JavaRiceValue javaRiceValue, int index) {
 		if(index >= this.javaRiceArray.length) {
-			Console.log(LogType.ERROR, String.format(ErrorRepository.getErrorMessage(
-					ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS), this.arrayIdentifier));
+			Console.log(LogType.DEBUG, "array out of bounds detected! " + index);
+			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, 
+					"", this.arrayIdentifier);
 			return;
 		}
 		

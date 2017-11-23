@@ -26,6 +26,7 @@ public class ErrorRepository {
 	// runtime errors
 	public final static int RUNTIME_ARRAY_OUT_OF_BOUNDS = 3100;
 	public final static int RUNTIME_NUMBER_FORMAT = 3200;
+	public final static int RUNTIME_NEGATIVE_ARRAY_SIZE = 3300;
 	
 	private static ErrorRepository INSTANCE = null;
 	
@@ -76,6 +77,8 @@ public class ErrorRepository {
 				"RUNTIME[TYPE]Array %s out of bounds. Aborting operation. ");
 		this.errorMessageDictionary.put(RUNTIME_NUMBER_FORMAT, 
 				"RUNTIME[TYPE]Number format exception for input: %s. Aborting operation. ");
+		this.errorMessageDictionary.put(RUNTIME_NEGATIVE_ARRAY_SIZE, 
+				"RUNTIME[TYPE]Array %s can't be initialized with a negative value. Aborting operation. ");
 	}
 	
 	public static void initialize() {
