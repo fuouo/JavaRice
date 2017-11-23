@@ -62,6 +62,9 @@ public class ErrorPanel extends Panel {
 				if(errorTable.getSelectedRow() <= -1){
 					return;
 				}
+				else if(errorTable.getValueAt(errorTable.getSelectedRow(), 1).toString() == "")
+					return;
+				
 				int line = Integer.parseInt(errorTable.getValueAt(errorTable.getSelectedRow(), 1).toString());
 				if(line < 0)
 					return;
@@ -79,15 +82,25 @@ public class ErrorPanel extends Panel {
 	
 	public void addRow(Error error) {
 		DefaultTableModel model = (DefaultTableModel) errorTable.getModel();
+		
+		String lineNumber = error.getLine() + "";
+		if(error.getLine() < 0)
+			lineNumber = "";
+		
 		model.addRow(new Object[]{
-				error.getErrorType(), error.getLine(), error.getMessage()
+				error.getErrorType(), lineNumber, error.getMessage()
 				});
 	}
 	
 	public void addRow(String type, int line, String message){
 		DefaultTableModel model = (DefaultTableModel) errorTable.getModel();
+		
+		String lineNumber = line + "";
+		if(line < 0)
+			lineNumber = "";
+		
 		model.addRow(new Object[]{
-				type, line, message
+				type, lineNumber, message
 				});
 	}
 

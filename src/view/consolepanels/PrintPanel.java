@@ -21,8 +21,9 @@ public class PrintPanel extends Panel{
 		
 		setLayout(new BorderLayout());
 		setBackground(Color.black);
-		
+	
 		messageTextPane = new JTextPane();
+		messageTextPane.setEditable(false);
 		
 		JScrollPane scrollPane = new JScrollPane(messageTextPane);
 			

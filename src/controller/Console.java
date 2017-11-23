@@ -181,6 +181,8 @@ public class Console {
 				errorMessage = tokens[1];
 				
 				break;
+			default:
+				return;
 			}
 			
 			Error error = new Error();

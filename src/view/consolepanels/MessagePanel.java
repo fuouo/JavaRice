@@ -24,6 +24,8 @@ public class MessagePanel extends Panel {
 		setBackground(Color.black);
 		
 		messageTextPane = new JTextPane();
+		messageTextPane.setEditable(false);
+		
 		
 		JScrollPane scrollPane = new JScrollPane(messageTextPane);
 			
