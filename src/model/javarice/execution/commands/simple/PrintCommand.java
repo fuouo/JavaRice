@@ -120,6 +120,8 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 
 		else if(context instanceof ExpressionContext) {
 			
+			Console.log(LogType.DEBUG, TAG + "Expression detected!");
+			
 			try {
                 Integer.parseInt(context.getText());
                 return;

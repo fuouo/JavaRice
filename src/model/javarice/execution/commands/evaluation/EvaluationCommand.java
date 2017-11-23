@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
@@ -41,17 +42,9 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 
 	@Override
 	public void enterEveryRule(ParserRuleContext ctx) {
-
-		System.out.println("EvaluationCommand: entering every rule");
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext expressionContext = (ExpressionContext) ctx;
-			
-			System.out.println("exprCtx.getText(): " + expressionContext.getText());
-            System.out.println("exprCtx.Identifier(): " + expressionContext.Identifier());
-            System.out.println("exprCtx.arguments(): " + expressionContext.arguments());
-            System.out.println("exprCtx.arguments().expressionList(): " + 
-            		expressionContext.arguments().expressionList());
 
 			if(EvaluationCommand.isFunctionCall(expressionContext)) {
 				this.evaluateFunctionCall(expressionContext);
@@ -105,6 +98,12 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		}
 
 		else {
+			Console.log(LogType.DEBUG, TAG + "Numeric!!!");
+			
+			// can't handle function variable
+			ParseTreeWalker treeWalker = new ParseTreeWalker();
+			treeWalker.walk(this, this.parentExpressionContext);
+			
 			Expression evalExpression = new Expression(this.modifiedExpression);
 			this.resultValue = evalExpression.eval();
 			this.strResult = this.resultValue.toEngineeringString();

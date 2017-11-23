@@ -1,5 +1,7 @@
 package model.javarice.execution.commands.simple;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.semantics.representations.JavaRiceValue;
@@ -28,7 +30,11 @@ public class ScanCommand implements ICommand {
 	/*
 	 * called when dialog box is dismissed
 	 */
-	public void acquireInputFromUser(String input) {		
+	public void acquireInputFromUser(String input) {	
+		
+		// print to console
+		Console.log(LogType.PRINT, input);
+		
 		// create java rice value
 		JavaRiceValue javaRiceValue = JavaRiceValueSearcher.searchJavaRiceValue(this.identifierString);
 		javaRiceValue.setValue(input);
