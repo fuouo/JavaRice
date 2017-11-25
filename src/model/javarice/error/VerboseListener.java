@@ -74,7 +74,7 @@ public class VerboseListener extends BaseErrorListener {
 			break;
 		case UNRECOG_TOKEN: 			
 			tokens = msg.split("token recognition error at: ");
-			error = "Oh no! We don't recognize this token " + tokens[1];
+			error = "Oh no! We don't recognize this token: " + tokens[2];
 			break;
 		default:
 			error = msg;
