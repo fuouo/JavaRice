@@ -90,11 +90,7 @@ public class JavaRiceValue {
 		return this.value;
 	}
 	
-	private Object attemptTypeCast(String value) {
-		
-		Console.log(LogType.DEBUG, TAG + "Value is " + value);
-		Console.log(LogType.DEBUG, TAG + "TYPE  " + this.primitiveType);
-		
+	private Object attemptTypeCast(String value) {		
 		try{ 
 			switch(this.primitiveType) {
 				case BOOLEAN: return Boolean.valueOf(value);

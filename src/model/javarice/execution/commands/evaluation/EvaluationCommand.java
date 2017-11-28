@@ -75,8 +75,6 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 
 	@Override
 	public void execute() {
-
-		Console.log(LogType.DEBUG, TAG + "executing");
 		
 		this.modifiedExpression = this.parentExpressionContext.getText();
 		
@@ -98,7 +96,6 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		}
 
 		else {
-			Console.log(LogType.DEBUG, TAG + "Numeric!!!");
 			
 			// can't handle function variable
 			ParseTreeWalker treeWalker = new ParseTreeWalker();

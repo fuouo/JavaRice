@@ -30,6 +30,7 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 	
 	private final String TAG = this.getClass().getSimpleName() + ": ";
 	private final Pattern functionPattern = Pattern.compile("([a-zA-Z0-9]+)\\(([ ,.a-zA-Z0-9]*)\\)");
+	private final Pattern arrayPattern = Pattern.compile("([a-zA-Z0-9]+)\\[([ ,.+a-zA-Z0-9]*)\\]");
 	
 	private ExpressionContext expressionContext;
 	
@@ -73,6 +74,9 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		// TODO Auto-generated method stub
 		
 		if(context instanceof LiteralContext) {
+			
+			Console.log(LogType.DEBUG, TAG + "Literal detected!");
+			
 			LiteralContext literalContext = (LiteralContext) context;
 			
 			if(literalContext.StringLiteral() != null) {
@@ -94,6 +98,10 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 						break;
 					}
 					
+					// if inside array
+					if ( arrayPattern.matcher(prCtx.getText()).matches()) {
+						break;
+					}
 				}
 
 				// if it does not belong to complex
@@ -135,7 +143,13 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 
 			while(!(prCtx instanceof StatementContext)) {
 				prCtx = prCtx.getParent();
+				
+				// if inside function
 				if(prCtx.getText().endsWith("]") || functionPattern.matcher(prCtx.getText()).matches()) {
+					break;
+				}
+				// if inside array
+				if ( arrayPattern.matcher(prCtx.getText()).matches()) {
 					break;
 				}
 			}
@@ -156,6 +170,8 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		
 		else if(context instanceof PrimaryContext) {
 			PrimaryContext primaryContext = (PrimaryContext) context;
+			
+			Console.log(LogType.DEBUG, TAG + "Primary detected!");
 			
 			if(primaryContext.expression() != null && !primaryContext.getText().contains("\"")) {				
 
