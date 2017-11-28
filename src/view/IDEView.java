@@ -29,15 +29,12 @@ import org.fife.ui.autocomplete.CompletionProviderBase;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.ShorthandCompletion;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
 import org.fife.ui.rsyntaxtextarea.folding.FoldParserManager;
-import org.fife.ui.rsyntaxtextarea.templates.CodeTemplate;
-import org.fife.ui.rsyntaxtextarea.templates.StaticCodeTemplate;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import controller.Console;
@@ -72,10 +69,8 @@ public class IDEView extends ViewInterface{
 	         + "      System.out.println(\"Hello, world!\");\n" + "   }\n\n"
 	         + "}\n";
 	 */
-	 private static final String text = "//Code by Best B*tches\n"
-	 		+ "//Insert Code Here\n\n"
-	 		+ "public class Main{"
-	 		+ "\n\t//insert code here\n"
+	 private static final String text = "public class Main {"
+	 		+ "\n\t\n"
 	 		+ "}";
 	
 	 private final String cursorMarker = "{cursor}";
