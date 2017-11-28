@@ -576,7 +576,7 @@ arguments
     
 // INPUT
 scan
-    :   'read' '(' Identifier ')' ';'
+    :   'read' '(' expression ')' ';'
     ;
 
 // LEXER

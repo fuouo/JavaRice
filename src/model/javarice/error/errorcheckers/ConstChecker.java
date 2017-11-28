@@ -93,7 +93,7 @@ public class ConstChecker implements IErrorChecker, ParseTreeListener {
 	/*
 	 * Verifies a const identifier from a scan statement since scan grammar is different.
 	 */
-	public static void verifyConstForScan(String identifier, ScanContext statementCtx) {		
+	public static void verifyConstForScan(String identifier, ScanContext scanCtx) {		
 		JavaRiceValue javaRiceValue = null;
 		
 		if(ExecutionManager.getInstance().isInFunctionExecution()) {
@@ -110,7 +110,7 @@ public class ConstChecker implements IErrorChecker, ParseTreeListener {
 					classScope, identifier);
 		}
 		
-		Token firstToken = statementCtx.getStart();
+		Token firstToken = scanCtx.getStart();
 		
 		if(javaRiceValue != null && javaRiceValue.isFinal()) {
 			BuildChecker.reportCustomError(ErrorRepository.CONST_REASSIGNMENT, "", 

@@ -17,9 +17,6 @@ public class ArrayInitializeCommand implements ICommand {
 	public ArrayInitializeCommand(JavaRiceArray javaRiceArray, ArrayCreatorRestContext arrayCreatorCtx) {
 		this.javaRiceArray = javaRiceArray;
 		this.arrayCreatorCtx = arrayCreatorCtx;
-		
-		
-		
 	}
 	
 

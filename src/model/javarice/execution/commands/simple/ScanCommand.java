@@ -2,18 +2,41 @@ package model.javarice.execution.commands.simple;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.error.errorcheckers.ConstChecker;
+import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.ScanContext;
+import model.javarice.semantics.representations.JavaRiceArray;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValueSearcher;
 import view.ScanDialog;
 
 public class ScanCommand implements ICommand {
 	
-	private String identifierString;
+	private final String TAG = this.getClass().getSimpleName() + ": ";
+	private ExpressionContext exprCtx;
 	
-	public ScanCommand(String identifierString) {
-		this.identifierString = identifierString;
+	private boolean isArray = false;
+	
+	public ScanCommand(ScanContext scanCtx) {
+		this.exprCtx = scanCtx.expression();
+		
+		// check for undeclared and constant variables
+		if(this.exprCtx.primary() != null) {
+			// for variables
+			UndeclaredChecker.verifyVarOrConstForScan(this.exprCtx.primary().getText(), scanCtx);
+			
+			// for constant variables
+			ConstChecker.verifyConstForScan(this.exprCtx.primary().getText(), scanCtx);
+			
+		} else if(this.exprCtx.expression(0).primary() != null) {
+			// for arrays
+			UndeclaredChecker.verifyVarOrConstForScan(this.exprCtx.expression(0).primary().getText(), scanCtx);
+			isArray = true;
+		}
 	}
 
 	@Override
@@ -36,8 +59,33 @@ public class ScanCommand implements ICommand {
 		Console.log(LogType.PRINT, input);
 		
 		// create java rice value
-		JavaRiceValue javaRiceValue = JavaRiceValueSearcher.searchJavaRiceValue(this.identifierString);
-		javaRiceValue.setValue(input);
+		
+		// if variable
+		if(!isArray) {
+			JavaRiceValue javaRiceValue = JavaRiceValueSearcher.searchJavaRiceValue(this.exprCtx.primary().getText());
+			javaRiceValue.setValue(input);			
+		} 
+		
+		// if in array
+		else {
+			
+			// get identifier
+			JavaRiceValue javaRiceValue = JavaRiceValueSearcher.searchJavaRiceValue(
+					this.exprCtx.expression(0).primary().getText());
+			
+			// get the array index expression
+			ExpressionContext arrayIndexExprCtx = this.exprCtx.expression(1);
+			
+			EvaluationCommand evalComm = new EvaluationCommand(arrayIndexExprCtx);
+			evalComm.execute();
+			
+			JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
+			JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evalComm.getResult().intValue());
+			
+			arrayJavaRiceValue.setValue(input);
+		}
+		
+		
 		
 		// resume execution
 		ExecutionManager.getInstance().resumeExecution();

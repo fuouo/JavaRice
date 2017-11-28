@@ -45,7 +45,10 @@ public class JavaRiceArray {
 		}
 		
 		this.javaRiceArray = new JavaRiceValue[size];
-		System.out.println("JavaRiceArray initialized to size " + this.javaRiceArray.length);
+		
+		for(int i = 0; i < this.javaRiceArray.length; i ++) {
+			this.javaRiceArray[i] = new JavaRiceValue(null, this.arrayPrimitiveType);
+		}
 	}
 	
 	public int getSize() {

@@ -7968,7 +7968,9 @@ public class JavaRiceParser extends Parser {
 	}
 
 	public static class ScanContext extends ParserRuleContext {
-		public TerminalNode Identifier() { return getToken(JavaRiceParser.Identifier, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
 		public ScanContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -7994,7 +7996,7 @@ public class JavaRiceParser extends Parser {
 			setState(1299);
 			match(LPAREN);
 			setState(1300);
-			match(Identifier);
+			expression(0);
 			setState(1301);
 			match(RPAREN);
 			setState(1302);
@@ -8555,8 +8557,8 @@ public class JavaRiceParser extends Parser {
 		"g\2\u050c\u0508\3\2\2\2\u050c\u050a\3\2\2\2\u050d\u00cb\3\2\2\2\u050e"+
 		"\u0510\7@\2\2\u050f\u0511\5\u00acW\2\u0510\u050f\3\2\2\2\u0510\u0511\3"+
 		"\2\2\2\u0511\u0512\3\2\2\2\u0512\u0513\7A\2\2\u0513\u00cd\3\2\2\2\u0514"+
-		"\u0515\7\'\2\2\u0515\u0516\7@\2\2\u0516\u0517\7k\2\2\u0517\u0518\7A\2"+
-		"\2\u0518\u0519\7F\2\2\u0519\u00cf\3\2\2\2\u0096\u00d1\u00d6\u00dc\u00e4"+
+		"\u0515\7\'\2\2\u0515\u0516\7@\2\2\u0516\u0517\5\u00b2Z\2\u0517\u0518\7"+
+		"A\2\2\u0518\u0519\7F\2\2\u0519\u00cf\3\2\2\2\u0096\u00d1\u00d6\u00dc\u00e4"+
 		"\u00ed\u00f2\u00f9\u0100\u0107\u010e\u0113\u0117\u011b\u011f\u0124\u0128"+
 		"\u012c\u0136\u013e\u0145\u014c\u0150\u0153\u0156\u015f\u0165\u016a\u016d"+
 		"\u0173\u0179\u017d\u0186\u018d\u0196\u019d\u01a3\u01a7\u01b3\u01b7\u01bf"+

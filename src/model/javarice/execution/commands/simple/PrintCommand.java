@@ -46,8 +46,8 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		
 		this.expressionContext = sCtx.expression(0);
 		
-		 UndeclaredChecker undeclaredChecker = new UndeclaredChecker(this.expressionContext);
-		 undeclaredChecker.verify();
+		UndeclaredChecker undeclaredChecker = new UndeclaredChecker(this.expressionContext);
+		undeclaredChecker.verify();
 	}
 
 	@Override

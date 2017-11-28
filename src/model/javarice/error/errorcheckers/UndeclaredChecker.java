@@ -157,12 +157,12 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 	/*
 	 * Verifies a var or const identifier from a scan statement since scan grammar is different.
 	 */
-	public static void verifyVarOrConstForScan(String identifier, ScanContext statementCtx) {
+	public static void verifyVarOrConstForScan(String identifier, ScanContext scanCtx) {
 		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
 				ParserHandler.getInstance().getCurrentClassName());
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariableInClassIncludingLocal(classScope, identifier);
 		
-		Token firstToken = statementCtx.getStart();
+		Token firstToken = scanCtx.getStart();
 		
 		if(javaRiceValue == null) {
 			BuildChecker.reportCustomError(ErrorRepository.UNDECLARED_VARIABLE, "", firstToken.getLine(), identifier);
