@@ -1,5 +1,7 @@
 package model.javarice.execution.commands.controlled;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
@@ -27,6 +29,7 @@ public class DoWhileCommand extends WhileCommand {
 		
 		try {
 			for(ICommand command : this.commandSequences) {
+				Console.log(LogType.DEBUG, "DOWHILE " + "for");
 				executionMonitor.tryExecution();
 				command.execute();
 			}

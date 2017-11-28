@@ -8,6 +8,7 @@ import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IConditionalCommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
+import model.javarice.execution.commands.controlled.IControlledCommand.ControlTypeEnum;
 
 public class StatementControlOverseer {
 	
@@ -121,11 +122,24 @@ public class StatementControlOverseer {
 			ICommand parentCommand = this.procedureCallStack.peek();
 			this.activeControlledCommand = parentCommand;
 			
+			// TODO: check this shit
 			if(parentCommand instanceof IControlledCommand) {
 				IControlledCommand controlledCommand = (IControlledCommand) parentCommand;
 				controlledCommand.addCommand(childCommand);
 
 			}
+			
+//			if(parentCommand instanceof IControlledCommand) {
+//				if(((IControlledCommand) childCommand).getControlType() == ControlTypeEnum.CONDITIONAL_IF && 
+//						(((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.WHILE_CONTROL ||
+//						((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.DO_WHILE_CONTROL)) {
+//						return;
+//					}
+//				}
+//				
+//				IControlledCommand controlledCommand = (IControlledCommand) parentCommand;
+//				controlledCommand.addCommand(childCommand);
+//			}
 		}
 		else {
 			System.out.println("Procedure call stack is now empty.");

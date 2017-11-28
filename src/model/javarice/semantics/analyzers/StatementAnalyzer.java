@@ -105,6 +105,7 @@ public class StatementAnalyzer {
 			Console.log(LogType.DEBUG, TAG + "Do While PAR expression: " +ctx.parExpression().getText());
 			
 			StatementContext statementCtx = ctx.statement(0);
+			Console.log(LogType.DEBUG, TAG + ctx.statement(0).getText());
 			
 			DoWhileCommand doWhileCommand = new DoWhileCommand(ctx.parExpression());
 			StatementControlOverseer.getInstance().openControlledCommand(doWhileCommand);

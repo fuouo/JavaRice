@@ -164,6 +164,7 @@ public class IDEView extends ViewInterface{
 	        		
 	        	}
 	        	
+	        	/*
 	        	if(e.getKeyChar() == '(' || e.getKeyChar() == '"' || e.getKeyChar() == '\''){
 	        		String ch = e.getKeyChar() + "";
 	        		if(ch.equals("("))
@@ -174,7 +175,7 @@ public class IDEView extends ViewInterface{
 	        		codeTextArea.setText(start + ch + "\n" + end);
 	        		codeTextArea.setCaretPosition(caretPos);
 	        	}
-	        	
+	        	*/
 	        	if(e.getKeyChar() == '~'){
 	        		//TODO: This is for debug. Please remove this after :) 
 	        		ac.doCompletion();
