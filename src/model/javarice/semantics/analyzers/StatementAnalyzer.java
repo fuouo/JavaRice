@@ -6,8 +6,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
-import model.javarice.error.errorcheckers.ConstChecker;
-import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.controlled.DoWhileCommand;
 import model.javarice.execution.commands.controlled.ForCommand;
@@ -47,12 +45,16 @@ public class StatementAnalyzer {
 
 		// an expression
 		else if(ctx.statementExpression() != null) {
+			Console.log(LogType.DEBUG, TAG + "STATEMENT EXPRESSION statement detected! ");
 			StatementExpressionAnalyzer expressionAnalyzer = new StatementExpressionAnalyzer();
 			expressionAnalyzer.analyze(ctx.statementExpression());
 		}
 
 		//a block statement
 		else if(ctx.block() != null) {
+			
+			Console.log(LogType.DEBUG, TAG + "BLOCK statement detected! ");
+			
 			BlockContext blockCtx = ctx.block();
 			
 			BlockAnalyzer blockAnalyzer = new BlockAnalyzer();
@@ -152,7 +154,7 @@ public class StatementAnalyzer {
 	
 	private void handlePrintStatement(StatementContext ctx) {
 		
-		Console.log(LogType.DEBUG, TAG + "Print detected!");
+		Console.log(LogType.DEBUG, TAG + "PRINT detected!");
 		
 		PrintCommand printCommand = new PrintCommand(ctx);
 		
@@ -181,6 +183,8 @@ public class StatementAnalyzer {
 	}
 	
 	private void handleScanStatement(StatementContext ctx) {
+		
+		Console.log(LogType.DEBUG, TAG + "SCAN detected!");
 		
 		ScanContext scanCtx = ctx.scan();
 		
@@ -232,7 +236,6 @@ public class StatementAnalyzer {
 				conditionalCommand.addPositiveCommand(returnCommand);
 			}
 			else {
-				String functionName = ExecutionManager.getInstance().getCurrentFunction().getFunctionName();
 				conditionalCommand.addNegativeCommand(returnCommand);
 			}
 		}

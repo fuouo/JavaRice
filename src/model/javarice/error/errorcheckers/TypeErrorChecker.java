@@ -125,14 +125,14 @@ public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 					}
 					break;
 				case INT:
-					if(javaRiceFunction.getReturnType() != FunctionType.INT_TYPE ||
+					if(javaRiceFunction.getReturnType() != FunctionType.INT_TYPE &&
 							javaRiceFunction.getReturnType() != FunctionType.LONG_TYPE) {
 						additionalMessage = "Expected int or long.";
 					}
 					break;
 				case FLOAT:
 				case DOUBLE:
-					if(javaRiceFunction.getReturnType() != FunctionType.FLOAT_TYPE || 
+					if(javaRiceFunction.getReturnType() != FunctionType.FLOAT_TYPE && 
 							javaRiceFunction.getReturnType() != FunctionType.DOUBLE_TYPE) {
 						additionalMessage = "Expected float or double.";
 					}

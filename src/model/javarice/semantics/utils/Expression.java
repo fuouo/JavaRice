@@ -776,8 +776,8 @@ public class Expression {
 		});
 
 		variables.put("PI", PI);
-		variables.put("TRUE", BigDecimal.ONE);
-		variables.put("FALSE", BigDecimal.ZERO);
+		variables.put("true", BigDecimal.ONE);
+		variables.put("false", BigDecimal.ZERO);
 
 	}
 

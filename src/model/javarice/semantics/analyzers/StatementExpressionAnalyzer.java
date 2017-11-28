@@ -119,7 +119,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	
 	private void handleFunctionCallWithParams(ExpressionContext funcExprCtx) {
 		ExpressionContext functionExprCtx = funcExprCtx.expression(0);
-		String functionName = functionExprCtx.Identifier().getText();
+		String functionName = functionExprCtx.primary().getText();
 		
 		FunctionCallCommand functionCallCommand = new FunctionCallCommand(functionName, funcExprCtx);
 		this.handleStatementExecution(functionCallCommand);
@@ -128,7 +128,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	}
 
 	private void handleFunctionCallWithNoParams(ExpressionContext funcExprCtx) {
-		String functionName = funcExprCtx.Identifier().getText();
+		String functionName = funcExprCtx.primary().getText();
 
 		FunctionCallCommand functionCallCommand = new FunctionCallCommand(functionName, funcExprCtx);
 		this.handleStatementExecution(functionCallCommand);
@@ -182,7 +182,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 
 		if(firstExprCtx != null) {
 			if(exprCtx != this.readRightHandExprCtx) {
-				return (firstExprCtx.Identifier() != null);
+				return (firstExprCtx.primary() != null);
 			}
 		}
 
@@ -192,7 +192,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 
 	private boolean isFunctionCallWithNoParams(ExpressionContext exprCtx) {
 		if(exprCtx.depth() == FUNCTION_CALL_NO_PARAMS_DEPTH) {
-			if(exprCtx.Identifier() != null)
+			if(exprCtx.primary() != null)
 				return true;
 		}
 

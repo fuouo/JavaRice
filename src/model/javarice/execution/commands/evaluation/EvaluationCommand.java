@@ -45,6 +45,8 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext expressionContext = (ExpressionContext) ctx;
+			
+			Console.log(LogType.DEBUG, TAG + "EXPRESSION MOTHER FUCKER " + expressionContext.getText());
 
 			if(EvaluationCommand.isFunctionCall(expressionContext)) {
 				this.evaluateFunctionCall(expressionContext);
@@ -79,6 +81,8 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		this.modifiedExpression = this.parentExpressionContext.getText();
 		
 		this.isNumeric = !this.modifiedExpression.contains("\"");
+		
+		System.out.println(this.modifiedExpression);
 
 		// catch rules if the value has direct boolean flags
 		if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_TRUE)) {
@@ -100,6 +104,22 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 			// can't handle function variable
 			ParseTreeWalker treeWalker = new ParseTreeWalker();
 			treeWalker.walk(this, this.parentExpressionContext);
+			
+			
+			if(this.modifiedExpression.contains("!")) {
+				this.modifiedExpression = this.modifiedExpression.replaceAll("!", "not");
+				this.modifiedExpression = this.modifiedExpression.replaceAll("not=", "!=");
+				
+			}
+
+			if(this.modifiedExpression.contains("and")) {
+				this.modifiedExpression = this.modifiedExpression.replaceAll("and", "&&");
+
+			}
+
+			if(this.modifiedExpression.contains("or")) {
+				this.modifiedExpression = this.modifiedExpression.replaceAll("or", "||");
+			}
 			
 			Expression evalExpression = new Expression(this.modifiedExpression);
 			this.resultValue = evalExpression.eval();
@@ -125,7 +145,10 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	}
 	
 	private void evaluateFunctionCall(ExpressionContext expressionContext) {
-		String functionName = expressionContext.expression(0).Identifier().getText();
+		
+		Console.log(LogType.DEBUG, TAG + "EVALUATING FUNCTION CALL");
+		
+		String functionName = expressionContext.expression(0).primary().getText();
 		
 		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
 				ParserHandler.getInstance().getCurrentClassName());
@@ -161,6 +184,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	}
 	
 	private void evaluateVariable(ExpressionContext expressionContext) {
+		Console.log(LogType.DEBUG, TAG + "evaluateVariable");
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(expressionContext.getText());
 		
 		if(javaRiceValue == null) {

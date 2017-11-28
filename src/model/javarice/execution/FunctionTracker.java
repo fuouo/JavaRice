@@ -2,6 +2,8 @@ package model.javarice.execution;
 
 import java.util.Stack;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.semantics.representations.JavaRiceFunction;
 
 public class FunctionTracker {
@@ -25,10 +27,12 @@ public class FunctionTracker {
 	public static void reset() { }
 	
 	public void reportEnterFunction(JavaRiceFunction javaRiceFunction) {
+		Console.log(LogType.DEBUG, "FunctionTracker entering " + javaRiceFunction.getFunctionName());
 		this.callStack.push(javaRiceFunction);
 	}
 	
 	public void reportExitFunction() {
+		Console.log(LogType.DEBUG, "FunctionTracker exiting function");
 		this.callStack.pop();
 	}
 	

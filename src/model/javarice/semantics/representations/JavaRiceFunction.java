@@ -12,6 +12,8 @@ import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.FunctionTracker;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
+import model.javarice.execution.commands.controlled.IfCommand;
+import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
@@ -259,6 +261,17 @@ public class JavaRiceFunction implements IControlledCommand{
 			for (ICommand command : this.commandSequences) {
 				executionMonitor.tryExecution();
 				command.execute();
+				
+				if(command instanceof ReturnCommand) {
+					break;
+				} else if(command instanceof IfCommand) {
+					if(((IfCommand) command).isReturned()) {
+						((IfCommand) command).resetReturnFlag();
+						break;
+					}
+				}
+				
+				
 			}
 		} catch(InterruptedException e) {
 			System.err.println("Monitor blocked interrupted! " + e.getMessage());

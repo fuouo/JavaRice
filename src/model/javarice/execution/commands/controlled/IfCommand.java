@@ -7,6 +7,7 @@ import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IControlledCommand.ControlTypeEnum;
+import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.execution.commands.utils.ConditionEvaluator;
 import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 import model.javarice.semantics.mapping.IValueMapper;
@@ -19,6 +20,8 @@ public class IfCommand implements IConditionalCommand {
 	
 	private ParExpressionContext conditionalExpr;
 	private String modifiedConditionExpr;
+	
+	private boolean returned = false;
 	
 	public IfCommand(ParExpressionContext conditionalExpr) {
 		this.positiveCommands = new ArrayList<ICommand>();
@@ -40,6 +43,12 @@ public class IfCommand implements IConditionalCommand {
 				for(ICommand command : this.positiveCommands) {
 					executionMonitor.tryExecution();
 					command.execute();
+					
+					if(command instanceof ReturnCommand) {
+						returned = true;
+						break;
+					}
+					
 				}
 			}
 			//execute the negative commands
@@ -47,6 +56,11 @@ public class IfCommand implements IConditionalCommand {
 				for(ICommand command : this.negativeCommands) {
 					executionMonitor.tryExecution();
 					command.execute();
+					
+					if(command instanceof ReturnCommand) {
+						returned = true;
+						break;
+					}
 				}
 			}
 		} catch(InterruptedException e) {
@@ -88,5 +102,13 @@ public class IfCommand implements IConditionalCommand {
 	
 	public int getNegativeCommandsCount() {
 		return this.negativeCommands.size();
+	}
+	
+	public boolean isReturned() {
+		return this.returned;
+	}
+	
+	public void resetReturnFlag() {
+		this.returned = false;
 	}
 }
