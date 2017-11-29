@@ -48,7 +48,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext expressionContext = (ExpressionContext) ctx;
 			
-			Console.log(LogType.DEBUG, TAG + "Expression is = " + expressionContext.getText());
+//			Console.log(LogType.DEBUG, TAG + "Expression is = " + expressionContext.getText());
 
 //			if(EvaluationCommand.isFunctionCall(expressionContext)) {
 //				this.evaluateFunctionCall(expressionContext);
@@ -61,7 +61,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 			} 
 			
 			else if(EvaluationCommand.isArray(expressionContext)) {
-				String s[] = expressionContext.getText().split("\\(");
+				String s[] = expressionContext.getText().split("\\[");
 				this.prevArrName = s[0];
 				// evaluate array
 				this.evaluateArray(expressionContext);
@@ -125,7 +125,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 				this.modifiedExpression = this.modifiedExpression.replaceAll("or", "||");
 			}
 			
-			Console.log(LogType.DEBUG, TAG + "Modified Expression is now = " + this.modifiedExpression);
+//			Console.log(LogType.DEBUG, TAG + "Modified Expression is now = " + this.modifiedExpression);
 			
 			Expression evalExpression = new Expression(this.modifiedExpression);
 			this.resultValue = evalExpression.eval();

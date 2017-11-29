@@ -157,7 +157,7 @@ public class JavaRiceFunction implements IControlledCommand{
 			newArray.updateValueAt(javaRiceArray.getValueAt(i), i);
 		}
 
-		this.parameterValues.put(this.getParameterKeyAt(index), newValue);
+		this.parameterValues.put(this.getParameterKeyAt(index), javaRiceValue);
 	}
 
 	public int getParameterValueSize() {

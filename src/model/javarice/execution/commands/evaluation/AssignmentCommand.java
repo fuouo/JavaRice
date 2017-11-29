@@ -94,7 +94,13 @@ public class AssignmentCommand implements ICommand {
 		}
 		else {
 			JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(this.leftHandExprCtx.getText());
-			AssignmentUtils.assignAppropriateValue(javaRiceValue, evaluationCommand.getResult());
+			
+			if(evaluationCommand.isNumericResult()) {
+				AssignmentUtils.assignAppropriateValue(javaRiceValue, evaluationCommand.getResult());
+			} else {
+
+				AssignmentUtils.assignAppropriateValue(javaRiceValue, evaluationCommand.getStringResult());
+			}
 		}
 	}
 

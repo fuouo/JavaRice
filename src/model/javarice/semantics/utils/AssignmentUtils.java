@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import controller.Console;
 import controller.Console.LogType;
 import model.javarice.semantics.representations.JavaRiceValue;
+import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 
 public class AssignmentUtils {
 	
@@ -38,6 +39,13 @@ public class AssignmentUtils {
 			break;
 		default:
 			Console.log(LogType.DEBUG, "JavaRiceValue: Did not find appropriate type!");
+		}
+	}
+	
+	public static void assignAppropriateValue(JavaRiceValue javaRiceValue, String stringValue) {
+		if(javaRiceValue.getPrimitiveType() == PrimitiveType.STRING || 
+				javaRiceValue.getPrimitiveType() == PrimitiveType.CHAR) {
+			javaRiceValue.setValue(stringValue);
 		}
 	}
 
