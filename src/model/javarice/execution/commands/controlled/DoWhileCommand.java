@@ -44,7 +44,6 @@ public class DoWhileCommand extends WhileCommand {
 				
 				// don't execute succeeding commands if there's a return
 				if(command instanceof ReturnCommand) {
-					System.err.println("I'm in control nigga");
 					this.doIsReturned = true;
 					break;
 				} else if(command instanceof IfCommand) {

@@ -49,7 +49,19 @@ public class WhileCommand implements IControlledCommand {
 					if(command instanceof ReturnCommand) {
 						this.returned = true;
 						break;
-					}
+					} else if(command instanceof IfCommand) {
+						if(((IfCommand) command).isReturned()) {
+							((IfCommand) command).resetReturnFlag();
+							this.returned = true;
+							break;
+						}
+					} else if(command instanceof IControlledCommand) {
+						if(((IControlledCommand) command).isReturned()) {
+							((IControlledCommand) command).resetReturnFlag();
+							this.returned = true;
+							break;
+						}
+					} 
 				}
 				
 				if(this.returned) {
