@@ -8,6 +8,7 @@ import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.controlled.IControlledCommand.ControlTypeEnum;
 import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.execution.commands.utils.ConditionEvaluator;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -97,7 +98,7 @@ public class ForCommand implements IControlledCommand {
 	@Override
 	public ControlTypeEnum getControlType() {
 		// TODO Auto-generated method stub
-		return null;
+		return ControlTypeEnum.FOR_CONTROL;
 	}
 
 	@Override
