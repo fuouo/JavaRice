@@ -14,7 +14,9 @@ import controller.Console;
 import controller.Console.LogType;
 import model.javarice.builder.ParserHandler;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.generatedexp.JavaRiceLexer;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.semantics.representations.JavaRiceArray;
 import model.javarice.semantics.representations.JavaRiceFunction;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
@@ -34,6 +36,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 
 	private boolean isNumeric;
 	private String strResult;
+	private String prevArrName = "";
 	
 	public EvaluationCommand(ExpressionContext expressionContext) {
 		this.parentExpressionContext = expressionContext;
@@ -44,11 +47,30 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext expressionContext = (ExpressionContext) ctx;
+			
+			Console.log(LogType.DEBUG, TAG + "Expression is = " + expressionContext.getText());
 
+//			if(EvaluationCommand.isFunctionCall(expressionContext)) {
+//				this.evaluateFunctionCall(expressionContext);
+//			} else if(EvaluationCommand.isVariableOrConstant(expressionContext)) {
+//				this.evaluateVariable(expressionContext);
+//			}
+			
 			if(EvaluationCommand.isFunctionCall(expressionContext)) {
 				this.evaluateFunctionCall(expressionContext);
-			} else if(EvaluationCommand.isVariableOrConstant(expressionContext)) {
-				this.evaluateVariable(expressionContext);
+			} 
+			
+			else if(EvaluationCommand.isArray(expressionContext)) {
+				String s[] = expressionContext.getText().split("\\(");
+				this.prevArrName = s[0];
+				// evaluate array
+				this.evaluateArray(expressionContext);
+			}
+			
+			else if(EvaluationCommand.isVariableOrConstant(expressionContext)) {
+				if(!this.prevArrName.equals(expressionContext.getText())) {
+					this.evaluateVariable(expressionContext);
+				}
 			}
 		}
 		
@@ -103,6 +125,8 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 				this.modifiedExpression = this.modifiedExpression.replaceAll("or", "||");
 			}
 			
+			Console.log(LogType.DEBUG, TAG + "Modified Expression is now = " + this.modifiedExpression);
+			
 			Expression evalExpression = new Expression(this.modifiedExpression);
 			this.resultValue = evalExpression.eval();
 			this.strResult = this.resultValue.toEngineeringString();
@@ -126,11 +150,18 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		return expressionContext.primary() != null && expressionContext.primary().Identifier() != null;
 	}
 	
+	public static boolean isArray(ExpressionContext expressionContext) {
+		List<TerminalNode> lBrackTokens = expressionContext.getTokens(JavaRiceLexer.LBRACK);
+		List<TerminalNode> rBrackTokens = expressionContext.getTokens(JavaRiceLexer.RBRACK);
+
+		return(lBrackTokens.size() > 0 && rBrackTokens.size() > 0);
+	}
+	
 	private void evaluateFunctionCall(ExpressionContext expressionContext) {
 		
-		Console.log(LogType.DEBUG, TAG + "EVALUATING FUNCTION CALL");
-		
 		String functionName = expressionContext.expression(0).primary().getText();
+		
+		Console.log(LogType.DEBUG, TAG + "EVALUATING FUNCTION CALL " + functionName);
 		
 		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
 				ParserHandler.getInstance().getCurrentClassName());
@@ -166,12 +197,13 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	}
 	
 	private void evaluateVariable(ExpressionContext expressionContext) {
-		Console.log(LogType.DEBUG, TAG + "evaluateVariable");
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(expressionContext.getText());
 		
 		if(javaRiceValue == null) {
 			return;
 		}
+
+		Console.log(LogType.DEBUG, TAG + "EVALUATING VARIABLE " + expressionContext.getText());
 
 		this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
 				javaRiceValue.getValue().toString());
@@ -181,6 +213,36 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		}
 
 		Console.log(LogType.DEBUG, TAG + "Evaluated: " + modifiedExpression);
+	}
+	
+	private void evaluateArray(ExpressionContext expressionContext) {
+		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(
+				expressionContext.expression(0).primary().getText());
+		
+		if(javaRiceValue == null) {
+			return;
+		}
+
+		Console.log(LogType.DEBUG, TAG + "EVALUATING ARRAY " + expressionContext.expression(0).primary().getText());
+		
+		ExpressionContext arrayIndexExpressionContext = expressionContext.expression(1);
+		
+		EvaluationCommand evaluationCommand = new EvaluationCommand(arrayIndexExpressionContext);
+		evaluationCommand.execute();
+		
+		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
+		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
+		
+		this.modifiedExpression = this.modifiedExpression.replaceFirst(
+				expressionContext.expression(0).primary().getText() + "\\[" 
+						+ arrayIndexExpressionContext.getText() + "\\]", 
+						arrayJavaRiceValue.getValue().toString());
+
+		if(arrayJavaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
+			this.modifiedExpression = "\"" + modifiedExpression + "\"";
+		}
+
+		Console.log(LogType.DEBUG, TAG + "Evaluated: " + this.modifiedExpression);
 	}
 	
 	/*

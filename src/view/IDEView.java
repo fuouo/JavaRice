@@ -323,7 +323,7 @@ public class IDEView extends ViewInterface{
       provider.addCompletion(new ShorthandCompletion(provider, "wlnf", "writeln(" + cursorMarker + ");","writeln();"));
       provider.addCompletion(new ShorthandCompletion(provider, "rf", "read(" + cursorMarker + ");","read();"));
       provider.addCompletion(new ShorthandCompletion(provider, "mainf", "public _void main(){\n\t\t" + cursorMarker + "\n\t}", "\tpublic _void main(){}"));
-      provider.addCompletion(new ShorthandCompletion(provider, "floop", "for (_int i=0; i<" + cursorMarker + "; i++){\n\t\t\t\n\t\t}", "for (_int i=0; i< %_int%; i++){}"));
+      provider.addCompletion(new ShorthandCompletion(provider, "floop", "for (_int i = 0; i < " + cursorMarker + "; i ++){\n\t\t\t\n\t\t}", "for (_int i=0; i< %_int%; i++){}"));
 
       return provider;
 
