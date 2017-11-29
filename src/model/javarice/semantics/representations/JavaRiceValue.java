@@ -91,11 +91,20 @@ public class JavaRiceValue {
 	}
 	
 	private Object attemptTypeCast(String value) {		
+		
 		try{ 
 			switch(this.primitiveType) {
 				case BOOLEAN: return Boolean.valueOf(value);
 				case CHAR: return Character.valueOf(value.charAt(0)); //only get first char at value
-				case INT: return Integer.valueOf(value);
+				case INT: 
+					String s = value;
+					
+					if(s.contains(".")) {
+						String[] tokens = s.split("\\.");
+						return Integer.valueOf(tokens[0]);
+					} else {
+						return Integer.valueOf(value);
+					}
 				case LONG: return Long.valueOf(value);
 				case SHORT: return Short.valueOf(value);
 				case FLOAT: return Float.valueOf(value);
