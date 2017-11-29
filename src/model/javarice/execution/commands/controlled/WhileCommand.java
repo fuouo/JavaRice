@@ -8,6 +8,7 @@ import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.execution.commands.utils.ConditionEvaluator;
 import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 import model.javarice.semantics.mapping.IValueMapper;
@@ -22,6 +23,8 @@ public class WhileCommand implements IControlledCommand {
 	
 	protected ParExpressionContext conditionalExpr;
 	protected String modifiedConditionExpr;
+	
+	protected boolean returned = false;
 	
 	public WhileCommand(ParExpressionContext conditionalExpr) {
 		this.commandSequences = new ArrayList<ICommand>();
@@ -41,6 +44,16 @@ public class WhileCommand implements IControlledCommand {
 				for(ICommand command : this.commandSequences) {
 					executionMonitor.tryExecution();
 					command.execute();
+					
+					// don't execute succeeding commands if there's a return
+					if(command instanceof ReturnCommand) {
+						this.returned = true;
+						break;
+					}
+				}
+				
+				if(this.returned) {
+					break;
 				}
 				
 				this.identifyVariables(); //identify variables again to detect changes to such variables used.
@@ -72,6 +85,16 @@ public class WhileCommand implements IControlledCommand {
 	
 	public int getCommandCount() {
 		return this.commandSequences.size();
+	}
+	
+	@Override
+	public boolean isReturned() {
+		return this.returned;
+	}
+	
+	@Override
+	public void resetReturnFlag() {
+		this.returned = false;
 	}
 
 }

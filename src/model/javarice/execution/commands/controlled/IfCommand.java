@@ -44,6 +44,7 @@ public class IfCommand implements IConditionalCommand {
 					executionMonitor.tryExecution();
 					command.execute();
 					
+					// don't execute succeeding commands if there's a return
 					if(command instanceof ReturnCommand) {
 						returned = true;
 						break;
@@ -57,6 +58,7 @@ public class IfCommand implements IConditionalCommand {
 					executionMonitor.tryExecution();
 					command.execute();
 					
+					// don't execute succeeding commands if there's a return
 					if(command instanceof ReturnCommand) {
 						returned = true;
 						break;

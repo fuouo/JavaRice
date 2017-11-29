@@ -22,7 +22,6 @@ import model.javarice.semantics.searching.VariableSearcher;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.Expression;
-import model.javarice.semantics.utils.RecognizedKeywords;
 import model.javarice.semantics.utils.StringUtils;
 
 public class EvaluationCommand implements ICommand, ParseTreeListener {
@@ -82,30 +81,15 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		this.isNumeric = !this.modifiedExpression.contains("\"");
 		
-		System.out.println(this.modifiedExpression);
+		ParseTreeWalker treeWalker = new ParseTreeWalker();
+		treeWalker.walk(this, this.parentExpressionContext);
 
-		// catch rules if the value has direct boolean flags
-		if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_TRUE)) {
-			this.resultValue = new BigDecimal(1);
-			this.strResult = this.resultValue.toEngineeringString();
-		} 
-
-		else if(this.modifiedExpression.contains(RecognizedKeywords.BOOLEAN_FALSE)) {
-			this.resultValue = new BigDecimal(0);
-			this.strResult = this.resultValue.toEngineeringString();
-		} 
-
-		else if(!this.isNumeric) {
+		if(!this.isNumeric) {
 			this.strResult = StringUtils.removeQuotes(this.modifiedExpression);
 		}
 
 		else {
-			
-			// can't handle function variable
-			ParseTreeWalker treeWalker = new ParseTreeWalker();
-			treeWalker.walk(this, this.parentExpressionContext);
-			
-			
+						
 			if(this.modifiedExpression.contains("!")) {
 				this.modifiedExpression = this.modifiedExpression.replaceAll("!", "not");
 				this.modifiedExpression = this.modifiedExpression.replaceAll("not=", "!=");

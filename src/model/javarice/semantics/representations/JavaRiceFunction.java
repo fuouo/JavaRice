@@ -11,8 +11,11 @@ import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.FunctionTracker;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.controlled.DoWhileCommand;
+import model.javarice.execution.commands.controlled.ForCommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.execution.commands.controlled.IfCommand;
+import model.javarice.execution.commands.controlled.WhileCommand;
 import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
@@ -262,6 +265,7 @@ public class JavaRiceFunction implements IControlledCommand{
 				executionMonitor.tryExecution();
 				command.execute();
 				
+				// don't execute succeeding commands if there's a return
 				if(command instanceof ReturnCommand) {
 					break;
 				} else if(command instanceof IfCommand) {
@@ -269,7 +273,12 @@ public class JavaRiceFunction implements IControlledCommand{
 						((IfCommand) command).resetReturnFlag();
 						break;
 					}
-				}
+				} else if(command instanceof IControlledCommand) {
+					if(((IControlledCommand) command).isReturned()) {
+						((IControlledCommand) command).resetReturnFlag();
+						break;
+					}
+				} 
 				
 				
 			}
@@ -308,5 +317,17 @@ public class JavaRiceFunction implements IControlledCommand{
 		}
 
 		return FunctionType.VOID_TYPE;
+	}
+
+	@Override
+	public boolean isReturned() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void resetReturnFlag() {
+		// TODO Auto-generated method stub
+		
 	}
 }
