@@ -1,5 +1,8 @@
 package model.javarice.builder;
 
+import java.util.ArrayList;
+
+import org.antlr.v4.gui.Trees;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -25,6 +28,10 @@ public class ParserHandler {
 		return sharedInstance;
 	}
 	
+	//This is for debug environment (watch & breakpoints)
+	private ArrayList<String> lines;
+	private ArrayList<Integer> breakpoints;
+	
 	private JavaRiceLexer sharedLexer;
 	private JavaRiceParser sharedParser;
 	
@@ -35,6 +42,11 @@ public class ParserHandler {
 	}
 	
 	public void parseText(String textToParse) {		
+		
+		lines = new ArrayList<String>();
+		breakpoints = new ArrayList<Integer>();
+		breakpoints.add(3);
+		
 		this.sharedLexer = new JavaRiceLexer(new ANTLRInputStream(textToParse));
 		CommonTokenStream tokens = new CommonTokenStream(this.sharedLexer);
 		this.sharedParser = new JavaRiceParser(tokens);
@@ -48,6 +60,9 @@ public class ParserHandler {
 		treeWalker.walk(new JavaRiceBaseImplementor(), parserRuleContext);
 
 		Console.log(LogType.VERBOSE, TAG + "Finished parsing. Compiled executables. Click RUN to execute");
+
+		//TODO: for Debug. Please remove after. This shows the parsetree
+		Trees.inspect(parserRuleContext, this.sharedParser);
 	}
 	
 	/*
@@ -62,6 +77,18 @@ public class ParserHandler {
 	 */
 	public String getCurrentClassName() {
 		return this.currentClassName;
+	}
+	
+	public ArrayList<String> getLineCode(){
+		return lines;
+	}
+	
+	public void addLineCode(String code){
+		lines.add(code);
+	}
+	
+	public ArrayList<Integer> getBreakpoints(){
+		return breakpoints;
 	}
 
 }

@@ -4,15 +4,14 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import controller.Console;
-import controller.Console.LogType;
+import model.javarice.builder.ParserHandler;
 import model.javarice.generatedexp.JavaRiceListener;
 import model.javarice.generatedexp.JavaRiceParser.*;
 import model.javarice.semantics.analyzers.ClassAnalyzer;
 import model.javarice.semantics.analyzers.MainAnalyzer;
 
 public class JavaRiceBaseImplementor implements JavaRiceListener {
-
+	
 	@Override
 	public void enterEveryRule(ParserRuleContext arg0) {
 		// TODO Auto-generated method stub
@@ -858,7 +857,11 @@ public class JavaRiceBaseImplementor implements JavaRiceListener {
 	@Override
 	public void enterBlockStatement(BlockStatementContext ctx) {
 		// TODO Auto-generated method stub
-		
+		ParserHandler.getInstance().addLineCode(ctx.getText());
+		System.out.println(ctx.getText() + " " + ParserHandler.getInstance().getBreakpoints().get(0) + " = " + ParserHandler.getInstance().getLineCode().size());
+		if(ParserHandler.getInstance().getBreakpoints().get(0) == ParserHandler.getInstance().getLineCode().size() + 2){
+			System.out.println("STOP HERE : " + ctx.getText());
+		}
 	}
 
 	@Override
