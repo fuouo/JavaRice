@@ -1,6 +1,7 @@
 package model.javarice.semantics.analyzers;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -124,7 +125,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 		FunctionCallCommand functionCallCommand = new FunctionCallCommand(functionName, funcExprCtx);
 		this.handleStatementExecution(functionCallCommand);
 		
-		Console.log(LogType.DEBUG, TAG + "Function call with params detected: " +functionName);
+		Console.log(LogType.DEBUG, TAG + "Function call with params detected: " +funcExprCtx.getText());
 	}
 
 	private void handleFunctionCallWithNoParams(ExpressionContext funcExprCtx) {
@@ -178,24 +179,34 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	}
 
 	private boolean isFunctionCallWithParams(ExpressionContext exprCtx) {
-		ExpressionContext firstExprCtx = exprCtx.expression(0);
-
-		if(firstExprCtx != null) {
-			if(exprCtx != this.readRightHandExprCtx) {
-				return (firstExprCtx.primary() != null);
+		
+		Pattern functionPattern = Pattern.compile("([a-zA-Z0-9]+)\\(([ ,.a-zA-Z0-9]*)\\)");
+		
+		if(exprCtx.arguments() != null || 
+				functionPattern.matcher(exprCtx.getText()).matches()) {
+			
+			if(exprCtx.arguments().expressionList() != null) {
+				return true;
 			}
+			
 		}
-
+		
 		return false;
 
 	}
 
 	private boolean isFunctionCallWithNoParams(ExpressionContext exprCtx) {
-		if(exprCtx.depth() == FUNCTION_CALL_NO_PARAMS_DEPTH) {
-			if(exprCtx.primary() != null)
+		Pattern functionPattern = Pattern.compile("([a-zA-Z0-9]+)\\(([ ,.a-zA-Z0-9]*)\\)");
+		
+		if(exprCtx.arguments() != null || 
+				functionPattern.matcher(exprCtx.getText()).matches()) {
+			
+			if(exprCtx.arguments().expressionList() == null) {
 				return true;
+			}
+			
 		}
-
+		
 		return false;
 	}
 

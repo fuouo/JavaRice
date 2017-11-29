@@ -44,8 +44,6 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext expressionContext = (ExpressionContext) ctx;
-			
-			Console.log(LogType.DEBUG, TAG + "EXPRESSION MOTHER FUCKER " + expressionContext.getText());
 
 			if(EvaluationCommand.isFunctionCall(expressionContext)) {
 				this.evaluateFunctionCall(expressionContext);

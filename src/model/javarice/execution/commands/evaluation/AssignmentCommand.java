@@ -21,39 +21,62 @@ import model.javarice.semantics.searching.VariableSearcher;
 import model.javarice.semantics.utils.AssignmentUtils;
 
 public class AssignmentCommand implements ICommand {
-	
+
 	private final String TAG = this.getClass().getSimpleName() + ": ";
-	
+
 	private ExpressionContext leftHandExprCtx;
 	private ExpressionContext rightHandExprCtx;
 
 	public AssignmentCommand(ExpressionContext leftHandExprCtx, ExpressionContext rightHandExprCtx) {
 		this.leftHandExprCtx = leftHandExprCtx;
 		this.rightHandExprCtx = rightHandExprCtx;
-		
-		UndeclaredChecker undeclaredChecker = new UndeclaredChecker(this.leftHandExprCtx);
-		undeclaredChecker.verify();
-		
-		ConstChecker constChecker = new ConstChecker(this.leftHandExprCtx);
-		constChecker.verify();
-		
+
+		UndeclaredChecker undeclaredChecker;
+		ConstChecker constChecker;
+
+		if(isLeftHandArrayAccessor()) {
+			undeclaredChecker = new UndeclaredChecker(this.leftHandExprCtx.expression(0));
+			undeclaredChecker.verify();
+
+			constChecker = new ConstChecker(this.leftHandExprCtx.expression(0));
+			constChecker.verify();
+		} else {
+			undeclaredChecker = new UndeclaredChecker(this.leftHandExprCtx);
+			undeclaredChecker.verify();
+
+			constChecker = new ConstChecker(this.leftHandExprCtx);
+			constChecker.verify();
+		}
+
 		undeclaredChecker = new UndeclaredChecker(this.rightHandExprCtx);
 		undeclaredChecker.verify();
-		
+
 		ParseTreeWalker functionWalker = new ParseTreeWalker();
 		functionWalker.walk(new FunctionCallVerifier(), this.rightHandExprCtx);
-		
+
 		// type check the java rice value
 		JavaRiceValue javaRiceValue;
-		
+
 		if(ExecutionManager.getInstance().isInFunctionExecution()) {
 			javaRiceValue = VariableSearcher.searchVariableInFunction(
 					ExecutionManager.getInstance().getCurrentFunction(), this.leftHandExprCtx.getText());
+
+			// maybe it's array
+			if(javaRiceValue == null && this.isLeftHandArrayAccessor()) {
+				javaRiceValue = VariableSearcher.searchVariableInFunction(
+						ExecutionManager.getInstance().getCurrentFunction(), 
+						this.leftHandExprCtx.expression(0).getText());
+			}
 		}
 		else {
 			javaRiceValue = VariableSearcher.searchVariable(this.leftHandExprCtx.getText());
+			
+			// maybe it's array
+			if(javaRiceValue == null && this.isLeftHandArrayAccessor()) {
+				javaRiceValue =VariableSearcher.searchVariable(this.leftHandExprCtx.expression(0).getText());
+			}
 		}
-		
+
 		TypeErrorChecker typeChecker = new TypeErrorChecker(javaRiceValue, this.rightHandExprCtx);
 		typeChecker.verify();
 	}
@@ -65,7 +88,7 @@ public class AssignmentCommand implements ICommand {
 		// TODO Auto-generated method stub
 		EvaluationCommand evaluationCommand = new EvaluationCommand(this.rightHandExprCtx);
 		evaluationCommand.execute();
-		
+
 		if(this.isLeftHandArrayAccessor()) {
 			this.handleArrayAssignment(evaluationCommand.getResult().toEngineeringString());
 		}
@@ -74,29 +97,29 @@ public class AssignmentCommand implements ICommand {
 			AssignmentUtils.assignAppropriateValue(javaRiceValue, evaluationCommand.getResult());
 		}
 	}
-	
+
 	private boolean isLeftHandArrayAccessor() {
 		List<TerminalNode> lBrackTokens = this.leftHandExprCtx.getTokens(JavaRiceLexer.LBRACK);
 		List<TerminalNode> rBrackTokens = this.leftHandExprCtx.getTokens(JavaRiceLexer.RBRACK);
-		
+
 		return(lBrackTokens.size() > 0 && rBrackTokens.size() > 0);
 	}
-	
+
 	private void handleArrayAssignment(String resultString) {
 		TerminalNode identifierNode = this.leftHandExprCtx.expression(0).primary().Identifier();
 		ExpressionContext arrayIndexExprCtx = this.leftHandExprCtx.expression(1);
-		
+
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(identifierNode.getText());
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
-		
+
 		EvaluationCommand evaluationCommand = new EvaluationCommand(arrayIndexExprCtx);
 		evaluationCommand.execute();
-		
+
 		//create a new array value to replace value at specified index
 		JavaRiceValue newArrayValue = new JavaRiceValue(null, javaRiceArray.getPrimitiveType());
 		newArrayValue.setValue(resultString);
 		javaRiceArray.updateValueAt(newArrayValue, evaluationCommand.getResult().intValue());
-		
+
 		//Console.log("Index to access: " +evaluationCommand.getResult().intValue()+ " Updated with: " +resultString);
 	}
 
