@@ -44,7 +44,7 @@ public class FunctionCallCommand implements ICommand {
 	private void searchFunction() {
 		ClassScope classScope = SymbolTableManager.getInstance().getClassScope(
 				ParserHandler.getInstance().getCurrentClassName());
-		this.javaRiceFunction = new JavaRiceFunction(classScope.searchFunction(this.functionName));
+		this.javaRiceFunction = classScope.searchFunction(this.functionName);
 	}
 
 	private void verifyParameters() {

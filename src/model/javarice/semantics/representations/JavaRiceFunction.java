@@ -67,17 +67,6 @@ public class JavaRiceFunction implements IControlledCommand{
 		this.parameterReferences = new LinkedHashMap<>();
 		this.parameterValues = new LinkedHashMap<>();
 	}
-	
-	public JavaRiceFunction(JavaRiceFunction javaRiceFunction) {
-		this.functionName = javaRiceFunction.functionName;
-		this.commandSequences = new ArrayList<>(javaRiceFunction.commandSequences);
-		this.parentLocalScope = javaRiceFunction.parentLocalScope;
-		this.parameterReferences = new LinkedHashMap<>(javaRiceFunction.parameterReferences);
-		this.parameterValues = new LinkedHashMap<>(javaRiceFunction.parameterValues);
-		this.returnValue = javaRiceFunction.returnValue;
-		this.returnType = javaRiceFunction.returnType;
-		
-	}
 
 	public void setParentLocalScope(LocalScope localScope) {
 		this.parentLocalScope = localScope;
