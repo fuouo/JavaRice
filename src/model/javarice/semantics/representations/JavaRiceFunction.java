@@ -19,8 +19,10 @@ import model.javarice.execution.commands.controlled.WhileCommand;
 import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
+import model.javarice.semantics.searching.VariableSearcher;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.symboltable.scopes.LocalScope;
+import model.javarice.semantics.utils.LocalVarTracker;
 import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class JavaRiceFunction implements IControlledCommand{
@@ -260,10 +262,14 @@ public class JavaRiceFunction implements IControlledCommand{
 		ExecutionMonitor executionMonitor = ExecutionManager.getInstance().getExecutionMonitor();
 		FunctionTracker.getInstance().reportEnterFunction(this);
 		
+		LocalVarTracker.getInstance().startNewSession();
+		
 		try {
 			for (ICommand command : this.commandSequences) {
 				executionMonitor.tryExecution();
 				command.execute();
+				
+				LocalVarTracker.getInstance().popLocalVar(command);
 				
 				// don't execute succeeding commands if there's a return
 				if(command instanceof ReturnCommand) {
@@ -287,6 +293,33 @@ public class JavaRiceFunction implements IControlledCommand{
 		}
 		
 		FunctionTracker.getInstance().reportExitFunction();
+		this.popBackParameters();
+		this.popBackLocalVars();
+		
+		LocalVarTracker.getInstance().endCurrentSession();
+	}
+	
+	private void popBackParameters() {
+		for (JavaRiceValue value : this.parameterValues.values()) {
+			if(value.getPrimitiveType() != PrimitiveType.ARRAY) {
+				value.popBack();
+			}
+		}
+	}
+	
+	private void popBackLocalVars() {
+		for (String s : LocalVarTracker.getInstance().getCurrentSession()) {
+			JavaRiceValue value = VariableSearcher.searchVariableInFunction(this, s);
+			
+			if(value != null) {
+				// prevent from reaching null
+				if(value.stackSize() > 1) {
+					if(value.getPrimitiveType() != PrimitiveType.ARRAY) {
+						value.popBack();
+					}
+				}
+			}
+		}
 	}
 
 	public static FunctionType identifyFunctionType(String primitiveTypeString) {

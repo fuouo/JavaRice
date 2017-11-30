@@ -7,6 +7,7 @@ import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
+import model.javarice.semantics.utils.LocalVarTracker;
 
 public class DoWhileCommand extends WhileCommand {
 	
@@ -41,6 +42,8 @@ public class DoWhileCommand extends WhileCommand {
 			for(ICommand command : this.commandSequences) {
 				executionMonitor.tryExecution();
 				command.execute();
+				
+				LocalVarTracker.getInstance().popLocalVar(command);
 				
 				// don't execute succeeding commands if there's a return
 				if(command instanceof ReturnCommand) {

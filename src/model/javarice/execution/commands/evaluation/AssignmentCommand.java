@@ -104,7 +104,7 @@ public class AssignmentCommand implements ICommand {
 		}
 	}
 
-	private boolean isLeftHandArrayAccessor() {
+	public boolean isLeftHandArrayAccessor() {
 		List<TerminalNode> lBrackTokens = this.leftHandExprCtx.getTokens(JavaRiceLexer.LBRACK);
 		List<TerminalNode> rBrackTokens = this.leftHandExprCtx.getTokens(JavaRiceLexer.RBRACK);
 
@@ -127,6 +127,10 @@ public class AssignmentCommand implements ICommand {
 		javaRiceArray.updateValueAt(newArrayValue, evaluationCommand.getResult().intValue());
 
 		//Console.log("Index to access: " +evaluationCommand.getResult().intValue()+ " Updated with: " +resultString);
+	}
+	
+	public ExpressionContext getLeftHandExpression() {
+		return this.leftHandExprCtx;
 	}
 
 }

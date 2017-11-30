@@ -13,6 +13,7 @@ import model.javarice.execution.commands.utils.ConditionEvaluator;
 import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 import model.javarice.semantics.mapping.IValueMapper;
 import model.javarice.semantics.mapping.IdentifierMapper;
+import model.javarice.semantics.utils.LocalVarTracker;
 
 public class WhileCommand implements IControlledCommand {
 	
@@ -25,6 +26,8 @@ public class WhileCommand implements IControlledCommand {
 	protected String modifiedConditionExpr;
 	
 	protected boolean returned = false;
+	
+	private ArrayList<String> localVars = new ArrayList<>();
 	
 	public WhileCommand(ParExpressionContext conditionalExpr) {
 		this.commandSequences = new ArrayList<ICommand>();
@@ -44,6 +47,8 @@ public class WhileCommand implements IControlledCommand {
 				for(ICommand command : this.commandSequences) {
 					executionMonitor.tryExecution();
 					command.execute();
+					
+					LocalVarTracker.getInstance().popLocalVar(command);
 					
 					// don't execute succeeding commands if there's a return
 					if(command instanceof ReturnCommand) {
@@ -107,6 +112,10 @@ public class WhileCommand implements IControlledCommand {
 	@Override
 	public void resetReturnFlag() {
 		this.returned = false;
+	}
+	
+	public ArrayList<String> getLocalVars() {
+		return localVars;
 	}
 
 }

@@ -85,5 +85,9 @@ public class IncDecCommand implements ICommand {
 			javaRiceValue.setValue(String.valueOf(value));
 		}
 	}
+	
+	public String getIdentifierString() {
+		return this.expressionContext.primary().getText();
+	}
 
 }

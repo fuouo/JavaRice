@@ -56,5 +56,12 @@ public class MappingCommand implements ICommand {
 	public String getModifiedExp() {
 		return this.modifiedExp;
 	}
+	
+	/*
+	 * Returns the modified exp, with mapped values.
+	 */
+	public String getIdentifierString() {
+		return this.identifierString;
+	}
 
 }

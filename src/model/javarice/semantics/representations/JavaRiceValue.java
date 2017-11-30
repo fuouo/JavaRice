@@ -36,6 +36,7 @@ public class JavaRiceValue {
 		
 		if(value == null || checkValueType(value, primitiveType)) {					
 			this.value = new Stack<>();
+			this.value.push(value);
 			this.primitiveType = primitiveType;
 		} else {
 			// type mismatch???
@@ -91,6 +92,18 @@ public class JavaRiceValue {
 	
 	public Object getValue() {
 		return this.value.peek();
+	}
+	
+	public Object popBack() {
+		if(this.value.size() > 2) {
+			return this.value.pop();
+		}
+		
+		return null;
+	}
+	
+	public int stackSize() {
+		return this.value.size();
 	}
 	
 	private Object attemptTypeCast(String value) {		

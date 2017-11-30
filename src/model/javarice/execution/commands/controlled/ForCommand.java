@@ -8,7 +8,6 @@ import controller.Console.LogType;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.ExecutionMonitor;
 import model.javarice.execution.commands.ICommand;
-import model.javarice.execution.commands.controlled.IControlledCommand.ControlTypeEnum;
 import model.javarice.execution.commands.simple.ReturnCommand;
 import model.javarice.execution.commands.utils.ConditionEvaluator;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -16,6 +15,7 @@ import model.javarice.generatedexp.JavaRiceParser.LocalVariableDeclarationContex
 import model.javarice.semantics.analyzers.LocalVariableAnalyzer;
 import model.javarice.semantics.mapping.IValueMapper;
 import model.javarice.semantics.mapping.IdentifierMapper;
+import model.javarice.semantics.utils.LocalVarTracker;
 
 public class ForCommand implements IControlledCommand {
 	
@@ -35,6 +35,8 @@ public class ForCommand implements IControlledCommand {
 	private String modifiedConditionExpr;
 	
 	private boolean returned = false;
+	
+	private ArrayList<String> localVars = new ArrayList<>();
 	
 	public ForCommand(LocalVariableDeclarationContext localVarDecCtx, 
 			ExpressionContext conditionalExpr, ICommand updateCommand) {
@@ -59,6 +61,8 @@ public class ForCommand implements IControlledCommand {
 				for(ICommand command : this.commandSequences) {
 					executionMonitor.tryExecution();
 					command.execute();
+					
+					LocalVarTracker.getInstance().popLocalVar(command);
 					
 					// don't execute succeeding commands if there's a return
 					if(command instanceof ReturnCommand) {
@@ -131,6 +135,10 @@ public class ForCommand implements IControlledCommand {
 	@Override
 	public void resetReturnFlag() {
 		this.returned = false;
+	}
+	
+	public ArrayList<String> getLocalVars() {
+		return localVars;
 	}
 
 }

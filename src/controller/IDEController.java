@@ -14,6 +14,7 @@ import model.javarice.execution.FunctionTracker;
 import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
+import model.javarice.semantics.utils.LocalVarTracker;
 import model.symboltable.STRow;
 import view.IDEView;
 import view.ViewInterface;
@@ -98,6 +99,7 @@ public class IDEController extends ControllerInterface{
 		LocalScopeCreator.initialize();
 		StatementControlOverseer.initialize();
 		FunctionTracker.initialize();
+		LocalVarTracker.initialize();
 	}
 	
 	private void performResetComponents() {
@@ -107,6 +109,7 @@ public class IDEController extends ControllerInterface{
 		BuildChecker.reset();
 		StatementControlOverseer.reset();
 		FunctionTracker.reset();
+		LocalVarTracker.reset();
 	}
 
 }

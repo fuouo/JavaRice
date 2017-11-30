@@ -236,6 +236,7 @@ public class StatementAnalyzer {
 				conditionalCommand.addPositiveCommand(returnCommand);
 			}
 			else {
+				ExecutionManager.getInstance().getCurrentFunction().setValidReturn(true);
 				conditionalCommand.addNegativeCommand(returnCommand);
 			}
 		}

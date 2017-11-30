@@ -12,6 +12,7 @@ import model.javarice.execution.commands.utils.ConditionEvaluator;
 import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 import model.javarice.semantics.mapping.IValueMapper;
 import model.javarice.semantics.mapping.IdentifierMapper;
+import model.javarice.semantics.utils.LocalVarTracker;
 
 public class IfCommand implements IConditionalCommand {
 	
@@ -22,6 +23,8 @@ public class IfCommand implements IConditionalCommand {
 	private String modifiedConditionExpr;
 	
 	private boolean returned = false;
+	
+	private ArrayList<String> localVars = new ArrayList<>();
 	
 	public IfCommand(ParExpressionContext conditionalExpr) {
 		this.positiveCommands = new ArrayList<ICommand>();
@@ -44,6 +47,8 @@ public class IfCommand implements IConditionalCommand {
 					executionMonitor.tryExecution();
 					command.execute();
 					
+					LocalVarTracker.getInstance().popLocalVar(command);
+					
 					// don't execute succeeding commands if there's a return
 					if(command instanceof ReturnCommand) {
 						returned = true;
@@ -57,6 +62,8 @@ public class IfCommand implements IConditionalCommand {
 				for(ICommand command : this.negativeCommands) {
 					executionMonitor.tryExecution();
 					command.execute();
+					
+					LocalVarTracker.getInstance().popLocalVar(command);
 					
 					// don't execute succeeding commands if there's a return
 					if(command instanceof ReturnCommand) {
@@ -112,5 +119,9 @@ public class IfCommand implements IConditionalCommand {
 	
 	public void resetReturnFlag() {
 		this.returned = false;
+	}
+	
+	public ArrayList<String> getLocalVars() {
+		return localVars;
 	}
 }
