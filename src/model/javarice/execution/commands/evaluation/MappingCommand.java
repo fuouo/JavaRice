@@ -2,6 +2,8 @@ package model.javarice.execution.commands.evaluation;
 
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -34,11 +36,18 @@ public class MappingCommand implements ICommand {
 		// TODO Auto-generated method stub
 		this.modifiedExp = this.parentExprCtx.getText();
 		
+		Console.log(LogType.DEBUG, "Mapping Command: " + this.modifiedExp);
+		
 		EvaluationCommand evaluationCommand = new EvaluationCommand(this.parentExprCtx);
 		evaluationCommand.execute();
 		
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(this.identifierString);
-		AssignmentUtils.assignAppropriateValue(javaRiceValue, evaluationCommand.getResult());
+		
+		if(evaluationCommand.isNumericResult()) {
+			AssignmentUtils.assignAppropriateValue(javaRiceValue, evaluationCommand.getResult());
+		} else {
+			AssignmentUtils.assignAppropriateValue(javaRiceValue, evaluationCommand.getStringResult());
+		}
 	}
 	
 	/*

@@ -99,14 +99,39 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		this.modifiedExpression = this.parentExpressionContext.getText();
 		
-		this.isNumeric = !this.modifiedExpression.contains("\"");
-		
 		ParseTreeWalker treeWalker = new ParseTreeWalker();
 		treeWalker.walk(this, this.parentExpressionContext);
+		
+		this.isNumeric = !this.modifiedExpression.contains("\"") && !this.modifiedExpression.contains("'");
 
 		if(!this.isNumeric) {
-			this.strResult = StringUtils.removeQuotes(this.modifiedExpression);
-		}
+			
+			if(this.modifiedExpression.contains("==") || this.modifiedExpression.contains("!=")) {
+				String[] strings = {"", ""};
+				
+				if(this.modifiedExpression.contains("==")) {
+					strings = this.modifiedExpression.split("==");
+					
+					if(strings[0].equals(strings[1]))
+						this.resultValue = new BigDecimal(1);
+					else 
+						this.resultValue = new BigDecimal(0);
+				}
+
+				if(this.modifiedExpression.contains("!=")) {
+					strings = this.modifiedExpression.split("!=");
+					
+					if(!(strings[0].equals(strings[1])))
+						this.resultValue = new BigDecimal(1);
+					else 
+						this.resultValue = new BigDecimal(0);
+				}
+				
+				this.isNumeric = true;
+			} else{
+				this.strResult = StringUtils.removeQuotes(this.modifiedExpression);
+			}
+		} 
 
 		else {
 						
@@ -129,6 +154,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 			
 			Expression evalExpression = new Expression(this.modifiedExpression);
 			this.resultValue = evalExpression.eval();
+			
 			this.strResult = this.resultValue.toEngineeringString();
 		}
 		
@@ -183,7 +209,12 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 				EvaluationCommand evalCommand = new EvaluationCommand(paramExprCtx);
 				evalCommand.execute();
 				
-				javaRiceFunction.mapParameterByValueAt(evalCommand.getResult().toEngineeringString(), i);
+				if(evalCommand.isNumeric) {
+					javaRiceFunction.mapParameterByValueAt(evalCommand.getResult().toEngineeringString(), i);
+				} else {
+					javaRiceFunction.mapParameterByValueAt(evalCommand.getStringResult(), i);
+				}
+				
 			}
 			
 		}
@@ -199,18 +230,21 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private void evaluateVariable(ExpressionContext expressionContext) {
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(expressionContext.getText());
 		
-		if(javaRiceValue == null) {
+		if(javaRiceValue == null || javaRiceValue.getPrimitiveType() == PrimitiveType.ARRAY) {
 			return;
 		}
 
 		Console.log(LogType.DEBUG, TAG + "EVALUATING VARIABLE " + expressionContext.getText());
 
-		this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
-				javaRiceValue.getValue().toString());
-
 		if(javaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
-			this.modifiedExpression = "\"" + modifiedExpression + "\"";
-		}
+			this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
+					"\"" + javaRiceValue.getValue().toString() + "\"");
+		} else if(javaRiceValue.getPrimitiveType() == PrimitiveType.CHAR) {
+			this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
+					"'" + javaRiceValue.getValue().toString() + "'");
+		} else
+			this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
+					javaRiceValue.getValue().toString());
 
 		Console.log(LogType.DEBUG, TAG + "Evaluated: " + modifiedExpression);
 	}
