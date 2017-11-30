@@ -11,16 +11,21 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.error.errorcheckers.ConstChecker;
 import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IConditionalCommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.execution.commands.evaluation.AssignmentCommand;
+import model.javarice.execution.commands.evaluation.EvaluationCommand;
 import model.javarice.execution.commands.simple.FunctionCallCommand;
 import model.javarice.execution.commands.simple.IncDecCommand;
 import model.javarice.generatedexp.JavaRiceLexer;
+import model.javarice.generatedexp.JavaRiceParser.ArgumentsContext;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
+import model.javarice.generatedexp.JavaRiceParser.StatementContext;
 import model.javarice.generatedexp.JavaRiceParser.StatementExpressionContext;
 import model.javarice.semantics.statements.StatementControlOverseer;
 
@@ -52,6 +57,44 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	@Override
 	public void enterEveryRule(ParserRuleContext ctx) {
 		// TODO Auto-generated method stub
+		
+		if(ctx instanceof ExpressionContext && 
+				ctx.getParent() instanceof ExpressionContext && 
+				ctx.getParent().getChild(1) instanceof ArgumentsContext && 
+				ctx.getParent().getParent() instanceof ExpressionContext && 
+				ctx.getParent().getParent().getChild(1) instanceof ArgumentsContext){
+			
+			BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "", ctx.getStart().getLine(), "(", ";");
+		}
+		/* This is for the non-assignment stamenets like z * 20, z * 20 + 30 / 12, etc */
+		if(ctx instanceof ExpressionContext && 
+				ctx.getParent() instanceof StatementExpressionContext &&
+				!(ctx.getParent().getChild(1) instanceof ExpressionContext) &&
+				ctx.getParent().getParent() instanceof StatementContext && 
+				!(ctx.getText().contains("=") || 
+				 ctx.getText().contains("-=") ||
+				 ctx.getText().contains("*=") ||
+				 ctx.getText().contains("/=") ||
+				 ctx.getText().contains("&=") ||
+				 ctx.getText().contains("|=") ||
+				 ctx.getText().contains("^=") ||
+				 ctx.getText().contains("%=") ||
+				 ctx.getText().contains("<<=") ||
+				 ctx.getText().contains(">>=") ||
+				 ctx.getText().contains(">>>=") /* end of assignment operator condition */) ){
+				
+				String var = ((ExpressionContext)ctx).expression(0).getText(); //not working
+				var = var.split("[^\\w']+")[0];
+				for(int i=0; i<var.split("[^\\w']+").length; i++ ){
+					System.out.println(var.split("[^\\w']+")[i]);
+				}
+				String op = ((StatementExpressionContext)ctx.getParent()).expression().getText().split(var)[1].substring(0, 1); // not working
+				op = "=";
+			
+				BuildChecker.reportCustomError(ErrorRepository.MISSING_TOKEN, "", ctx.getStart().getLine(), op , var);
+				
+		}
+		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext exprCtx = (ExpressionContext) ctx;
 			
@@ -119,6 +162,12 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	}
 	
 	private void handleFunctionCallWithParams(ExpressionContext funcExprCtx) {
+		if(funcExprCtx.primary() == null){
+			if(!EvaluationCommand.isFunctionCall(funcExprCtx))
+				BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "With Params", funcExprCtx.getStart().getLine(), "(", ";");
+			return;
+		}
+		
 		ExpressionContext functionExprCtx = funcExprCtx.expression(0);
 		String functionName = functionExprCtx.primary().getText();
 		
@@ -129,8 +178,13 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	}
 
 	private void handleFunctionCallWithNoParams(ExpressionContext funcExprCtx) {
-		String functionName = funcExprCtx.primary().getText();
-
+		if(funcExprCtx.primary() == null){
+			if(!EvaluationCommand.isFunctionCall(funcExprCtx))
+				BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "Without Params", funcExprCtx.getStart().getLine(), "(", ";");
+			//return;
+		}
+		String functionName = funcExprCtx.expression(0).getText();
+		
 		FunctionCallCommand functionCallCommand = new FunctionCallCommand(functionName, funcExprCtx);
 		this.handleStatementExecution(functionCallCommand);
 

@@ -5,6 +5,8 @@ import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import model.javarice.builder.ParserHandler;
+import model.javarice.error.errorcheckers.ConstChecker;
+import model.javarice.error.errorcheckers.UndeclaredChecker;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -26,6 +28,10 @@ public class FunctionCallCommand implements ICommand {
 		this.functionName = functionName;
 		this.expressionContext = expressionContext;
 
+		UndeclaredChecker undeclaredChecker;
+		undeclaredChecker = new UndeclaredChecker(this.expressionContext);
+		undeclaredChecker.verify();
+		
 		this.searchFunction();
 
 		ParseTreeWalker functionWalker = new ParseTreeWalker();
