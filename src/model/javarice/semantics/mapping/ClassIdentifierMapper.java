@@ -6,6 +6,8 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.builder.ParserHandler;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
@@ -73,7 +75,11 @@ public class ClassIdentifierMapper implements ParseTreeListener, IValueMapper {
 						ParserHandler.getInstance().getCurrentClassName());
 				
 				this.javaRiceValue = classScope.searchVariableIncludingLocal(variableKey);
-				this.modExpression = this.modExpression.replace(variableKey, this.javaRiceValue.getValue().toString());
+				
+				if(this.javaRiceValue.getValue() == null)
+					BuildChecker.reportCustomError(ErrorRepository.UNINITIALIZED_VARIABLE, "", ctx.getStart().getLine(), variableKey);
+				else
+					this.modExpression = this.modExpression.replace(variableKey, this.javaRiceValue.getValue().toString());
 			}
 		}
 	}

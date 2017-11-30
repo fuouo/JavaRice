@@ -22,6 +22,7 @@ public class ErrorRepository {
 	public final static int MULTIPLE_FUNCTION = 2700;
 	public final static int PARAMETER_COUNT_MISMATCH = 2800;
 	public final static int MISSING_RETURN = 2900;
+	public final static int UNINITIALIZED_VARIABLE = 3000;
 	
 	// runtime errors
 	public final static int RUNTIME_ARRAY_OUT_OF_BOUNDS = 3100;
@@ -71,6 +72,8 @@ public class ErrorRepository {
 				"SEMANTIC[TYPE]%d[LINE]Number of parameters for method %s does not match with its declaration. ");
 		this.errorMessageDictionary.put(MISSING_RETURN, 
 				"SEMANTIC[TYPE]%d[LINE]This method must return a result of type %s. ");
+		this.errorMessageDictionary.put(UNINITIALIZED_VARIABLE, 
+				"SEMANTIC[TYPE]%d[LINE]Oops! You forgot to initialize variable %s. ");
 		
 		// runtime errors
 		this.errorMessageDictionary.put(RUNTIME_ARRAY_OUT_OF_BOUNDS, 
