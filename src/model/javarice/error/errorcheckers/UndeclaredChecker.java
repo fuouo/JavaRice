@@ -45,6 +45,7 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext exprCtx = (ExpressionContext) ctx;
+			
 			if(EvaluationCommand.isFunctionCall(exprCtx)) {
 				Console.log(LogType.DEBUG, TAG + "Function call detected! "
 						+ exprCtx.getText());
@@ -89,6 +90,9 @@ public class UndeclaredChecker implements IErrorChecker, ParseTreeListener {
 
 	private void verifyFunctionCall(ExpressionContext funcExprCtx) {		
 		
+		if(funcExprCtx.expression(0).primary() == null)
+			return;
+			
 		if(funcExprCtx.expression(0).primary().Identifier() != null) {
 			Console.log(LogType.DEBUG, TAG + "Function found " + funcExprCtx.expression(0).primary().Identifier());
 		}

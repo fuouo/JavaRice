@@ -12,6 +12,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.builder.ParserHandler;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.generatedexp.JavaRiceLexer;
@@ -138,8 +140,12 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		Pattern functionPattern = Pattern.compile("([a-zA-Z0-9]+)\\(([ ,.a-zA-Z0-9]*)\\)");
 		
 		if(expressionContext.arguments() != null || 
-				functionPattern.matcher(expressionContext.getText()).matches()) {
-			return true;
+			functionPattern.matcher(expressionContext.getText()).matches()) {
+			Pattern ptn = Pattern.compile("([a-zA-Z0-9]+)");
+			if(ptn.matcher(expressionContext.getText().split("\\(")[0]).matches())
+				return true;
+			
+		
 		}
 		
 		return false;
