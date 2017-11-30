@@ -1,7 +1,7 @@
 package model.javarice.semantics.representations;
 
-import controller.Console;
-import controller.Console.LogType;
+import java.util.Stack;
+
 import model.javarice.builder.BuildChecker;
 import model.javarice.builder.ErrorRepository;
 import model.javarice.semantics.utils.RecognizedKeywords;
@@ -25,15 +25,17 @@ public class JavaRiceValue {
 		ARRAY
 	}
 
-	private Object defaultValue; //this value will no longer change.
-	private Object value;
+//	private Object defaultValue; //this value will no longer change.
+//	private Object value;
+	private Stack<Object> defaultValue; //this value will no longer change.
+	private Stack<Object> value;
 	private PrimitiveType primitiveType = PrimitiveType.NOT_YET_IDENTIFIED;
 	private boolean finalFlag = false;
 	
 	public JavaRiceValue(Object value, PrimitiveType primitiveType) {
 		
 		if(value == null || checkValueType(value, primitiveType)) {					
-			this.value = value;
+			this.value = new Stack<>();
 			this.primitiveType = primitiveType;
 		} else {
 			// type mismatch???
@@ -71,10 +73,11 @@ public class JavaRiceValue {
 		case LONG:
 		case FLOAT:
 		case DOUBLE:
-			this.value = this.attemptTypeCast(value);
+			this.value.push(this.attemptTypeCast(value));
 			break;
 		case STRING:
-			this.value = StringUtils.removeQuotes(value);
+			value = StringUtils.removeQuotes(value);
+			this.value.push(value);
 			break;
 		case ARRAY:
 			// error
@@ -87,7 +90,7 @@ public class JavaRiceValue {
 	}
 	
 	public Object getValue() {
-		return this.value;
+		return this.value.peek();
 	}
 	
 	private Object attemptTypeCast(String value) {		
