@@ -66,34 +66,7 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			
 			BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "", ctx.getStart().getLine(), "(", ";");
 		}
-		/* This is for the non-assignment stamenets like z * 20, z * 20 + 30 / 12, etc */
-		if(ctx instanceof ExpressionContext && 
-				ctx.getParent() instanceof StatementExpressionContext &&
-				!(ctx.getParent().getChild(1) instanceof ExpressionContext) &&
-				ctx.getParent().getParent() instanceof StatementContext && 
-				!(ctx.getText().contains("=") || 
-				 ctx.getText().contains("-=") ||
-				 ctx.getText().contains("*=") ||
-				 ctx.getText().contains("/=") ||
-				 ctx.getText().contains("&=") ||
-				 ctx.getText().contains("|=") ||
-				 ctx.getText().contains("^=") ||
-				 ctx.getText().contains("%=") ||
-				 ctx.getText().contains("<<=") ||
-				 ctx.getText().contains(">>=") ||
-				 ctx.getText().contains(">>>=") /* end of assignment operator condition */) ){
-				
-				String var = ((ExpressionContext)ctx).expression(0).getText(); //not working
-				var = var.split("[^\\w']+")[0];
-				for(int i=0; i<var.split("[^\\w']+").length; i++ ){
-					System.out.println(var.split("[^\\w']+")[i]);
-				}
-				String op = ((StatementExpressionContext)ctx.getParent()).expression().getText().split(var)[1].substring(0, 1); // not working
-				op = "=";
-			
-				BuildChecker.reportCustomError(ErrorRepository.MISSING_TOKEN, "", ctx.getStart().getLine(), op , var);
-				
-		}
+		
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext exprCtx = (ExpressionContext) ctx;
@@ -139,6 +112,38 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			
 			else if(this.isFunctionCallWithNoParams(exprCtx)) {
 				this.handleFunctionCallWithNoParams(exprCtx);
+			}
+			
+			else {
+				
+				
+				/* This is for the non-assignment stamenets like z * 20, z * 20 + 30 / 12, etc */
+				if(	ctx.getParent() instanceof StatementExpressionContext &&
+					!(ctx.getParent().getChild(1) instanceof ExpressionContext) &&
+					ctx.getParent().getParent() instanceof StatementContext && 
+					((ExpressionContext) ctx).arguments() == null &&
+					!(ctx.getText().contains("=") || 
+					 ctx.getText().contains("-=") ||
+					 ctx.getText().contains("*=") ||
+					 ctx.getText().contains("/=") ||
+					 ctx.getText().contains("&=") ||
+					 ctx.getText().contains("|=") ||
+					 ctx.getText().contains("^=") ||
+					 ctx.getText().contains("%=") ||
+					 ctx.getText().contains("<<=") ||
+					 ctx.getText().contains(">>=") ||
+					 ctx.getText().contains(">>>=") || 
+					 ctx.getText().contains("++") || 
+					 ctx.getText().contains("--")/* end of assignment operator condition */) ){
+					
+					String var = ((ExpressionContext)ctx).expression(0).getText(); //not working
+					var = var.split("[^\\w']+")[0];
+					String op = ((StatementExpressionContext)ctx.getParent()).expression().getText().split(var)[1].substring(0, 1); // not working
+					op = "=";
+				
+					BuildChecker.reportCustomError(ErrorRepository.MISSING_TOKEN, "", ctx.getStart().getLine(), op , var);
+						
+				}
 			}
 		}
 	}
