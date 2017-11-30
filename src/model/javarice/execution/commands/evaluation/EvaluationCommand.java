@@ -18,6 +18,7 @@ import model.javarice.generatedexp.JavaRiceLexer;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceArray;
 import model.javarice.semantics.representations.JavaRiceFunction;
+import model.javarice.semantics.representations.JavaRiceFunction.FunctionType;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.searching.VariableSearcher;
@@ -99,6 +100,17 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		this.modifiedExpression = this.parentExpressionContext.getText();
 		
+		// evaluate function calls first
+		for(int i = 0; i < this.parentExpressionContext.expression().size(); i ++) {
+			ExpressionContext exprCtx = (ExpressionContext) this.parentExpressionContext.expression(i);
+			if(isFunctionCall(exprCtx)) {
+				EvaluationCommand evalCommand = new EvaluationCommand(exprCtx);
+				evalCommand.execute();
+				
+				this.modifiedExpression = this.modifiedExpression.replace(exprCtx.getText(), evalCommand.modifiedExpression);
+			}
+		}
+		
 		ParseTreeWalker treeWalker = new ParseTreeWalker();
 		treeWalker.walk(this, this.parentExpressionContext);
 		
@@ -128,7 +140,27 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 				}
 				
 				this.isNumeric = true;
-			} else{
+			} 
+			
+			else if(this.parentExpressionContext.expression().size() != 0 &&
+					!isArray(this.parentExpressionContext) && !isFunctionCall(this.parentExpressionContext)) {
+				for (ExpressionContext exprCtx : this.parentExpressionContext.expression()) {
+					if(!isArrayVariable(exprCtx)) {
+						EvaluationCommand evaluationCommand = new EvaluationCommand(exprCtx);
+						evaluationCommand.execute();
+						
+						if(evaluationCommand.isNumericResult()) {
+							if(evaluationCommand.getResult() != null)
+								this.strResult += evaluationCommand.getResult().toEngineeringString();
+						} else
+							if(evaluationCommand.getStringResult() != null)
+								this.strResult += evaluationCommand.getStringResult();
+					}
+				}
+			}
+			
+			
+			else{
 				this.strResult = StringUtils.removeQuotes(this.modifiedExpression);
 			}
 		} 
@@ -139,15 +171,6 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 				this.modifiedExpression = this.modifiedExpression.replaceAll("!", "not");
 				this.modifiedExpression = this.modifiedExpression.replaceAll("not=", "!=");
 				
-			}
-
-			if(this.modifiedExpression.contains("and")) {
-				this.modifiedExpression = this.modifiedExpression.replaceAll("and", "&&");
-
-			}
-
-			if(this.modifiedExpression.contains("or")) {
-				this.modifiedExpression = this.modifiedExpression.replaceAll("or", "||");
 			}
 			
 //			Console.log(LogType.DEBUG, TAG + "Modified Expression is now = " + this.modifiedExpression);
@@ -174,6 +197,16 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	
 	public static boolean isVariableOrConstant(ExpressionContext expressionContext) {
 		return expressionContext.primary() != null && expressionContext.primary().Identifier() != null;
+	}
+	
+	public static boolean isArrayVariable(ExpressionContext expressionContext) {
+		JavaRiceValue value = VariableSearcher.searchVariable(expressionContext.getText());
+		
+		if(value != null) {
+			return value.getPrimitiveType() == PrimitiveType.ARRAY && !isArray(expressionContext);
+		}
+		
+		return false;
 	}
 	
 	public static boolean isArray(ExpressionContext expressionContext) {
@@ -220,10 +253,14 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		}
 		
 		javaRiceFunction.execute();
-		Console.log(LogType.DEBUG, TAG + "Before modified expression function call: " + this.modifiedExpression);
-		this.modifiedExpression = this.modifiedExpression.replace(expressionContext.getText(), 
-				javaRiceFunction.getReturnValue().getValue().toString());
-		Console.log(LogType.DEBUG, TAG + "After modified expression function call: " + this.modifiedExpression);
+		
+		if(javaRiceFunction.getReturnType() == FunctionType.STRING_TYPE) {
+			this.modifiedExpression = this.modifiedExpression.replace(expressionContext.getText(), 
+					"\"" + javaRiceFunction.getReturnValue().getValue().toString() + "\"");
+		} else {
+			this.modifiedExpression = this.modifiedExpression.replace(expressionContext.getText(), 
+					javaRiceFunction.getReturnValue().getValue().toString());
+		}
 		
 	}
 	

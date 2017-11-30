@@ -40,6 +40,8 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 	private boolean arrayAccess = false;
 	private boolean isLN = false;
 	
+	private boolean isEvaluatedExpr = false;
+	
 	private List<Object> printExpr = new ArrayList<>();
 	
 	public PrintCommand(StatementContext sCtx) {
@@ -75,192 +77,19 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 	public void enterEveryRule(ParserRuleContext context) {
 		// TODO Auto-generated method stub
 		
-//		if(context instanceof ExpressionContext && !evaluatedExpr) {
-//			ExpressionContext exprCtx = (ExpressionContext) context;
-//			
-//			EvaluationCommand evalComm = new EvaluationCommand(exprCtx);
-//			evalComm.execute();
-//			
-//			if(evalComm.isNumericResult()) {
-//				this.strToPrint += evalComm.getResult().toEngineeringString();
-//			} else {
-//				this.strToPrint += evalComm.getStringResult();
-//			}
-//			
-//			this.evaluatedExpr = true;
-//		}
-		
-		if(context instanceof LiteralContext) {
-			
-			Console.log(LogType.DEBUG, TAG + "Literal detected!");
-			
-			LiteralContext literalContext = (LiteralContext) context;
-			
-			if(literalContext.StringLiteral() != null) {
-				String quotedString = literalContext.StringLiteral().getText();
-				
-				this.strToPrint += StringUtils.removeQuotes(quotedString);
-			}
-
-			else if (literalContext.IntegerLiteral() != null) {
-				ParserRuleContext prCtx = literalContext;
-
-				// if it belongs to complex
-				while(!(prCtx instanceof StatementContext)) {
-					prCtx = prCtx.getParent();
-					
-					// if function
-					if ( (prCtx.getText().startsWith("(") && prCtx.getText().endsWith(")") ) ||
-                            functionPattern.matcher(prCtx.getText()).matches()) {
-						break;
-					}
-					
-					// if inside array
-					if ( arrayPattern.matcher(prCtx.getText()).matches()) {
-						break;
-					}
-				}
-
-				// if it does not belong to complex
-				if(prCtx instanceof StatementContext) {
-					int value = Integer.parseInt(literalContext.IntegerLiteral().getText());
-					this.strToPrint += value;
-
-				}
-			}
-
-			else if (literalContext.FloatingPointLiteral() != null) {
-				float value = Float.parseFloat(literalContext.FloatingPointLiteral().getText());
-				this.strToPrint += value;
-			}
-
-			else if (literalContext.BooleanLiteral() != null) {
-				this.strToPrint += literalContext.BooleanLiteral().getText();
-			}
-
-			else if (literalContext.CharacterLiteral() != null) {
-				this.strToPrint += literalContext.CharacterLiteral().getText();
-			}
-		}
-
-		else if(context instanceof ExpressionContext) {
-			
-			Console.log(LogType.DEBUG, TAG + "Expression detected!");
-			
-			try {
-                Integer.parseInt(context.getText());
-                return;
-            }catch (NumberFormatException ex) {
-
-            }
-			
+		if(context instanceof ExpressionContext && !isEvaluatedExpr) {
 			ExpressionContext exprCtx = (ExpressionContext) context;
 			
-			ParserRuleContext prCtx = context;
-
-			while(!(prCtx instanceof StatementContext)) {
-				prCtx = prCtx.getParent();
-				
-				// if inside function
-				if(prCtx.getText().endsWith("]") || functionPattern.matcher(prCtx.getText()).matches()) {
-					break;
-				}
-				// if inside array
-				if ( arrayPattern.matcher(prCtx.getText()).matches()) {
-					break;
-				}
-			}
-
-			if(prCtx instanceof StatementContext && 
-					!context.getText().contains(("\"")) &&
-					functionPattern.matcher(context.getText()).matches()) {
-				try {
-					EvaluationCommand evalComm = new EvaluationCommand(exprCtx);
-					evalComm.execute();
-
-					this.strToPrint += evalComm.getStringResult();
-				} catch(ClassCastException | Expression.ExpressionException ex) {
-					
-				}
-			}
-		}
-		
-		else if(context instanceof PrimaryContext) {
-			PrimaryContext primaryContext = (PrimaryContext) context;
+			EvaluationCommand evalComm = new EvaluationCommand(exprCtx);
+			evalComm.execute();
 			
-			Console.log(LogType.DEBUG, TAG + "Primary detected!");
-			
-			if(primaryContext.expression() != null && !primaryContext.getText().contains("\"")) {				
-
-				ParserRuleContext prCtx = primaryContext;
-
-				// if it belongs to complex
-				while(!(prCtx instanceof StatementContext) || prCtx.getText().equals(context.getText())) {
-
-					if((prCtx.getText().startsWith("(") && prCtx.getText().endsWith(")")) &&
-							!(prCtx.getText().equals(context.getText())))
-						break;
-
-					prCtx = prCtx.getParent();
-				}	
-
-				if(prCtx instanceof StatementContext || prCtx.getParent() instanceof StatementContext) {
-					ExpressionContext expCtx = primaryContext.expression();
-
-					this.complexExpr = true;
-					Console.log(LogType.DEBUG, TAG + "Complex expression detected: " + expCtx.getText());
-
-					EvaluationCommand evalComm = new EvaluationCommand(expCtx);
-					evalComm.execute();
-					
-					Console.log(LogType.DEBUG, TAG + evalComm.getResult().toEngineeringString());
-
-					this.strToPrint += evalComm.getResult().toEngineeringString();
-				}
-				
+			if(evalComm.isNumericResult()) {
+				this.strToPrint += evalComm.getResult().toEngineeringString();
+			} else {
+				this.strToPrint += evalComm.getStringResult();
 			}
 			
-			else if(primaryContext.Identifier() != null && !this.complexExpr) {
-				
-				ParserRuleContext prCtx = primaryContext;
-				
-				// if it belongs to complex
-				while(!(prCtx instanceof StatementContext) || prCtx.getText().equals(context.getText())) {
-					
-					Console.log(LogType.DEBUG, TAG + " PARENT MOTHERFUCKER " + prCtx.getText());
-
-					if((prCtx.getText().startsWith("(") && prCtx.getText().endsWith(")")) &&
-							!(prCtx.getText().equals(context.getText())))
-						break;
-
-					prCtx = prCtx.getParent();
-				}
-				
-				if(prCtx instanceof StatementContext) {
-					String identifier = primaryContext.getText();
-					
-					JavaRiceValue value = JavaRiceValueSearcher.searchJavaRiceValue(identifier);
-					
-					if(value != null) {
-						
-						Console.log(LogType.DEBUG, TAG + " IDENTIFIER DETECTED " + identifier);
-						
-						if(value.getPrimitiveType() == PrimitiveType.ARRAY) {
-							this.arrayAccess = true;
-							this.evaluateArrayPrint(value, primaryContext);
-						} else if(this.arrayAccess == false) {
-							this.strToPrint += value.getValue();
-							printExpr.add(value.getValue());
-						}
-					}
-				}
-				
-			}
-
-			else {
-				this.complexExpr = false;
-			}
-			
+			this.isEvaluatedExpr = true;
 		}
 		
 	}
