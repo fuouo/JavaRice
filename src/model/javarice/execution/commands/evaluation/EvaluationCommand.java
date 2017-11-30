@@ -38,7 +38,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private BigDecimal resultValue;
 
 	private boolean isNumeric;
-	private String strResult;
+	private String strResult = "";
 	private String prevArrName = "";
 	
 	public EvaluationCommand(ExpressionContext expressionContext) {
@@ -309,14 +309,22 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
 		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
-		
-		this.modifiedExpression = this.modifiedExpression.replaceFirst(
-				expressionContext.expression(0).primary().getText() + "\\[" 
-						+ arrayIndexExpressionContext.getText() + "\\]", 
-						arrayJavaRiceValue.getValue().toString());
 
 		if(arrayJavaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
-			this.modifiedExpression = "\"" + modifiedExpression + "\"";
+			this.modifiedExpression = this.modifiedExpression.replaceFirst(
+					expressionContext.expression(0).primary().getText() + "\\[" 
+							+ arrayIndexExpressionContext.getText() + "\\]", 
+							"\"" + arrayJavaRiceValue.getValue().toString() + "\"");
+		} else if(arrayJavaRiceValue.getPrimitiveType() == PrimitiveType.CHAR) {
+			this.modifiedExpression = this.modifiedExpression.replaceFirst(
+					expressionContext.expression(0).primary().getText() + "\\[" 
+							+ arrayIndexExpressionContext.getText() + "\\]", 
+							"'" + arrayJavaRiceValue.getValue().toString() + "'");
+		} else {
+			this.modifiedExpression = this.modifiedExpression.replaceFirst(
+					expressionContext.expression(0).primary().getText() + "\\[" 
+							+ arrayIndexExpressionContext.getText() + "\\]", 
+							arrayJavaRiceValue.getValue().toString());
 		}
 
 		Console.log(LogType.DEBUG, TAG + "Evaluated: " + this.modifiedExpression);

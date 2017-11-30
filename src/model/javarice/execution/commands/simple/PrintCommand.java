@@ -70,7 +70,7 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 		
 		// rest statement to print
 		this.strToPrint = "";
-//		this.evaluatedExpr = false;
+		this.isEvaluatedExpr = false;
 	}
 
 	@Override
