@@ -391,11 +391,13 @@ statement
     ;
 
 catchClause
-    :   'catch' '(' variableModifier* catchType Identifier ')' block
+    :   'catch' '(' catchType ')' block
     ;
 
 catchType
-    :   qualifiedName ('|' qualifiedName)*
+    :   ARRAY_OUT_OF_BOUNDS
+    |	ARITHMETIC_EXPRESSION
+    |	NEGATIVE_ARRAY_SIZE
     ;
 
 finallyBlock
@@ -584,6 +586,8 @@ scan
 // §3.9 Keywords
 
 ABSTRACT      : 'abstract';
+ARITHMETIC_EXPRESSION : 'ARITHMETIC_EXPRESSION';
+ARRAY_OUT_OF_BOUNDS : 'ARRAY_OUT_OF_BOUNDS';
 ASSERT        : 'assert';
 BOOLEAN       : '_boolean';
 BREAK         : 'break';
@@ -614,6 +618,7 @@ INTERFACE     : 'interface';
 LONG          : '_long';
 MAIN		  : 'main';
 NATIVE        : 'native';
+NEGATIVE_ARRAY_SIZE : 'NEGATIVE_ARRAY_SIZE';
 NEW           : 'new';
 PACKAGE       : 'package';
 PRIVATE       : 'private';
