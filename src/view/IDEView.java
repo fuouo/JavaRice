@@ -37,13 +37,14 @@ import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
 import org.fife.ui.rsyntaxtextarea.folding.FoldParserManager;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import controller.Console;
-import controller.ControllerInterface;
 import view.consolepanels.ErrorPanel;
 import view.consolepanels.MessagePanel;
 import view.consolepanels.PrintPanel;
 import view.factory.ConsolePanelFactory;
 import view.factory.ConsoleType;
+import controller.Console;
+import controller.ControllerInterface;
+import controller.thread.scopeTable.AutoCompleteScopeAnalyzer;
 
 public class IDEView extends ViewInterface{
 
@@ -57,6 +58,7 @@ public class IDEView extends ViewInterface{
 	private JFrame myView;
 
 	private ControllerInterface controller;
+	private AutoCompleteScopeAnalyzer scopeAnalyzer;
 	
 	//INSERT AFTER THIS PART GLOBAL UI ELEMENTS
 	JTextPane codeTextPane, lineNumberPane;
@@ -324,11 +326,14 @@ public class IDEView extends ViewInterface{
       
       //Get Code from Text Area
       String code = codeTextArea.getText();
-      
       //Remove Comments in analyzation
       code = removeSingleComments(code);
       code = removeMultipleComments (code);
-      	
+
+      scopeAnalyzer = new AutoCompleteScopeAnalyzer();
+      scopeAnalyzer.addVariableCompletion(provider, code, codeTextArea.getCaretLineNumber());
+      
+      
       code = code.replace("\n", " ");	//replace new line
       code = code.replace("\t", " "); //replace tabs
       String[] token = code.split(" ");
@@ -363,7 +368,7 @@ public class IDEView extends ViewInterface{
     				  tok = removeExtraTokens(tok);
     				  provider.addCompletion(new ShorthandCompletion(provider, tok, tok, tok));
     			  }
-    			  else
+    			  else if(token[i + 1].contains("(") && (token[i+1].charAt(token[i+1].length()-1)==')'))
     			  	  provider.addCompletion(new ShorthandCompletion(provider, token[i+1], token[i+1], token[i+1]));
     		  }
     	  }
@@ -425,7 +430,7 @@ public class IDEView extends ViewInterface{
 	   }
 	   String newCode = "";
 	   for (int i = 0; i < token.length; i++) {
-		   newCode += token[i];
+		   newCode += token[i] + "\n";
 	   }
 	   return newCode;
    }
