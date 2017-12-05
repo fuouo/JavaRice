@@ -24,7 +24,6 @@ import controller.thread.IDEThread;
 
 public class IDEController extends ControllerInterface{
 	
-	public IDEThread buildThread;
 	public boolean done = true;
 	
 	public IDEController(ModelInterface model, ViewInterface view) {
@@ -56,10 +55,6 @@ public class IDEController extends ControllerInterface{
 	
 	@Override
 	public synchronized void runCode(String code){
-				
-				//buildThread.setIsBuilding(true);
-				System.out.println("THREAD STOP");
-				// reset components
 				this.performResetComponents();
 				
 				ParserHandler.getInstance().parseText(code);
@@ -72,14 +67,6 @@ public class IDEController extends ControllerInterface{
 				
 	}
 
-	
-	public void setDone(boolean b)
-	{
-		done = b;
-		System.out.println("Controller Set to " + done);
-		
-	}
-	
 	@Override
 	public ArrayList<Object> getErrors(String code) {
 		JavaRiceCompiler cmp = (JavaRiceCompiler) model;
@@ -131,38 +118,5 @@ public class IDEController extends ControllerInterface{
 		LocalVarTracker.reset();
 	}
 	
-	public void build()
-	{
-		/*while(!done)
-		{
-			
-			try {
-				buildThread.wait();
-				System.out.println("THREAD WAITING");
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}*/
-		// reset components
-		this.performResetComponents();
-		String code = ((IDEView) views.get(views.size() - 1)).getCode();
-		ParserHandler.getInstance().parseText(code);
-	}
-
-	public void setBuildThread(IDEThread buildThread) {
-		this.buildThread = buildThread;
-	}
-	
-	public String getCode()
-	{
-		return((IDEView) views.get(views.size() - 1)).getCode();
-	}
-
-	public synchronized void newThread()
-	{
-		System.out.println("Restarting thread");
-		buildThread = new IDEThread(this);
-	}
 	
 }

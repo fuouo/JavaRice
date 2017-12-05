@@ -158,6 +158,7 @@ public class IDEView extends ViewInterface{
 	        	catch(Exception ex){
 	        		
 	        	}
+	        	System.out.println("LINE NUMBER IS" + codeTextArea.getCaretLineNumber());
 	        	
 	        	////AUTO COMPLETION
 	        	
@@ -323,6 +324,11 @@ public class IDEView extends ViewInterface{
       
       //Get Code from Text Area
       String code = codeTextArea.getText();
+      
+      //Remove Comments in analyzation
+      code = removeSingleComments(code);
+      code = removeMultipleComments (code);
+      	
       code = code.replace("\n", " ");	//replace new line
       code = code.replace("\t", " "); //replace tabs
       String[] token = code.split(" ");
@@ -341,7 +347,6 @@ public class IDEView extends ViewInterface{
     		token[i].equals("_String")){
     		  if( i + 1 < token.length)
     		  {
-    			  System.out.println(token[i+1]+",");
     			  token[i+1] = token[i+1].replace("{", "");
     			  
     			  //If function with Parameters
@@ -353,23 +358,9 @@ public class IDEView extends ViewInterface{
     				  {
     					  if( o + 2 < token.length)
     						  tok += " " + token[o+2];
-    					  System.out.println(tok);
     					  o++;
     				  }
-    				  
-    				  //remove primitive type in function calls
-    				  tok = tok.replace("_int", "");
-    				  tok = tok.replace("_boolean", "");
-    				  tok = tok.replace("_char", "");
-    				  tok = tok.replace("_String", "");
-    				  tok = tok.replace("_double", "");
-    				  tok = tok.replace("_float", "");
-    				  tok = tok.replace("_short", "");
-    				  tok = tok.replace("_long", "");
-    				  tok = tok.replace("{", "");
-    				  tok = tok.replace(" ", "");
-    				  
-    				  
+    				  tok = removeExtraTokens(tok);
     				  provider.addCompletion(new ShorthandCompletion(provider, tok, tok, tok));
     			  }
     			  else
@@ -403,6 +394,57 @@ public class IDEView extends ViewInterface{
 
       return provider;
 
+   }
+   
+   private String removeExtraTokens(String tok)
+   {
+		  //remove primitive type in function calls
+		  tok = tok.replace("_int", "");
+		  tok = tok.replace("_boolean", "");
+		  tok = tok.replace("_char", "");
+		  tok = tok.replace("_String", "");
+		  tok = tok.replace("_double", "");
+		  tok = tok.replace("_float", "");
+		  tok = tok.replace("_short", "");
+		  tok = tok.replace("_long", "");
+		  tok = tok.replace("{", "");
+		  tok = tok.replace(" ", "");
+	   return tok;
+   }
+   
+   private String removeSingleComments(String code)
+   {
+	   String[] token = code.split("\n");
+	   String [] subtoken;
+	   for (int i = 0; i < token.length; i++) {
+		   if(token[i].contains("//"))
+		   {
+			   subtoken = token[i].split("//");
+			   token[i] = subtoken[0];
+		   }
+	   }
+	   String newCode = "";
+	   for (int i = 0; i < token.length; i++) {
+		   newCode += token[i];
+	   }
+	   return newCode;
+   }
+   
+   private String removeMultipleComments(String code)
+   {
+	   int start = 0;
+	   int end = 0;
+	   String comment = "";
+	   
+	   while(code.contains("/*"))
+	   {
+		   start = code.indexOf("/*");
+		   end = code.indexOf("*/");
+		   comment = code.substring(start, end + 2);
+		   System.out.println("Replacing : " + comment);
+		   code = code.replace(comment, "");
+	   }
+	   return code;
    }
    
    public String getCode()
