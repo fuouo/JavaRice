@@ -13,7 +13,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import controller.Console;
 import controller.Console.LogType;
 import model.javarice.builder.ParserHandler;
+import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 import model.javarice.generatedexp.JavaRiceLexer;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceArray;
@@ -22,6 +24,7 @@ import model.javarice.semantics.representations.JavaRiceFunction.FunctionType;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.searching.VariableSearcher;
+import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.Expression;
@@ -176,9 +179,19 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 //			Console.log(LogType.DEBUG, TAG + "Modified Expression is now = " + this.modifiedExpression);
 			
 			Expression evalExpression = new Expression(this.modifiedExpression);
-			this.resultValue = evalExpression.eval();
 			
-			this.strResult = this.resultValue.toEngineeringString();
+			try {
+				this.resultValue = evalExpression.eval();
+				this.strResult = this.resultValue.toEngineeringString();
+			} catch(Expression.ExpressionException e) {
+				this.resultValue = new BigDecimal(0);
+				this.strResult = "";
+			} catch(ArithmeticException e) {
+				ExecutionManager.getInstance().setCurrCatchType(CatchType.ARITHMETIC_EXPRESSION);
+				
+				this.resultValue = new BigDecimal(0);
+				this.strResult = "";
+			}
 		}
 		
 	}
@@ -313,8 +326,12 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		evaluationCommand.execute();
 		
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
-		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue(), expressionContext);
+		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
 
+		if(arrayJavaRiceValue == null) {
+			return;
+		}
+		
 		if(arrayJavaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
 			this.modifiedExpression = this.modifiedExpression.replaceFirst(
 					expressionContext.expression(0).primary().getText() + "\\[" 

@@ -20,6 +20,7 @@ import model.javarice.execution.commands.controlled.IConditionalCommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.execution.commands.evaluation.AssignmentCommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand;
 import model.javarice.execution.commands.simple.FunctionCallCommand;
 import model.javarice.execution.commands.simple.IncDecCommand;
 import model.javarice.generatedexp.JavaRiceLexer;
@@ -221,6 +222,14 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			IControlledCommand controlledCommand = 
 					(IControlledCommand) statementControl.getActiveControlledCommand();
 			controlledCommand.addCommand(command);
+		} else if(statementControl.isAttemptCommand()) {
+			IAttemptCommand attemptCommand = (IAttemptCommand) statementControl.getActiveControlledCommand();
+			
+			if(statementControl.isInTryBlock()) {
+				attemptCommand.addTryCommand(command);
+			} else {
+				attemptCommand.addCatchCommand(statementControl.getCurrCatchType(), command);
+			}
 		}
 		else {
 			ExecutionManager.getInstance().addCommand(command);

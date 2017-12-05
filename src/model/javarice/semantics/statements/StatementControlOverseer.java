@@ -9,12 +9,17 @@ import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.controlled.IConditionalCommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.execution.commands.controlled.IControlledCommand.ControlTypeEnum;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 
 public class StatementControlOverseer {
 	
 	private final String TAG = this.getClass().getSimpleName() + ": ";
 	
 	private static StatementControlOverseer INSTANCE = null;
+	
+	private boolean isInTry = false;
+	private CatchType currCatchType = null;
 	
 	public static StatementControlOverseer getInstance() {
 		return INSTANCE;
@@ -39,6 +44,8 @@ public class StatementControlOverseer {
 	public static void reset() {
 		INSTANCE.procedureCallStack.clear();
 		INSTANCE.activeControlledCommand = null;
+		INSTANCE.isInTry = false;
+		INSTANCE.currCatchType = null;
 	}
 	
 	public void openConditionalCommand(IConditionalCommand command) {
@@ -62,12 +69,35 @@ public class StatementControlOverseer {
 		this.activeControlledCommand = command;
 	}
 	
+	public void openAttemptCommand(IAttemptCommand command) {
+		this.procedureCallStack.push(command);
+		this.activeControlledCommand = command;
+		
+		this.isInTry = true;
+	}
+	
 	public boolean isInPositiveRule() {
 		return this.isInPositive;
 	}
 	
+	public boolean isInTryBlock() {
+		return this.isInTry;
+	}
+	
+	public void reportExitTryBlock() {
+		this.isInTry = false;
+	}
+	
 	public void reportExitPositiveRule() {
 		this.isInPositive = false;
+	}
+	
+	public void setCurrentCatchClause(CatchType catchType) {
+		this.currCatchType = catchType;
+	}
+	
+	public CatchType getCurrCatchType() {
+		return currCatchType;
 	}
 	
 	/*
@@ -137,11 +167,19 @@ public class StatementControlOverseer {
 					}
 				
 				
-			}
+				}
 					
 				IControlledCommand controlledCommand = (IControlledCommand) parentCommand;
 				controlledCommand.addCommand(childCommand);
 
+			} else if(parentCommand instanceof IAttemptCommand) {
+				IAttemptCommand attemptCommand = (IAttemptCommand) parentCommand;
+				
+				if(this.isInTry) {
+					attemptCommand.addTryCommand(childCommand);
+				} else {
+					attemptCommand.addCatchCommand(this.currCatchType, childCommand);
+				}
 			}
 		
 		/*	if(parentCommand instanceof IControlledCommand) {
@@ -172,6 +210,10 @@ public class StatementControlOverseer {
 	
 	public boolean isInControlledCommand() {
 		return (this.activeControlledCommand!= null && this.activeControlledCommand instanceof IControlledCommand);
+	}
+	
+	public boolean isAttemptCommand() {
+		return (this.activeControlledCommand!= null && this.activeControlledCommand instanceof IAttemptCommand);
 	}
 	
 	public ICommand getActiveControlledCommand() {

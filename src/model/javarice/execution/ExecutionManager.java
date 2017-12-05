@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.execution.adders.FunctionExecutionAdder;
 import model.javarice.execution.adders.IExecutionAdder;
 import model.javarice.execution.adders.MainExecutionAdder;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 import model.javarice.semantics.representations.JavaRiceFunction;
 
 public class ExecutionManager {
@@ -26,6 +30,9 @@ public class ExecutionManager {
 	private IExecutionAdder activeExecutionAdder;
 	private MainExecutionAdder mainExecutionAdder;
 	
+	private CatchType currCatchType = null;
+	private IAttemptCommand currentTryCommand = null;
+	
 	private ExecutionManager() {
 		this.mainExecutionAdder = new MainExecutionAdder(this.executionList);
 		this.activeExecutionAdder = this.mainExecutionAdder;
@@ -43,6 +50,28 @@ public class ExecutionManager {
 		INSTANCE.foundEntryPoint = false;
 		INSTANCE.entryClassName = null;
 		INSTANCE.clearAllActions();
+	}
+	
+	public CatchType getCurrCatchType() {
+		return currCatchType;
+	}
+	
+	public void setCurrCatchType(CatchType currCatchType) {
+		
+		if(this.currentTryCommand != null) {
+			this.currCatchType = currCatchType;
+		} else {
+			if(currCatchType == CatchType.ARRAY_OUT_OF_BOUNDS) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS, "");
+			} else if(currCatchType == CatchType.NEGATIVE_ARRAY_SIZE) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, "");
+			} else if(currCatchType == CatchType.ARITHMETIC_EXPRESSION) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARITHMETIC_EXPRESSION, "");
+			}
+		}
+		
+		this.clearAllActions();
+		
 	}
 	
 	/*
@@ -153,6 +182,14 @@ public class ExecutionManager {
 	 */
 	public ExecutionMonitor getExecutionMonitor() {
 		return this.executionMonitor;
+	}
+	
+	public IAttemptCommand getCurrentTryCommand() {
+		return currentTryCommand;
+	}
+	
+	public void setCurrentTryCommand(IAttemptCommand currentTryCommand) {
+		this.currentTryCommand = currentTryCommand;
 	}
 	
 }
