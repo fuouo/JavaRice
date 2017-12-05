@@ -3,6 +3,7 @@ package model.javarice.execution;
 import java.util.ArrayList;
 
 import controller.Console;
+import controller.IDEController;
 import controller.Console.LogType;
 import model.javarice.execution.adders.FunctionExecutionAdder;
 import model.javarice.execution.adders.IExecutionAdder;
@@ -21,22 +22,28 @@ public class ExecutionManager {
 	private String entryClassName = null;
 	
 	private ExecutionThread executionThread;
+
 	private ExecutionMonitor executionMonitor;
 	
 	private IExecutionAdder activeExecutionAdder;
 	private MainExecutionAdder mainExecutionAdder;
 	
+	public static IDEController controller;
+	
 	private ExecutionManager() {
 		this.mainExecutionAdder = new MainExecutionAdder(this.executionList);
 		this.activeExecutionAdder = this.mainExecutionAdder;
+		
 	}
 	
 	public static ExecutionManager getInstance() {
 		return INSTANCE;
 	}
 	
-	public static void initialize() {
+	public static void initialize(IDEController c) {
 		INSTANCE = new ExecutionManager();
+		System.out.println("INITIALIZE");
+		controller = c;
 	}
 	
 	public static void reset() {
@@ -130,6 +137,7 @@ public class ExecutionManager {
 	 * At this point, the execution thread should continue to do other actions.
 	 */
 	public void resumeExecution() {
+		System.out.println("Resumed Execution;");
 		this.executionMonitor.releaseExecutionFlag();
 	}
 	
@@ -140,7 +148,7 @@ public class ExecutionManager {
 	 */
 	public void executeAllActions() {
 		this.executionMonitor = new ExecutionMonitor();
-		this.executionThread = new ExecutionThread(this.executionList, this.executionMonitor);
+		this.executionThread = new ExecutionThread(this.executionList, this.executionMonitor, controller);
 		this.executionThread.start();
 	}
 	
@@ -153,6 +161,11 @@ public class ExecutionManager {
 	 */
 	public ExecutionMonitor getExecutionMonitor() {
 		return this.executionMonitor;
+	}
+	
+
+	public ExecutionThread getExecutionThread() {
+		return executionThread;
 	}
 	
 }

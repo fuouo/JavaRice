@@ -2,16 +2,19 @@ package model.javarice.execution;
 
 import java.util.ArrayList;
 
+import controller.IDEController;
 import model.javarice.execution.commands.ICommand;
 
 public class ExecutionThread extends Thread {
 	
 	private ArrayList<ICommand> executionList = new ArrayList<>();
 	private ExecutionMonitor executionMonitor;
+	IDEController controller;
 	
-	public ExecutionThread(ArrayList<ICommand> executionList, ExecutionMonitor executionMonitor) {
+	public ExecutionThread(ArrayList<ICommand> executionList, ExecutionMonitor executionMonitor, IDEController controller) {
 		this.executionList = executionList;
 		this.executionMonitor = executionMonitor;
+		this.controller = controller;
 	}
 	
 	/*
@@ -26,14 +29,17 @@ public class ExecutionThread extends Thread {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		try {
 			for (ICommand command : this.executionList) {
-				this.executionMonitor.tryExecution();
+				try {
+					this.executionMonitor.tryExecution();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				command.execute();
 			}
-		} catch (InterruptedException e) {
-			System.err.println("Monitor block interrupted! " + e.getMessage());
-		}
+			
+			//controller.newThread();
 	}
 
 }

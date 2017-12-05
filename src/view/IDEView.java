@@ -132,7 +132,7 @@ public class IDEView extends ViewInterface{
 		scheme.getStyle(Token.RESERVED_WORD).foreground = scheme.getStyle(Token.RESERVED_WORD).foreground = scheme.getStyle(Token.RESERVED_WORD).foreground;
 		// === SyntaxHighlighting === //
 		
-		// === Code Templates === //    
+		/*// === Code Templates === //    
 	    CompletionProvider provider = createCompletionProvider();
 	    ((CompletionProviderBase) provider).setAutoActivationRules(true, null);
 	    AutoCompletion ac = new AutoCompletion(provider);
@@ -140,7 +140,7 @@ public class IDEView extends ViewInterface{
 	    ac.setAutoCompleteSingleChoices(false); //single choices are not automatically inputted
 	    ac.setAutoActivationDelay(0); //no delay
 
-	    ac.install(codeTextArea);
+	    ac.install(codeTextArea);*/
 	  
 	    
 	    codeTextArea.addKeyListener(new KeyAdapter() {
@@ -159,6 +159,20 @@ public class IDEView extends ViewInterface{
 	        		
 	        	}
 	        	
+	        	////AUTO COMPLETION
+	        	
+	        	// === Code Templates === //    
+	    	    CompletionProvider provider = createCompletionProvider();
+	    	    ((CompletionProviderBase) provider).setAutoActivationRules(true, null);
+	    	    AutoCompletion ac = new AutoCompletion(provider);
+	    	    //ac.setAutoActivationEnabled(true); //removes the need to input ctrl+space for autocomplete
+	    	    ac.setAutoCompleteSingleChoices(false); //single choices are not automatically inputted
+	    	    ac.setAutoActivationDelay(0); //no delay
+
+	    	    ac.install(codeTextArea);
+	        	
+	        	
+	        	
 	        	/*
 	        	if(e.getKeyChar() == '(' || e.getKeyChar() == '"' || e.getKeyChar() == '\''){
 	        		String ch = e.getKeyChar() + "";
@@ -175,10 +189,12 @@ public class IDEView extends ViewInterface{
 	        		//TODO: This is for debug. Please remove this after :) 
 	        		ac.doCompletion();
 	        	}
+	        	
+	        	ac.setTriggerKey(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, InputEvent.CTRL_DOWN_MASK));
 	        }
 	     });
 	    
-	    ac.setTriggerKey(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, InputEvent.CTRL_DOWN_MASK));
+	    //ac.setTriggerKey(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, InputEvent.CTRL_DOWN_MASK));
 	    
 	    
 	    // === END of Code Templates === //
@@ -305,6 +321,65 @@ public class IDEView extends ViewInterface{
       // Add completions for all Java keywords. A BasicCompletion is just
       // a straightforward word completion.
       
+      //Get Code from Text Area
+      String code = codeTextArea.getText();
+      code = code.replace("\n", " ");	//replace new line
+      code = code.replace("\t", " "); //replace tabs
+      String[] token = code.split(" ");
+      
+      for(int i = 0; i < token.length; i++)
+      {
+    	  if(token[i].equals("_int") || 
+    		token[i].equals("_void") ||
+    		token[i].equals("_char") ||
+    		token[i].equals("_short") ||
+    		token[i].equals("_long") ||
+    		token[i].equals("_boolean") ||
+    		token[i].equals("_byte") ||
+    		token[i].equals("_float") ||
+    		token[i].equals("_double") ||
+    		token[i].equals("_String")){
+    		  if( i + 1 < token.length)
+    		  {
+    			  System.out.println(token[i+1]+",");
+    			  token[i+1] = token[i+1].replace("{", "");
+    			  
+    			  //If function with Parameters
+    			  if(token[i + 1].contains("(") && !(token[i+1].charAt(token[i+1].length()-1)==')'))
+    			  {
+    				  int o = i;
+    				  String tok = token[i+1];
+    				  while(!tok.contains(")"))
+    				  {
+    					  if( o + 2 < token.length)
+    						  tok += " " + token[o+2];
+    					  System.out.println(tok);
+    					  o++;
+    				  }
+    				  
+    				  //remove primitive type in function calls
+    				  tok = tok.replace("_int", "");
+    				  tok = tok.replace("_boolean", "");
+    				  tok = tok.replace("_char", "");
+    				  tok = tok.replace("_String", "");
+    				  tok = tok.replace("_double", "");
+    				  tok = tok.replace("_float", "");
+    				  tok = tok.replace("_short", "");
+    				  tok = tok.replace("_long", "");
+    				  tok = tok.replace("{", "");
+    				  tok = tok.replace(" ", "");
+    				  
+    				  
+    				  provider.addCompletion(new ShorthandCompletion(provider, tok, tok, tok));
+    			  }
+    			  else
+    			  	  provider.addCompletion(new ShorthandCompletion(provider, token[i+1], token[i+1], token[i+1]));
+    		  }
+    	  }
+      }
+      
+      
+      
       //PRIMITIVE TYPES
       provider.addCompletion(new BasicCompletion(provider, "_boolean"));
       provider.addCompletion(new BasicCompletion(provider, "_char"));
@@ -315,6 +390,7 @@ public class IDEView extends ViewInterface{
       provider.addCompletion(new BasicCompletion(provider, "_float"));
       provider.addCompletion(new BasicCompletion(provider, "_double"));
       provider.addCompletion(new BasicCompletion(provider, "_String"));
+      provider.addCompletion(new BasicCompletion(provider, "_void"));
       // ... etc ...
      
       // Add a couple of "shorthand" completions. These completions don't
@@ -327,5 +403,10 @@ public class IDEView extends ViewInterface{
 
       return provider;
 
+   }
+   
+   public String getCode()
+   {
+	   return codeTextArea.getText();
    }
 }
