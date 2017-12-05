@@ -58,6 +58,8 @@ public class ScanCommand implements ICommand {
 		// print to console
 		Console.log(LogType.PRINT, input);
 		
+		ExecutionManager.getInstance().setCurrLineNumber(exprCtx.getStart().getLine());
+		
 		// create java rice value
 		
 		// if variable

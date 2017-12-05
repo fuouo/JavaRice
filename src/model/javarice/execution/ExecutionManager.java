@@ -82,6 +82,8 @@ public class ExecutionManager {
 				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, "", this.currLineNumber);
 			} else if(currCatchType == CatchType.ARITHMETIC_EXPRESSION) {
 				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARITHMETIC_EXPRESSION, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.NUMBER_FORMAT) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NUMBER_FORMAT, "", this.currLineNumber);
 			}
 			
 

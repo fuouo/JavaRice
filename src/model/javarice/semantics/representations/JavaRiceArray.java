@@ -1,15 +1,10 @@
 package model.javarice.semantics.representations;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 import controller.Console;
 import controller.Console.LogType;
 import model.javarice.builder.BuildChecker;
 import model.javarice.builder.ErrorRepository;
-import model.javarice.execution.ExecutionManager;
-import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
-import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.utils.RecognizedKeywords;
 
 public class JavaRiceArray {
@@ -41,18 +36,16 @@ public class JavaRiceArray {
 	}
 	
 	public void initializeSize(int size) {
-		try {
-			this.javaRiceArray = new JavaRiceValue[size];
-			
-			for(int i = 0; i < this.javaRiceArray.length; i ++) {
-				this.javaRiceArray[i] = new JavaRiceValue(null, this.arrayPrimitiveType);
-			}
-			
-		} catch(NegativeArraySizeException e) {
-			this.javaRiceArray = null;
-			
-			ExecutionManager.getInstance().setCurrCatchType(CatchType.NEGATIVE_ARRAY_SIZE);
+		
+		if(size < 0) {
+			Console.log(LogType.DEBUG, "negative size array detected! " + size);
+			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, 
+					"", this.arrayIdentifier);
+			return;
 		}
+		
+		this.javaRiceArray = new JavaRiceValue[size];
+		System.out.println("JavaRiceArray initialized to size " + this.javaRiceArray.length);
 	}
 	
 	public int getSize() {
@@ -62,7 +55,8 @@ public class JavaRiceArray {
 	public void updateValueAt(JavaRiceValue javaRiceValue, int index) {
 		if(index >= this.javaRiceArray.length) {
 			Console.log(LogType.DEBUG, "array out of bounds detected! " + index);
-			ExecutionManager.getInstance().setCurrCatchType(CatchType.ARRAY_OUT_OF_BOUNDS);
+			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, 
+					"", this.arrayIdentifier);
 			return;
 		}
 		
@@ -71,8 +65,9 @@ public class JavaRiceArray {
 	
 	public JavaRiceValue getValueAt(int index) {
 		if(index >= this.javaRiceArray.length || index < 0) {
-			ExecutionManager.getInstance().setCurrCatchType(CatchType.ARRAY_OUT_OF_BOUNDS);
-			return null;
+			Console.log(LogType.ERROR, String.format(ErrorRepository.getErrorMessage(
+					ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS), this.arrayIdentifier));
+			return this.javaRiceArray[this.javaRiceArray.length - 1];
 		}
 		
 		return this.javaRiceArray[index];

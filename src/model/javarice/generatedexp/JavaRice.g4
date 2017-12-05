@@ -398,6 +398,7 @@ catchType
     :   ARRAY_OUT_OF_BOUNDS
     |	ARITHMETIC_EXPRESSION
     |	NEGATIVE_ARRAY_SIZE
+    |	NUMBER_FORMAT
     ;
 
 finallyBlock
@@ -620,6 +621,7 @@ MAIN		  : 'main';
 NATIVE        : 'native';
 NEGATIVE_ARRAY_SIZE : 'NEGATIVE_ARRAY_SIZE';
 NEW           : 'new';
+NUMBER_FORMAT : 'NUMBER_FORMAT';
 PACKAGE       : 'package';
 PRIVATE       : 'private';
 PROTECTED     : 'protected';
