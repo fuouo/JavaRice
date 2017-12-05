@@ -334,8 +334,8 @@ public class IDEView extends ViewInterface{
       scopeAnalyzer.addVariableCompletion(provider, code, codeTextArea.getCaretLineNumber());
       
       
-      code = code.replace("\n", " ");	//replace new line
-      code = code.replace("\t", " "); //replace tabs
+      code = code.replaceAll("\n", " ");	//replace new line
+      code = code.replaceAll("\t", " "); //replace tabs
       String[] token = code.split(" ");
       
       for(int i = 0; i < token.length; i++)
@@ -368,6 +368,7 @@ public class IDEView extends ViewInterface{
     				  tok = removeExtraTokens(tok);
     				  provider.addCompletion(new ShorthandCompletion(provider, tok, tok, tok));
     			  }
+    			  //If function without parameters
     			  else if(token[i + 1].contains("(") && (token[i+1].charAt(token[i+1].length()-1)==')'))
     			  	  provider.addCompletion(new ShorthandCompletion(provider, token[i+1], token[i+1], token[i+1]));
     		  }
@@ -425,7 +426,8 @@ public class IDEView extends ViewInterface{
 		   if(token[i].contains("//"))
 		   {
 			   subtoken = token[i].split("//");
-			   token[i] = subtoken[0];
+			   if(subtoken != null)
+				   token[i] = subtoken[0];
 		   }
 	   }
 	   String newCode = "";
@@ -441,7 +443,7 @@ public class IDEView extends ViewInterface{
 	   int end = 0;
 	   String comment = "";
 	   
-	   while(code.contains("/*"))
+	   while(code.contains("/*") && code.contains("*/"))
 	   {
 		   start = code.indexOf("/*");
 		   end = code.indexOf("*/");

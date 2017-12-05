@@ -44,8 +44,8 @@ public class AutoCompleteScopeAnalyzer {
 	public Scope getVarScope(int currLinePos)
 	{
 		for (int i = 1; i < scopeList.size(); i++) {
-			System.out.println("Start : " + scopeList.get(i).getParentStartLine() );
-			System.out.println("End : " + scopeList.get(i).getParentEndLine() );
+			//System.out.println("Start : " + scopeList.get(i).getParentStartLine() );
+			//System.out.println("End : " + scopeList.get(i).getParentEndLine() );
 			if(scopeList.get(i).getParentStartLine() <= currLinePos &&
 				scopeList.get(i).getParentEndLine() >= currLinePos){
 				currScope = i;
@@ -57,20 +57,17 @@ public class AutoCompleteScopeAnalyzer {
 	
 	
 	public void analyze()
-	{
-		
+	{		
 		System.out.println("ANALYZING");
 		int lastCloseBracket = 0;
 		String[] lineToken = code.split("\n");
 		System.out.println(code);
 		System.out.println(lineToken[0]);
 		Scope scope = new Scope(0, 1);
-		/*code = removeSingleComments(code);
-	    code = removeMultipleComments (code);*/
 		
 		for(int i = 0; i < lineToken.length; i++)
 		{
-			System.out.println("Line : " + lineToken[i]);
+			//System.out.println("Line : " + lineToken[i]);
 			//Sets line number of the last seen closing bracket
 			if(lineToken[i].contains("}"))
 				lastCloseBracket = i;
@@ -99,13 +96,14 @@ public class AutoCompleteScopeAnalyzer {
 			else if(hasPrimitiveType(lineToken[i]) && 
 					!lineToken[i].contains("(") &&
 					!lineToken[i].contains(")")){
-				String[] splitLine = lineToken[i].split(" ");
+				String[] splitLine = lineToken[i].split("=");
+				String[] splitDeclaration = splitLine[0].split(" ");
 				System.out.println("Variable Declaration");
-				for (int j = 0; j < splitLine.length; j++) {
-					if(hasPrimitiveType(splitLine[j])&&    //If variable
-							j+1 < splitLine.length)
+				for (int j = 0; j < splitDeclaration.length; j++) {
+					if(hasPrimitiveType(splitDeclaration[j])&&    //If variable
+							j+1 < splitDeclaration.length)
 					{
-						scopeList.get(currScope).addIdentifier(splitLine[j+1]);
+						scopeList.get(currScope).addIdentifier(splitDeclaration[j+1]);
 					}
 				}
 			}
