@@ -30,22 +30,26 @@ public class TryCommand implements IAttemptCommand {
 				executionMonitor.tryExecution();
 				command.execute();
 				
-				if(ExecutionManager.getInstance().getCurrCatchType() != null) {
+				if(ExecutionManager.getInstance().getCurrCatchType() != null ||
+						ExecutionManager.getInstance().isAborted()) {
 					break;
 				}
 			}
 			
 			if(ExecutionManager.getInstance().getCurrCatchType() != null) {
-				if(catchCommands.get(ExecutionManager.getInstance().getCurrCatchType()) != null) {
+				
+				List<ICommand> currCatchCommands = this.catchCommands.get(
+						ExecutionManager.getInstance().getCurrCatchType());
+				
+				if(currCatchCommands != null) {
+					ExecutionManager.getInstance().setCurrCatchType(null);
+					ExecutionManager.getInstance().setCurrentTryCommand(null);
 					
-					for (ICommand command : catchCommands.get(ExecutionManager.getInstance().getCurrCatchType())) {
+					for (ICommand command : currCatchCommands) {
 						executionMonitor.tryExecution();
 						command.execute();
 					}
 				}
-				
-				ExecutionManager.getInstance().setCurrCatchType(null);
-				ExecutionManager.getInstance().setCurrentTryCommand(null);
 			}
 		} catch(InterruptedException e) {
 			e.printStackTrace();
@@ -73,6 +77,12 @@ public class TryCommand implements IAttemptCommand {
 		commandList.add(command);
 		
 		catchCommands.put(catchType, commandList);
+	}
+
+	@Override
+	public boolean hasCatchFor(CatchType catchType) {
+		// TODO Auto-generated method stub
+		return catchCommands.containsKey(catchType);
 	}
 
 }

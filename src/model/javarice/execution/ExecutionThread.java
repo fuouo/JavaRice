@@ -1,6 +1,7 @@
 package model.javarice.execution;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import model.javarice.execution.commands.ICommand;
 
@@ -33,6 +34,8 @@ public class ExecutionThread extends Thread {
 			}
 		} catch (InterruptedException e) {
 			System.err.println("Monitor block interrupted! " + e.getMessage());
+		} catch (ConcurrentModificationException e) {
+			
 		}
 	}
 

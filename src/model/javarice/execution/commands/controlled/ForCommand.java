@@ -64,6 +64,10 @@ public class ForCommand implements IControlledCommand {
 					
 					LocalVarTracker.getInstance().popLocalVar(command);
 					
+					if(ExecutionManager.getInstance().isAborted()) {
+						break;
+					}
+					
 					// don't execute succeeding commands if there's a return
 					if(command instanceof ReturnCommand) {
 						this.returned = true;
@@ -81,6 +85,10 @@ public class ForCommand implements IControlledCommand {
 							break;
 						}
 					} 
+				}
+				
+				if(ExecutionManager.getInstance().isAborted()) {
+					break;
 				}
 				
 				if(this.returned) {

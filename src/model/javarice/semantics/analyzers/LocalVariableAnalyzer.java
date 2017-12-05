@@ -179,7 +179,6 @@ public class LocalVariableAnalyzer implements ParseTreeListener {
 		else {
 			MappingCommand mappingCommand = new MappingCommand(
 					varCtx.variableDeclaratorId().getText(), varCtx.variableInitializer().expression());
-			ExecutionManager.getInstance().addCommand(mappingCommand);
 			
 			StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
 			

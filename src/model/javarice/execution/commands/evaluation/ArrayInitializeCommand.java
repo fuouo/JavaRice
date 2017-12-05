@@ -2,6 +2,7 @@ package model.javarice.execution.commands.evaluation;
 
 import controller.Console;
 import controller.Console.LogType;
+import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.generatedexp.JavaRiceParser.ArrayCreatorRestContext;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -32,6 +33,7 @@ public class ArrayInitializeCommand implements ICommand {
 			Console.log(LogType.DEBUG, TAG + "initializing array with size " 
 					+ evaluationCommand.getResult().intValue());
 			
+			ExecutionManager.getInstance().setCurrLineNumber(exprCtx.getStart().getLine());
 			this.javaRiceArray.initializeSize(evaluationCommand.getResult().intValue());
 		}
 	}

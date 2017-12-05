@@ -50,6 +50,10 @@ public class WhileCommand implements IControlledCommand {
 					
 					LocalVarTracker.getInstance().popLocalVar(command);
 					
+					if(ExecutionManager.getInstance().isAborted()) {
+						break;
+					}
+					
 					// don't execute succeeding commands if there's a return
 					if(command instanceof ReturnCommand) {
 						this.returned = true;
@@ -67,6 +71,10 @@ public class WhileCommand implements IControlledCommand {
 							break;
 						}
 					} 
+				}
+				
+				if(ExecutionManager.getInstance().isAborted()) {
+					break;
 				}
 				
 				if(this.returned) {

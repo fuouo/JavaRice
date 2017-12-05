@@ -12,6 +12,7 @@ public interface IAttemptCommand extends ICommand{
 	
 	public abstract void addTryCommand(ICommand command);
 	public abstract void addCatchCommand(CatchType catchType, ICommand command);
+	public abstract boolean hasCatchFor(CatchType catchType);
 	
 
 }

@@ -75,8 +75,8 @@ public class StatementAnalyzer {
 				catchBlockAnalyzer.analyze(ccContext.block());
 			}
 			
-			StatementControlOverseer.getInstance().setCurrentCatchClause(null);
 			StatementControlOverseer.getInstance().compileControlledCommand();
+			StatementControlOverseer.getInstance().setCurrentCatchClause(null);
 		}
 
 		//a block statement

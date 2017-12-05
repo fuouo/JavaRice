@@ -24,7 +24,6 @@ import model.javarice.semantics.representations.JavaRiceFunction.FunctionType;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
 import model.javarice.semantics.searching.VariableSearcher;
-import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.SymbolTableManager;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.utils.Expression;
@@ -41,6 +40,8 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private boolean isNumeric;
 	private String strResult = "";
 	private String prevArrName = "";
+	
+	private boolean hasException = false;
 	
 	public EvaluationCommand(ExpressionContext expressionContext) {
 		this.parentExpressionContext = expressionContext;
@@ -186,11 +187,14 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 			} catch(Expression.ExpressionException e) {
 				this.resultValue = new BigDecimal(0);
 				this.strResult = "";
+				this.hasException = true;
 			} catch(ArithmeticException e) {
+				ExecutionManager.getInstance().setCurrLineNumber(this.parentExpressionContext.getStart().getLine());
 				ExecutionManager.getInstance().setCurrCatchType(CatchType.ARITHMETIC_EXPRESSION);
 				
 				this.resultValue = new BigDecimal(0);
 				this.strResult = "";
+				this.hasException = true;
 			}
 		}
 		
@@ -327,6 +331,8 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
 		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
+		
+		ExecutionManager.getInstance().setCurrLineNumber(expressionContext.getStart().getLine());
 
 		if(arrayJavaRiceValue == null) {
 			return;
@@ -365,6 +371,10 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 
 	public boolean isNumericResult() {
 		return this.isNumeric;
+	}
+	
+	public boolean hasException() {
+		return this.hasException;
 	}
 
 }

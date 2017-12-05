@@ -33,6 +33,10 @@ public class ExecutionManager {
 	private CatchType currCatchType = null;
 	private IAttemptCommand currentTryCommand = null;
 	
+	private boolean aborted = false;
+	
+	private int currLineNumber = -1;
+	
 	private ExecutionManager() {
 		this.mainExecutionAdder = new MainExecutionAdder(this.executionList);
 		this.activeExecutionAdder = this.mainExecutionAdder;
@@ -50,6 +54,10 @@ public class ExecutionManager {
 		INSTANCE.foundEntryPoint = false;
 		INSTANCE.entryClassName = null;
 		INSTANCE.clearAllActions();
+		
+		INSTANCE.currCatchType = null;
+		INSTANCE.currentTryCommand = null;
+		INSTANCE.aborted = false;
 	}
 	
 	public CatchType getCurrCatchType() {
@@ -58,19 +66,28 @@ public class ExecutionManager {
 	
 	public void setCurrCatchType(CatchType currCatchType) {
 		
-		if(this.currentTryCommand != null) {
-			this.currCatchType = currCatchType;
-		} else {
-			if(currCatchType == CatchType.ARRAY_OUT_OF_BOUNDS) {
-				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS, "");
-			} else if(currCatchType == CatchType.NEGATIVE_ARRAY_SIZE) {
-				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, "");
-			} else if(currCatchType == CatchType.ARITHMETIC_EXPRESSION) {
-				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARITHMETIC_EXPRESSION, "");
-			}
+		if(currCatchType == null) {
+			this.currCatchType = null;
+			return;
 		}
 		
-		this.clearAllActions();
+		if(this.currentTryCommand != null && this.currentTryCommand.hasCatchFor(currCatchType)) {
+			this.currCatchType = currCatchType;
+		} else {
+			this.aborted = true;
+			
+			if(currCatchType == CatchType.ARRAY_OUT_OF_BOUNDS) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.NEGATIVE_ARRAY_SIZE) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.ARITHMETIC_EXPRESSION) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARITHMETIC_EXPRESSION, "", this.currLineNumber);
+			}
+			
+
+			this.clearAllActions();
+		}
+		
 		
 	}
 	
@@ -192,4 +209,11 @@ public class ExecutionManager {
 		this.currentTryCommand = currentTryCommand;
 	}
 	
+	public boolean isAborted() {
+		return this.aborted;
+	}
+	
+	public void setCurrLineNumber(int currLineNumber) {
+		this.currLineNumber = currLineNumber;
+	}
 }

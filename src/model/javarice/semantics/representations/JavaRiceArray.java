@@ -49,7 +49,7 @@ public class JavaRiceArray {
 			}
 			
 		} catch(NegativeArraySizeException e) {
-			this.javaRiceArray = new JavaRiceValue[0];
+			this.javaRiceArray = null;
 			
 			ExecutionManager.getInstance().setCurrCatchType(CatchType.NEGATIVE_ARRAY_SIZE);
 		}
@@ -72,7 +72,7 @@ public class JavaRiceArray {
 	public JavaRiceValue getValueAt(int index) {
 		if(index >= this.javaRiceArray.length || index < 0) {
 			ExecutionManager.getInstance().setCurrCatchType(CatchType.ARRAY_OUT_OF_BOUNDS);
-			return this.javaRiceArray[this.javaRiceArray.length - 1];
+			return null;
 		}
 		
 		return this.javaRiceArray[index];
