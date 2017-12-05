@@ -12,8 +12,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
-import model.javarice.builder.BuildChecker;
-import model.javarice.builder.ErrorRepository;
 import model.javarice.builder.ParserHandler;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.generatedexp.JavaRiceLexer;
@@ -280,8 +278,15 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		Console.log(LogType.DEBUG, TAG + "EVALUATING VARIABLE " + expressionContext.getText());
 
 		if(javaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
-			this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
-					"\"" + javaRiceValue.getValue().toString() + "\"");
+			
+			if(javaRiceValue.getValue() == null) {
+				this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
+						"\"null\"");
+			} else {
+				this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
+						"\"" + javaRiceValue.getValue().toString() + "\"");
+			}
+			
 		} else if(javaRiceValue.getPrimitiveType() == PrimitiveType.CHAR) {
 			this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
 					"'" + javaRiceValue.getValue().toString() + "'");
@@ -308,7 +313,7 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		evaluationCommand.execute();
 		
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
-		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
+		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue(), expressionContext);
 
 		if(arrayJavaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
 			this.modifiedExpression = this.modifiedExpression.replaceFirst(

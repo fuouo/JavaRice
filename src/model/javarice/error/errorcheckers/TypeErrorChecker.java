@@ -1,5 +1,7 @@
 package model.javarice.error.errorcheckers;
 
+import java.util.List;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -13,6 +15,7 @@ import model.javarice.builder.BuildChecker;
 import model.javarice.builder.ErrorRepository;
 import model.javarice.builder.ParserHandler;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.generatedexp.JavaRiceLexer;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.LiteralContext;
 import model.javarice.semantics.representations.JavaRiceFunction;
@@ -71,11 +74,18 @@ public class TypeErrorChecker implements IErrorChecker, ParseTreeListener {
 				}
 				break;
 			case STRING:
-				if((expressionString.charAt(0) != '\"' 
+				
+				List<TerminalNode> nullList = literalContext.getTokens(JavaRiceLexer.NullLiteral);
+				
+				if(nullList.size() > 0) {
+					
+				}
+				
+				else if((expressionString.charAt(0) != '\"' 
 					&& (expressionString.charAt(expressionString.length() - 1) != '\"')) ||
 					literalContext.StringLiteral() == null) {
 					additionalMessage = "Expected String.";
-				}
+				} 
 				break;
 			default:
 				break;

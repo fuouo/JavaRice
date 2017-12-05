@@ -27,10 +27,10 @@ public class FunctionCallCommand implements ICommand {
 	public FunctionCallCommand(String functionName, ExpressionContext expressionContext) {
 		this.functionName = functionName;
 		this.expressionContext = expressionContext;
-
-		UndeclaredChecker undeclaredChecker;
-		undeclaredChecker = new UndeclaredChecker(this.expressionContext);
+		
+		UndeclaredChecker undeclaredChecker = new UndeclaredChecker(expressionContext);
 		undeclaredChecker.verify();
+		
 		
 		this.searchFunction();
 

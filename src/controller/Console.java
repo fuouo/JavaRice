@@ -178,7 +178,12 @@ public class Console {
 				
 				// error type
 				errorType = ErrorType.RUNTIME;
-				errorMessage = tokens[1];
+				
+				// get line number
+				lineNumber = Integer.parseInt(tokens[1]);
+				
+				// get message
+				errorMessage = tokens[2];
 				
 				break;
 			default:

@@ -25,8 +25,6 @@ public class JavaRiceValue {
 		ARRAY
 	}
 
-//	private Object defaultValue; //this value will no longer change.
-//	private Object value;
 	private Stack<Object> defaultValue; //this value will no longer change.
 	private Stack<Object> value;
 	private PrimitiveType primitiveType = PrimitiveType.NOT_YET_IDENTIFIED;
@@ -36,7 +34,18 @@ public class JavaRiceValue {
 		
 		if(value == null || checkValueType(value, primitiveType)) {					
 			this.value = new Stack<>();
-			this.value.push(value);
+			
+			if(value == null) {
+				if(primitiveType != PrimitiveType.STRING && primitiveType != PrimitiveType.CHAR) {
+					this.value.push(0);
+				} else {
+					this.value.push(value);
+				}
+			} else {
+				this.value.push(value);
+			}
+			
+			
 			this.primitiveType = primitiveType;
 		} else {
 			// type mismatch???

@@ -1,5 +1,7 @@
 package model.javarice.semantics.representations;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import controller.Console;
 import controller.Console.LogType;
 import model.javarice.builder.BuildChecker;
@@ -58,7 +60,7 @@ public class JavaRiceArray {
 	public void updateValueAt(JavaRiceValue javaRiceValue, int index) {
 		if(index >= this.javaRiceArray.length) {
 			Console.log(LogType.DEBUG, "array out of bounds detected! " + index);
-			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, 
+			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS, 
 					"", this.arrayIdentifier);
 			return;
 		}
@@ -70,6 +72,21 @@ public class JavaRiceArray {
 		if(index >= this.javaRiceArray.length || index < 0) {
 			Console.log(LogType.ERROR, String.format(ErrorRepository.getErrorMessage(
 					ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS), this.arrayIdentifier));
+			return this.javaRiceArray[this.javaRiceArray.length - 1];
+		}
+		
+		return this.javaRiceArray[index];
+	}
+	
+	public JavaRiceValue getValueAt(int index, ParserRuleContext ctx) {
+		if(index >= this.javaRiceArray.length || index < 0) {
+//			Console.log(LogType.ERROR, String.format(ErrorRepository.getErrorMessage(
+//					ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS), this.arrayIdentifier));
+			
+			int linenumber = ctx.getStart().getLine();
+			
+			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS, "", linenumber, this.arrayIdentifier);
+			
 			return this.javaRiceArray[this.javaRiceArray.length - 1];
 		}
 		

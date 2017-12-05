@@ -74,11 +74,11 @@ public class ErrorRepository {
 		
 		// runtime errors
 		this.errorMessageDictionary.put(RUNTIME_ARRAY_OUT_OF_BOUNDS, 
-				"RUNTIME[TYPE]Array %s out of bounds. Aborting operation. ");
+				"RUNTIME[TYPE]%d[LINE]Array %s out of bounds. Aborting operation. ");
 		this.errorMessageDictionary.put(RUNTIME_NUMBER_FORMAT, 
-				"RUNTIME[TYPE]Number format exception for input: %s. Aborting operation. ");
+				"RUNTIME[TYPE]%d[LINE]Number format exception for input: %s. Aborting operation. ");
 		this.errorMessageDictionary.put(RUNTIME_NEGATIVE_ARRAY_SIZE, 
-				"RUNTIME[TYPE]Array %s can't be initialized with a negative value. Aborting operation. ");
+				"RUNTIME[TYPE]%d[LINE]Array %s can't be initialized with a negative value. Aborting operation. ");
 	}
 	
 	public static void initialize() {
