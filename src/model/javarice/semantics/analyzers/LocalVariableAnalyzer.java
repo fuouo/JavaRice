@@ -11,7 +11,10 @@ import controller.Console.LogType;
 import model.javarice.error.errorcheckers.MultipleVarDecChecker;
 import model.javarice.error.errorcheckers.TypeErrorChecker;
 import model.javarice.execution.ExecutionManager;
+import model.javarice.execution.commands.controlled.IConditionalCommand;
+import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.execution.commands.evaluation.MappingCommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand;
 import model.javarice.generatedexp.JavaRiceLexer;
 import model.javarice.generatedexp.JavaRiceParser.ClassOrInterfaceTypeContext;
 import model.javarice.generatedexp.JavaRiceParser.LocalVariableDeclarationContext;
@@ -20,6 +23,7 @@ import model.javarice.generatedexp.JavaRiceParser.TypeTypeContext;
 import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorContext;
 import model.javarice.generatedexp.JavaRiceParser.VariableModifierContext;
 import model.javarice.semantics.representations.JavaRiceValue;
+import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.scopes.LocalScope;
 import model.javarice.semantics.symboltable.scopes.LocalScopeCreator;
 import model.javarice.semantics.utils.IdentifiedTokens;
@@ -175,7 +179,36 @@ public class LocalVariableAnalyzer implements ParseTreeListener {
 		else {
 			MappingCommand mappingCommand = new MappingCommand(
 					varCtx.variableDeclaratorId().getText(), varCtx.variableInitializer().expression());
-			ExecutionManager.getInstance().addCommand(mappingCommand);
+			
+			StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
+			
+			if(statementControl.isInConditionalCommand()) {
+				IConditionalCommand conditionalCommand = (IConditionalCommand) statementControl.getActiveControlledCommand();
+				
+				if(statementControl.isInPositiveRule()) {
+					conditionalCommand.addPositiveCommand(mappingCommand);
+				} else {
+					conditionalCommand.addNegativeCommand(mappingCommand);
+				}
+			}
+			
+			else if(statementControl.isInControlledCommand()) {
+				IControlledCommand controlledCommand = (IControlledCommand) statementControl.getActiveControlledCommand();
+				controlledCommand.addCommand(mappingCommand);
+			} else if(statementControl.isAttemptCommand()) {
+				IAttemptCommand attemptCommand = (IAttemptCommand) statementControl.getActiveControlledCommand();
+				
+				if(statementControl.isInTryBlock()) {
+					attemptCommand.addTryCommand(mappingCommand);
+				} else {
+					attemptCommand.addCatchCommand(statementControl.getCurrCatchType(), mappingCommand);
+				}
+			}
+			
+			else {
+				ExecutionManager.getInstance().addCommand(mappingCommand);
+			}
+			
 		}
 	}
 	

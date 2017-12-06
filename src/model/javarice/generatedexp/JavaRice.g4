@@ -391,11 +391,16 @@ statement
     ;
 
 catchClause
-    :   'catch' '(' variableModifier* catchType Identifier ')' block
+    :   'catch' '(' catchType ')' block
     ;
 
 catchType
-    :   qualifiedName ('|' qualifiedName)*
+    :   ARRAY_OUT_OF_BOUNDS
+    |	ARITHMETIC_EXPRESSION
+    |	NEGATIVE_ARRAY_SIZE
+    |	NULL_POINTER
+    |	NUMBER_FORMAT
+    |	INPUT_MISMATCH
     ;
 
 finallyBlock
@@ -584,6 +589,8 @@ scan
 // §3.9 Keywords
 
 ABSTRACT      : 'abstract';
+ARITHMETIC_EXPRESSION : 'ArithmeticExpressionException';
+ARRAY_OUT_OF_BOUNDS : 'ArrayOutOfBoundsException';
 ASSERT        : 'assert';
 BOOLEAN       : '_boolean';
 BREAK         : 'break';
@@ -605,6 +612,7 @@ FINALLY       : 'finally';
 FLOAT         : '_float';
 FOR           : 'for';
 IF            : 'if';
+INPUT_MISMATCH : 'InputMismatchException';
 GOTO          : 'goto';
 IMPLEMENTS    : 'implements';
 IMPORT        : 'import';
@@ -614,7 +622,10 @@ INTERFACE     : 'interface';
 LONG          : '_long';
 MAIN		  : 'main';
 NATIVE        : 'native';
+NEGATIVE_ARRAY_SIZE : 'NegativeArraySizeException';
 NEW           : 'new';
+NULL_POINTER : 'NullPointerException';
+NUMBER_FORMAT : 'NumberFormatException';
 PACKAGE       : 'package';
 PRIVATE       : 'private';
 PROTECTED     : 'protected';

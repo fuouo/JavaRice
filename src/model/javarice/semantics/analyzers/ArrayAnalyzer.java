@@ -11,7 +11,10 @@ import controller.Console.LogType;
 import model.javarice.error.errorcheckers.MultipleVarDecChecker;
 import model.javarice.error.errorcheckers.TypeErrorChecker;
 import model.javarice.execution.ExecutionManager;
+import model.javarice.execution.commands.controlled.IConditionalCommand;
+import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.execution.commands.evaluation.ArrayInitializeCommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand;
 import model.javarice.generatedexp.JavaRiceParser.ArrayCreatorRestContext;
 import model.javarice.generatedexp.JavaRiceParser.CreatedNameContext;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
@@ -20,6 +23,7 @@ import model.javarice.generatedexp.JavaRiceParser.VariableDeclaratorIdContext;
 import model.javarice.semantics.representations.JavaRiceArray;
 import model.javarice.semantics.representations.JavaRiceValue;
 import model.javarice.semantics.representations.JavaRiceValue.PrimitiveType;
+import model.javarice.semantics.statements.StatementControlOverseer;
 import model.javarice.semantics.symboltable.scopes.ClassScope;
 import model.javarice.semantics.symboltable.scopes.LocalScope;
 import model.javarice.semantics.utils.IdentifiedTokens;
@@ -145,7 +149,35 @@ public class ArrayAnalyzer implements ParseTreeListener {
 	private void createInitializeCommand(ArrayCreatorRestContext arrayCreatorCtx) {
 		ArrayInitializeCommand arrayInitializeCommand = new ArrayInitializeCommand(
 				this.declaredArray, arrayCreatorCtx);
-		ExecutionManager.getInstance().addCommand(arrayInitializeCommand);
+		
+		StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
+		
+		if(statementControl.isInConditionalCommand()) {
+			IConditionalCommand conditionalCommand = (IConditionalCommand) statementControl.getActiveControlledCommand();
+			
+			if(statementControl.isInPositiveRule()) {
+				conditionalCommand.addPositiveCommand(arrayInitializeCommand);
+			} else {
+				conditionalCommand.addNegativeCommand(arrayInitializeCommand);
+			}
+		}
+		
+		else if(statementControl.isInControlledCommand()) {
+			IControlledCommand controlledCommand = (IControlledCommand) statementControl.getActiveControlledCommand();
+			controlledCommand.addCommand(arrayInitializeCommand);
+		} else if(statementControl.isAttemptCommand()) {
+			IAttemptCommand attemptCommand = (IAttemptCommand) statementControl.getActiveControlledCommand();
+			
+			if(statementControl.isInTryBlock()) {
+				attemptCommand.addTryCommand(arrayInitializeCommand);
+			} else {
+				attemptCommand.addCatchCommand(statementControl.getCurrCatchType(), arrayInitializeCommand);
+			}
+		}
+		
+		else {
+			ExecutionManager.getInstance().addCommand(arrayInitializeCommand);
+		}
 	}
 
 }

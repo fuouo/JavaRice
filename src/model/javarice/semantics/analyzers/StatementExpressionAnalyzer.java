@@ -20,6 +20,7 @@ import model.javarice.execution.commands.controlled.IConditionalCommand;
 import model.javarice.execution.commands.controlled.IControlledCommand;
 import model.javarice.execution.commands.evaluation.AssignmentCommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand;
 import model.javarice.execution.commands.simple.FunctionCallCommand;
 import model.javarice.execution.commands.simple.IncDecCommand;
 import model.javarice.generatedexp.JavaRiceLexer;
@@ -58,42 +59,14 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	public void enterEveryRule(ParserRuleContext ctx) {
 		// TODO Auto-generated method stub
 		
-//		if(ctx instanceof ExpressionContext && 
-//				ctx.getParent() instanceof ExpressionContext && 
-//				ctx.getParent().getChild(1) instanceof ArgumentsContext && 
-//				ctx.getParent().getParent() instanceof ExpressionContext && 
-//				ctx.getParent().getParent().getChild(1) instanceof ArgumentsContext){
-//			
-//			BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "", ctx.getStart().getLine(), "(", ";");
-//		}
-//		/* This is for the non-assignment stamenets like z * 20, z * 20 + 30 / 12, etc */
-//		if(ctx instanceof ExpressionContext && 
-//				ctx.getParent() instanceof StatementExpressionContext &&
-//				!(ctx.getParent().getChild(1) instanceof ExpressionContext) &&
-//				ctx.getParent().getParent() instanceof StatementContext && 
-//				!(ctx.getText().contains("=") || 
-//				 ctx.getText().contains("-=") ||
-//				 ctx.getText().contains("*=") ||
-//				 ctx.getText().contains("/=") ||
-//				 ctx.getText().contains("&=") ||
-//				 ctx.getText().contains("|=") ||
-//				 ctx.getText().contains("^=") ||
-//				 ctx.getText().contains("%=") ||
-//				 ctx.getText().contains("<<=") ||
-//				 ctx.getText().contains(">>=") ||
-//				 ctx.getText().contains(">>>=") /* end of assignment operator condition */) ){
-//				
-//				String var = ((ExpressionContext)ctx).expression(0).getText(); //not working
-//				var = var.split("[^\\w']+")[0];
-//				for(int i=0; i<var.split("[^\\w']+").length; i++ ){
-//					System.out.println(var.split("[^\\w']+")[i]);
-//				}
-//				String op = ((StatementExpressionContext)ctx.getParent()).expression().getText().split(var)[1].substring(0, 1); // not working
-//				op = "=";
-//			
-//				BuildChecker.reportCustomError(ErrorRepository.MISSING_TOKEN, "", ctx.getStart().getLine(), op , var);
-//				
-//		}
+		if(ctx instanceof ExpressionContext && 
+				ctx.getParent() instanceof ExpressionContext && 
+				ctx.getParent().getChild(1) instanceof ArgumentsContext && 
+				ctx.getParent().getParent() instanceof ExpressionContext && 
+				ctx.getParent().getParent().getChild(1) instanceof ArgumentsContext){
+			
+			BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "", ctx.getStart().getLine(), "(", ";");
+		}
 		
 		if(ctx instanceof ExpressionContext) {
 			ExpressionContext exprCtx = (ExpressionContext) ctx;
@@ -139,6 +112,36 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			
 			else if(this.isFunctionCallWithNoParams(exprCtx)) {
 				this.handleFunctionCallWithNoParams(exprCtx);
+			} 
+			
+			else {
+				/* This is for the non-assignment stamenets like z * 20, z * 20 + 30 / 12, etc */
+				if(	ctx.getParent() instanceof StatementExpressionContext &&
+					!(ctx.getParent().getChild(1) instanceof ExpressionContext) &&
+					ctx.getParent().getParent() instanceof StatementContext && 
+					((ExpressionContext) ctx).arguments() == null &&
+					!(ctx.getText().contains("=") || 
+					 ctx.getText().contains("-=") ||
+					 ctx.getText().contains("*=") ||
+					 ctx.getText().contains("/=") ||
+					 ctx.getText().contains("&=") ||
+					 ctx.getText().contains("|=") ||
+					 ctx.getText().contains("^=") ||
+					 ctx.getText().contains("%=") ||
+					 ctx.getText().contains("<<=") ||
+					 ctx.getText().contains(">>=") ||
+					 ctx.getText().contains(">>>=") || 
+					 ctx.getText().contains("++") || 
+					 ctx.getText().contains("--")/* end of assignment operator condition */) ){
+					
+					String var = ((ExpressionContext)ctx).expression(0).getText(); //not working
+					var = var.split("[^\\w']+")[0];
+					String op = ((StatementExpressionContext)ctx.getParent()).expression().getText().split(var)[1].substring(0, 1); // not working
+					op = "=";
+				
+					BuildChecker.reportCustomError(ErrorRepository.MISSING_TOKEN, "", ctx.getStart().getLine(), op , var);
+						
+				}
 			}
 		}
 	}
@@ -162,14 +165,19 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	}
 	
 	private void handleFunctionCallWithParams(ExpressionContext funcExprCtx) {
-//		if(funcExprCtx.primary() == null){
-//			if(!EvaluationCommand.isFunctionCall(funcExprCtx))
-//				BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "With Params", funcExprCtx.getStart().getLine(), "(", ";");
-//			return;
-//		}
 		
-		ExpressionContext functionExprCtx = funcExprCtx.expression(0);
-		String functionName = functionExprCtx.primary().getText();
+		Console.log(LogType.DEBUG, TAG + "handleFunctionCallWithParams " + funcExprCtx.getText());
+		
+		if(funcExprCtx.expression(0).primary() == null){
+			if(!EvaluationCommand.isFunctionCall(funcExprCtx))
+				BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "", 
+						funcExprCtx.getStart().getLine(), "\"(\"", "\";\"");
+			return;
+		}
+		
+		String functionName = funcExprCtx.expression(0).primary().getText();
+		
+		Console.log(LogType.DEBUG, TAG + "funcExprCtx: " + funcExprCtx.getText());
 		
 		FunctionCallCommand functionCallCommand = new FunctionCallCommand(functionName, funcExprCtx);
 		this.handleStatementExecution(functionCallCommand);
@@ -178,13 +186,17 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 	}
 
 	private void handleFunctionCallWithNoParams(ExpressionContext funcExprCtx) {
-//		if(funcExprCtx.primary() == null){
-//			if(!EvaluationCommand.isFunctionCall(funcExprCtx))
-//				BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "Without Params", funcExprCtx.getStart().getLine(), "(", ";");
-//			//return;
-//		}
+		Console.log(LogType.DEBUG, TAG + "handleFunctionCallWithNOParams " + funcExprCtx.getText());
+		if(funcExprCtx.expression(0).primary() == null){
+			if(!EvaluationCommand.isFunctionCall(funcExprCtx))
+				BuildChecker.reportCustomError(ErrorRepository.MISMATCHED_INPUT, "", 
+						funcExprCtx.getStart().getLine(), "\"(\"", "\";\"");
+			return;
+		}
 		
-		String functionName = funcExprCtx.primary().getText();
+		String functionName = funcExprCtx.expression(0).primary().getText();
+		
+		Console.log(LogType.DEBUG, TAG + "funcExprCtx: " + funcExprCtx.getText());
 		
 		FunctionCallCommand functionCallCommand = new FunctionCallCommand(functionName, funcExprCtx);
 		this.handleStatementExecution(functionCallCommand);
@@ -210,6 +222,14 @@ public class StatementExpressionAnalyzer implements ParseTreeListener {
 			IControlledCommand controlledCommand = 
 					(IControlledCommand) statementControl.getActiveControlledCommand();
 			controlledCommand.addCommand(command);
+		} else if(statementControl.isAttemptCommand()) {
+			IAttemptCommand attemptCommand = (IAttemptCommand) statementControl.getActiveControlledCommand();
+			
+			if(statementControl.isInTryBlock()) {
+				attemptCommand.addTryCommand(command);
+			} else {
+				attemptCommand.addCatchCommand(statementControl.getCurrCatchType(), command);
+			}
 		}
 		else {
 			ExecutionManager.getInstance().addCommand(command);

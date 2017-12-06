@@ -361,6 +361,7 @@ public class IDEView extends ViewInterface{
     				  String tok = token[i+1];
     				  while(!tok.contains(")"))
     				  {
+    					  System.out.println("tok is " + tok);
     					  if( o + 2 < token.length)
     						  tok += " " + token[o+2];
     					  o++;

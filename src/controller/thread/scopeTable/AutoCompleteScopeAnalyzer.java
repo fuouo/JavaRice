@@ -23,8 +23,8 @@ public class AutoCompleteScopeAnalyzer {
 		analyze();
 		Scope curr = getVarScope(currLinePos);
 		System.out.println("currentLine is " + currLinePos);
-		System.out.println("Start of Current: " + curr.getParentStartLine());
-		System.out.println("End of Current: " + curr.getParentEndLine());
+		//System.out.println("Start of Current: " + curr.getParentStartLine());
+		//System.out.println("End of Current: " + curr.getParentEndLine());
 		curr.printIdentifiers();
 		//Add variables in certain scope 
 		for (int i = 0; i < curr.getIdentifierNames().size(); i++) {
@@ -60,6 +60,7 @@ public class AutoCompleteScopeAnalyzer {
 	{		
 		System.out.println("ANALYZING");
 		int lastCloseBracket = 0;
+		int temp = 0;
 		String[] lineToken = code.split("\n");
 		System.out.println(code);
 		System.out.println(lineToken[0]);
@@ -69,8 +70,10 @@ public class AutoCompleteScopeAnalyzer {
 		{
 			//System.out.println("Line : " + lineToken[i]);
 			//Sets line number of the last seen closing bracket
-			if(lineToken[i].contains("}"))
+			if(lineToken[i].contains("}")){
+				temp = lastCloseBracket;
 				lastCloseBracket = i;
+			}
 			
 			//Checks if it's for global scope
 			if(hasPubPriv(lineToken[i]) && 
@@ -114,6 +117,9 @@ public class AutoCompleteScopeAnalyzer {
 				}
 			}
 		}
+		
+		scopeList.get(currScope).setParentEndLine(temp);
+		
 		//Set last line for Global Scope
 		scopeList.get(0).setParentEndLine(lastCloseBracket);
 	}

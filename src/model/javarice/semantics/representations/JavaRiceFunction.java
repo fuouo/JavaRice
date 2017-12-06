@@ -271,6 +271,10 @@ public class JavaRiceFunction implements IControlledCommand{
 				
 				LocalVarTracker.getInstance().popLocalVar(command);
 				
+				if(ExecutionManager.getInstance().isAborted()) {
+					break;
+				}
+				
 				// don't execute succeeding commands if there's a return
 				if(command instanceof ReturnCommand) {
 					break;

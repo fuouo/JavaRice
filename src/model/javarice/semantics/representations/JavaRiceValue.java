@@ -4,6 +4,8 @@ import java.util.Stack;
 
 import model.javarice.builder.BuildChecker;
 import model.javarice.builder.ErrorRepository;
+import model.javarice.execution.ExecutionManager;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 import model.javarice.semantics.utils.RecognizedKeywords;
 import model.javarice.semantics.utils.StringUtils;
 
@@ -25,18 +27,28 @@ public class JavaRiceValue {
 		ARRAY
 	}
 
-//	private Object defaultValue; //this value will no longer change.
-//	private Object value;
 	private Stack<Object> defaultValue; //this value will no longer change.
 	private Stack<Object> value;
 	private PrimitiveType primitiveType = PrimitiveType.NOT_YET_IDENTIFIED;
 	private boolean finalFlag = false;
+	private boolean scanning = false;
 	
 	public JavaRiceValue(Object value, PrimitiveType primitiveType) {
 		
 		if(value == null || checkValueType(value, primitiveType)) {					
 			this.value = new Stack<>();
-			this.value.push(value);
+			
+			if(value == null) {
+				if(primitiveType != PrimitiveType.STRING && primitiveType != PrimitiveType.CHAR) {
+					this.value.push(0);
+				} else {
+					this.value.push(value);
+				}
+			} else {
+				this.value.push(value);
+			}
+			
+			
 			this.primitiveType = primitiveType;
 		} else {
 			// type mismatch???
@@ -106,9 +118,13 @@ public class JavaRiceValue {
 		return this.value.size();
 	}
 	
+	public void setScanning(boolean scanning) {
+		this.scanning = scanning;
+	}
+	
 	private Object attemptTypeCast(String value) {		
 		
-		try{ 
+		try {
 			switch(this.primitiveType) {
 				case BOOLEAN: return Boolean.valueOf(value);
 				case CHAR: return Character.valueOf(value.charAt(0)); //only get first char at value
@@ -128,8 +144,14 @@ public class JavaRiceValue {
 				case STRING: return value;
 				default: return null;
 			}
-		}catch(NumberFormatException e){
-			BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NUMBER_FORMAT, "", value);
+		} catch(NumberFormatException e) {
+			
+			if(this.scanning) {
+				ExecutionManager.getInstance().setCurrCatchType(CatchType.INPUT_MISMATCH);
+			} else {
+				ExecutionManager.getInstance().setCurrCatchType(CatchType.NUMBER_FORMAT);
+			}
+			
 			return null;
 		}
 	}

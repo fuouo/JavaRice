@@ -88,9 +88,18 @@ public class AssignmentCommand implements ICommand {
 		// TODO Auto-generated method stub
 		EvaluationCommand evaluationCommand = new EvaluationCommand(this.rightHandExprCtx);
 		evaluationCommand.execute();
+		
+		if(evaluationCommand.hasException()) {
+			return;
+		}
 
 		if(this.isLeftHandArrayAccessor()) {
-			this.handleArrayAssignment(evaluationCommand.getResult().toEngineeringString());
+			
+			if(evaluationCommand.isNumericResult()) {
+				this.handleArrayAssignment(evaluationCommand.getResult().toEngineeringString());
+			} else {
+				this.handleArrayAssignment(evaluationCommand.getStringResult());
+			}
 		}
 		else {
 			JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(this.leftHandExprCtx.getText());
@@ -114,6 +123,8 @@ public class AssignmentCommand implements ICommand {
 	private void handleArrayAssignment(String resultString) {
 		TerminalNode identifierNode = this.leftHandExprCtx.expression(0).primary().Identifier();
 		ExpressionContext arrayIndexExprCtx = this.leftHandExprCtx.expression(1);
+		
+		ExecutionManager.getInstance().setCurrLineNumber(arrayIndexExprCtx.getStart().getLine());
 
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(identifierNode.getText());
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();

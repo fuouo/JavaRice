@@ -41,6 +41,10 @@ public class MappingCommand implements ICommand {
 		EvaluationCommand evaluationCommand = new EvaluationCommand(this.parentExprCtx);
 		evaluationCommand.execute();
 		
+		if(evaluationCommand.hasException()) {
+			return;
+		}
+		
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(this.identifierString);
 		
 		if(evaluationCommand.isNumericResult()) {

@@ -1,6 +1,7 @@
 package model.javarice.execution;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import controller.IDEController;
 import model.javarice.execution.commands.ICommand;
@@ -11,10 +12,9 @@ public class ExecutionThread extends Thread {
 	private ExecutionMonitor executionMonitor;
 	IDEController controller;
 	
-	public ExecutionThread(ArrayList<ICommand> executionList, ExecutionMonitor executionMonitor, IDEController controller) {
+	public ExecutionThread(ArrayList<ICommand> executionList, ExecutionMonitor executionMonitor) {
 		this.executionList = executionList;
 		this.executionMonitor = executionMonitor;
-		this.controller = controller;
 	}
 	
 	/*
@@ -29,17 +29,17 @@ public class ExecutionThread extends Thread {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		try{
+
 			for (ICommand command : this.executionList) {
-				try {
-					this.executionMonitor.tryExecution();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				this.executionMonitor.tryExecution();
 				command.execute();
 			}
+		} catch (InterruptedException e) {
+			System.err.println("Monitor block interrupted! " + e.getMessage());
+		} catch (ConcurrentModificationException e) {
 			
-			//controller.newThread();
+		}
 	}
 
 }

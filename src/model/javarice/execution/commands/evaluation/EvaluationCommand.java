@@ -12,10 +12,10 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import controller.Console;
 import controller.Console.LogType;
-import model.javarice.builder.BuildChecker;
-import model.javarice.builder.ErrorRepository;
 import model.javarice.builder.ParserHandler;
+import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 import model.javarice.generatedexp.JavaRiceLexer;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.semantics.representations.JavaRiceArray;
@@ -40,6 +40,8 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private boolean isNumeric;
 	private String strResult = "";
 	private String prevArrName = "";
+	
+	private boolean hasException = false;
 	
 	public EvaluationCommand(ExpressionContext expressionContext) {
 		this.parentExpressionContext = expressionContext;
@@ -178,9 +180,22 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 //			Console.log(LogType.DEBUG, TAG + "Modified Expression is now = " + this.modifiedExpression);
 			
 			Expression evalExpression = new Expression(this.modifiedExpression);
-			this.resultValue = evalExpression.eval();
 			
-			this.strResult = this.resultValue.toEngineeringString();
+			try {
+				this.resultValue = evalExpression.eval();
+				this.strResult = this.resultValue.toEngineeringString();
+			} catch(Expression.ExpressionException e) {
+				this.resultValue = new BigDecimal(0);
+				this.strResult = "";
+				this.hasException = true;
+			} catch(ArithmeticException e) {
+				ExecutionManager.getInstance().setCurrLineNumber(this.parentExpressionContext.getStart().getLine());
+				ExecutionManager.getInstance().setCurrCatchType(CatchType.ARITHMETIC_EXPRESSION);
+				
+				this.resultValue = new BigDecimal(0);
+				this.strResult = "";
+				this.hasException = true;
+			}
 		}
 		
 	}
@@ -280,8 +295,15 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		Console.log(LogType.DEBUG, TAG + "EVALUATING VARIABLE " + expressionContext.getText());
 
 		if(javaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
-			this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
-					"\"" + javaRiceValue.getValue().toString() + "\"");
+			
+			if(javaRiceValue.getValue() == null) {
+				this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
+						"\"null\"");
+			} else {
+				this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
+						"\"" + javaRiceValue.getValue().toString() + "\"");
+			}
+			
 		} else if(javaRiceValue.getPrimitiveType() == PrimitiveType.CHAR) {
 			this.modifiedExpression = this.modifiedExpression.replaceFirst(expressionContext.getText(), 
 					"'" + javaRiceValue.getValue().toString() + "'");
@@ -309,7 +331,13 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
 		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
+		
+		ExecutionManager.getInstance().setCurrLineNumber(expressionContext.getStart().getLine());
 
+		if(arrayJavaRiceValue == null) {
+			return;
+		}
+		
 		if(arrayJavaRiceValue.getPrimitiveType() == PrimitiveType.STRING) {
 			this.modifiedExpression = this.modifiedExpression.replaceFirst(
 					expressionContext.expression(0).primary().getText() + "\\[" 
@@ -343,6 +371,10 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 
 	public boolean isNumericResult() {
 		return this.isNumeric;
+	}
+	
+	public boolean hasException() {
+		return this.hasException;
 	}
 
 }

@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import controller.Console;
 import controller.IDEController;
 import controller.Console.LogType;
+import model.javarice.builder.BuildChecker;
+import model.javarice.builder.ErrorRepository;
 import model.javarice.execution.adders.FunctionExecutionAdder;
 import model.javarice.execution.adders.IExecutionAdder;
 import model.javarice.execution.adders.MainExecutionAdder;
 import model.javarice.execution.commands.ICommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 import model.javarice.semantics.representations.JavaRiceFunction;
 
 public class ExecutionManager {
@@ -28,7 +32,12 @@ public class ExecutionManager {
 	private IExecutionAdder activeExecutionAdder;
 	private MainExecutionAdder mainExecutionAdder;
 	
-	public static IDEController controller;
+	private CatchType currCatchType = null;
+	private IAttemptCommand currentTryCommand = null;
+	
+	private boolean aborted = false;
+	
+	private int currLineNumber = -1;
 	
 	private ExecutionManager() {
 		this.mainExecutionAdder = new MainExecutionAdder(this.executionList);
@@ -43,13 +52,53 @@ public class ExecutionManager {
 	public static void initialize(IDEController c) {
 		INSTANCE = new ExecutionManager();
 		System.out.println("INITIALIZE");
-		controller = c;
 	}
 	
 	public static void reset() {
 		INSTANCE.foundEntryPoint = false;
 		INSTANCE.entryClassName = null;
 		INSTANCE.clearAllActions();
+		
+		INSTANCE.currCatchType = null;
+		INSTANCE.currentTryCommand = null;
+		INSTANCE.aborted = false;
+	}
+	
+	public CatchType getCurrCatchType() {
+		return currCatchType;
+	}
+	
+	public void setCurrCatchType(CatchType currCatchType) {
+		
+		if(currCatchType == null) {
+			this.currCatchType = null;
+			return;
+		}
+		
+		if(this.currentTryCommand != null && this.currentTryCommand.hasCatchFor(currCatchType)) {
+			this.currCatchType = currCatchType;
+		} else {
+			this.aborted = true;
+			
+			if(currCatchType == CatchType.ARRAY_OUT_OF_BOUNDS) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARRAY_OUT_OF_BOUNDS, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.NEGATIVE_ARRAY_SIZE) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NEGATIVE_ARRAY_SIZE, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.ARITHMETIC_EXPRESSION) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARITHMETIC_EXPRESSION, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.NULL_POINTER) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NULL_POINTER, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.INPUT_MISMATCH) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_INPUT_MISMATCH, "", this.currLineNumber);
+			}  else if(currCatchType == CatchType.NUMBER_FORMAT) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NUMBER_FORMAT, "", this.currLineNumber);
+			}
+			
+
+			this.clearAllActions();
+		}
+		
+		
 	}
 	
 	/*
@@ -148,7 +197,7 @@ public class ExecutionManager {
 	 */
 	public void executeAllActions() {
 		this.executionMonitor = new ExecutionMonitor();
-		this.executionThread = new ExecutionThread(this.executionList, this.executionMonitor, controller);
+		this.executionThread = new ExecutionThread(this.executionList, this.executionMonitor);
 		this.executionThread.start();
 	}
 	
@@ -168,4 +217,19 @@ public class ExecutionManager {
 		return executionThread;
 	}
 	
+	public IAttemptCommand getCurrentTryCommand() {
+		return currentTryCommand;
+	}
+	
+	public void setCurrentTryCommand(IAttemptCommand currentTryCommand) {
+		this.currentTryCommand = currentTryCommand;
+	}
+	
+	public boolean isAborted() {
+		return this.aborted;
+	}
+	
+	public void setCurrLineNumber(int currLineNumber) {
+		this.currLineNumber = currLineNumber;
+	}
 }
