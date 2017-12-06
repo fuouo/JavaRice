@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 public class Scope {
 	
+	String functionName;
 	int parentStartLine = 0;
 	int parentEndLine = 1;
+	
+	
 	ArrayList<String> identifierNames;
 	
 	public Scope(int parentStartLine, int parentEndLine) {
@@ -15,6 +18,13 @@ public class Scope {
 		this.identifierNames = new ArrayList<String>();
 	}
 	
+	public Scope(String funcName, int parentStartLine, int parentEndLine) {
+		super();
+		this.functionName = funcName;
+		this.parentStartLine = parentStartLine;
+		this.parentEndLine = parentEndLine;
+		this.identifierNames = new ArrayList<String>();
+	}
 	
 	public int getParentStartLine() {
 		return parentStartLine;
@@ -47,7 +57,15 @@ public class Scope {
 		
 	}
 	
-	
+
+	public String getFunctionName() {
+		return functionName;
+	}
+
+	public void setFunctionName(String functionName) {
+		this.functionName = functionName;
+	}
+
 	
 	
 	

@@ -78,6 +78,7 @@ public class AutoCompleteScopeAnalyzer {
 			{
 				System.out.println("Class Declaration");
 				scope.setParentStartLine(i);
+				scope.setFunctionName(getClassName(lineToken[i]));
 				scopeList.add(scope);
 			}
 			//Checks for normal Methods
@@ -89,7 +90,12 @@ public class AutoCompleteScopeAnalyzer {
 				System.out.println("Function Declaration");
 				scopeList.get(currScope).setParentEndLine(lastCloseBracket);
 				currScope ++;
-				scope = new Scope(i, i+1);
+				scope = new Scope(getFunctionNameFromLine(lineToken[i]), i, i+1);
+				//Checks if func has parameters
+				if(functionHasParameters(lineToken[i]))
+				{
+					getParameterVar(scope, lineToken[i]);
+				}
 				scopeList.add(scope);
 			}
 			//Checks Variables
@@ -110,6 +116,79 @@ public class AutoCompleteScopeAnalyzer {
 		}
 		//Set last line for Global Scope
 		scopeList.get(0).setParentEndLine(lastCloseBracket);
+	}
+	
+	private boolean functionHasParameters(String line)
+	{
+		String[] token = line.split("\\(");
+		if(hasPrimitiveType(token[1]))
+			return true;
+		else {
+			return false;
+		}
+	}
+	
+	private String getClassName(String line) {
+		String[] token = line.split(" ");
+		String func = "";
+		int end = 0;
+		 
+		for (int i = 0; i < token.length; i++) {
+			if(token[i].contains("class"))
+			{
+				if(i+1 < token.length)
+				{
+					func = token[i+1];
+					func = func.replace("{", "");
+					func = func.replace("}", "");
+					System.out.println("Class Name is " + func);
+					return func;
+				}
+			}
+		}
+		return null;
+	}
+	
+	private void getParameterVar(Scope scope, String line)
+	{
+		String[] token = line.split("\\(");	
+		String[] tok = token[1].split(" ");
+		String param = "";
+		for (int i = 0; i < tok.length; i++) {
+			if(hasPrimitiveType(tok[i]))
+			{
+				if(i+1 < tok.length)
+				{
+					param = tok[i+1];
+					param = param.replace(",", "");
+					param = param.replace(")", "");
+					System.out.println("Parameter Detected : " + param);
+					scope.addIdentifier(param);
+				}
+			}
+		}
+		
+	}
+
+	private String getFunctionNameFromLine(String line)
+	{
+		String[] token = line.split(" ");
+		String func = "";
+		int end = 0;
+		 
+		for (int i = 0; i < token.length; i++) {
+			if(hasPrimitiveType(token[i]))
+			{
+				if(i+1 < token.length)
+				{
+					func = token[i+1];
+					end = func.indexOf('(');
+					System.out.println("Function Name is " + func.substring(0, end));
+					return func;
+				}
+			}
+		}
+		return null;
 	}
 	
 	private boolean hasPrimitiveType(String code)
