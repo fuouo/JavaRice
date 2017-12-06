@@ -84,6 +84,10 @@ public class ExecutionManager {
 				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_ARITHMETIC_EXPRESSION, "", this.currLineNumber);
 			} else if(currCatchType == CatchType.NUMBER_FORMAT) {
 				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NUMBER_FORMAT, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.INPUT_MISMATCH) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_INPUT_MISMATCH, "", this.currLineNumber);
+			} else if(currCatchType == CatchType.NULL_POINTER) {
+				BuildChecker.reportCustomError(ErrorRepository.RUNTIME_NULL_POINTER, "", this.currLineNumber);
 			}
 			
 

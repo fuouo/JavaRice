@@ -324,6 +324,10 @@ public class StatementAnalyzer {
 			return CatchType.ARITHMETIC_EXPRESSION;
 		} else if(ctx.getTokens(JavaRiceLexer.NUMBER_FORMAT).size() > 0) {
 			return CatchType.NUMBER_FORMAT;
+		} else if(ctx.getTokens(JavaRiceLexer.INPUT_MISMATCH).size() > 0) {
+			return CatchType.INPUT_MISMATCH;
+		} else if(ctx.getTokens(JavaRiceLexer.NULL_POINTER).size() > 0) {
+			return CatchType.NULL_POINTER;
 		}
 		
 		return null;

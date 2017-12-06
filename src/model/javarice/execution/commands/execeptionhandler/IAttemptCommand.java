@@ -7,7 +7,9 @@ public interface IAttemptCommand extends ICommand{
 	public enum CatchType {
 		ARRAY_OUT_OF_BOUNDS,
 		ARITHMETIC_EXPRESSION,
+		INPUT_MISMATCH,
 		NEGATIVE_ARRAY_SIZE,
+		NULL_POINTER,
 		NUMBER_FORMAT;
 	}
 	

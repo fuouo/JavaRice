@@ -65,7 +65,9 @@ public class ScanCommand implements ICommand {
 		// if variable
 		if(!isArray) {
 			JavaRiceValue javaRiceValue = JavaRiceValueSearcher.searchJavaRiceValue(this.exprCtx.primary().getText());
-			javaRiceValue.setValue(input);			
+			javaRiceValue.setScanning(true);
+			javaRiceValue.setValue(input);	
+			javaRiceValue.setScanning(false);
 		} 
 		
 		// if in array
@@ -84,7 +86,13 @@ public class ScanCommand implements ICommand {
 			JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
 			JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evalComm.getResult().intValue());
 			
+			arrayJavaRiceValue.setScanning(true);
+			
 			arrayJavaRiceValue.setValue(input);
+			
+			arrayJavaRiceValue.setScanning(false);
+			
+			
 		}
 		
 		

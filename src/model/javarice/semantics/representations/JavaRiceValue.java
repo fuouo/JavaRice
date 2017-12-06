@@ -31,6 +31,7 @@ public class JavaRiceValue {
 	private Stack<Object> value;
 	private PrimitiveType primitiveType = PrimitiveType.NOT_YET_IDENTIFIED;
 	private boolean finalFlag = false;
+	private boolean scanning = false;
 	
 	public JavaRiceValue(Object value, PrimitiveType primitiveType) {
 		
@@ -117,6 +118,10 @@ public class JavaRiceValue {
 		return this.value.size();
 	}
 	
+	public void setScanning(boolean scanning) {
+		this.scanning = scanning;
+	}
+	
 	private Object attemptTypeCast(String value) {		
 		
 		try {
@@ -141,7 +146,11 @@ public class JavaRiceValue {
 			}
 		} catch(NumberFormatException e) {
 			
-			ExecutionManager.getInstance().setCurrCatchType(CatchType.NUMBER_FORMAT);
+			if(this.scanning) {
+				ExecutionManager.getInstance().setCurrCatchType(CatchType.INPUT_MISMATCH);
+			} else {
+				ExecutionManager.getInstance().setCurrCatchType(CatchType.NUMBER_FORMAT);
+			}
 			
 			return null;
 		}
