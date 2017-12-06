@@ -322,6 +322,12 @@ public class StatementAnalyzer {
 			return CatchType.NEGATIVE_ARRAY_SIZE;
 		} else if(ctx.getTokens(JavaRiceLexer.ARITHMETIC_EXPRESSION).size() > 0) {
 			return CatchType.ARITHMETIC_EXPRESSION;
+		} else if(ctx.getTokens(JavaRiceLexer.NUMBER_FORMAT).size() > 0) {
+			return CatchType.NUMBER_FORMAT;
+		} else if(ctx.getTokens(JavaRiceLexer.NULL_POINTER).size() > 0) {
+			return CatchType.NULL_POINTER;
+		} else if(ctx.getTokens(JavaRiceLexer.INPUT_MISMATCH).size() > 0) {
+			return CatchType.INPUT_MISMATCH;
 		}
 		
 		return null;
