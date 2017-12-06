@@ -176,8 +176,13 @@ public class StatementControlOverseer {
 				Console.log(LogType.DEBUG, TAG + 
 						"Parent is Controlled Command : " + ((IControlledCommand) parentCommand).getControlType());
 				
-				if(!(childCommand instanceof IControlledCommand || childCommand instanceof IAttemptCommand)) {
-					if(((IConditionalCommand) childCommand).getControlType() == ControlTypeEnum.CONDITIONAL_IF && 
+				if(!(childCommand instanceof IControlledCommand)) {
+					
+					if(childCommand instanceof IAttemptCommand) {
+						return;
+					}
+					
+					else if(((IConditionalCommand) childCommand).getControlType() == ControlTypeEnum.CONDITIONAL_IF && 
 							(((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.FOR_CONTROL ||
 							((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.DO_WHILE_CONTROL ||
 							((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.WHILE_CONTROL)) {
