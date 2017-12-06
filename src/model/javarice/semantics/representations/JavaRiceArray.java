@@ -60,6 +60,13 @@ public class JavaRiceArray {
 	}
 	
 	public void updateValueAt(JavaRiceValue javaRiceValue, int index) {
+		
+		if(javaRiceArray == null) {
+			Console.log(LogType.DEBUG, "array not yet initialized! " + index);
+			ExecutionManager.getInstance().setCurrCatchType(CatchType.NULL_POINTER);
+			return;
+		}
+		
 		if(index >= this.javaRiceArray.length) {
 			Console.log(LogType.DEBUG, "array out of bounds detected! " + index);
 			ExecutionManager.getInstance().setCurrCatchType(CatchType.ARRAY_OUT_OF_BOUNDS);
@@ -70,6 +77,13 @@ public class JavaRiceArray {
 	}
 	
 	public JavaRiceValue getValueAt(int index) {
+		
+		if(javaRiceArray == null) {
+			Console.log(LogType.DEBUG, "array not yet initialized! " + index);
+			ExecutionManager.getInstance().setCurrCatchType(CatchType.NULL_POINTER);
+			return null;
+		}
+		
 		if(index >= this.javaRiceArray.length || index < 0) {
 			ExecutionManager.getInstance().setCurrCatchType(CatchType.ARRAY_OUT_OF_BOUNDS);
 			return null;
