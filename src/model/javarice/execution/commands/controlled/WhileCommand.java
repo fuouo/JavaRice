@@ -50,6 +50,10 @@ public class WhileCommand implements IControlledCommand {
 					
 					LocalVarTracker.getInstance().popLocalVar(command);
 					
+					if(ExecutionManager.getInstance().getCurrCatchType() != null) {
+						break;
+					}
+					
 					if(ExecutionManager.getInstance().isAborted()) {
 						break;
 					}
@@ -71,6 +75,10 @@ public class WhileCommand implements IControlledCommand {
 							break;
 						}
 					} 
+				}
+				
+				if(ExecutionManager.getInstance().getCurrCatchType() != null) {
+					break;
 				}
 				
 				if(ExecutionManager.getInstance().isAborted()) {

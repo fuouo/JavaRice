@@ -64,6 +64,10 @@ public class ForCommand implements IControlledCommand {
 					
 					LocalVarTracker.getInstance().popLocalVar(command);
 					
+					if(ExecutionManager.getInstance().getCurrCatchType() != null) {
+						break;
+					}
+					
 					if(ExecutionManager.getInstance().isAborted()) {
 						break;
 					}
@@ -85,6 +89,10 @@ public class ForCommand implements IControlledCommand {
 							break;
 						}
 					} 
+				}
+				
+				if(ExecutionManager.getInstance().getCurrCatchType() != null) {
+					break;
 				}
 				
 				if(ExecutionManager.getInstance().isAborted()) {
