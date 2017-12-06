@@ -49,6 +49,10 @@ public class IfCommand implements IConditionalCommand {
 					
 					LocalVarTracker.getInstance().popLocalVar(command);
 					
+					if(ExecutionManager.getInstance().getCurrCatchType() != null) {
+						break;
+					}
+					
 					if(ExecutionManager.getInstance().isAborted()) {
 						break;
 					}
@@ -68,6 +72,10 @@ public class IfCommand implements IConditionalCommand {
 					command.execute();
 					
 					LocalVarTracker.getInstance().popLocalVar(command);
+					
+					if(ExecutionManager.getInstance().getCurrCatchType() != null) {
+						break;
+					}
 					
 					if(ExecutionManager.getInstance().isAborted()) {
 						break;
