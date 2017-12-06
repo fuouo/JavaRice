@@ -333,48 +333,60 @@ public class IDEView extends ViewInterface{
       scopeAnalyzer = new AutoCompleteScopeAnalyzer();
       scopeAnalyzer.addVariableCompletion(provider, code, codeTextArea.getCaretLineNumber());
       
+      String[] codePerLine = code.split("\n");
       
       code = code.replaceAll("\n", " ");	//replace new line
       code = code.replaceAll("\t", " "); //replace tabs
       String[] token = code.split(" ");
       
-      for(int i = 0; i < token.length; i++)
-      {
-    	  if(token[i].equals("_int") || 
-    		token[i].equals("_void") ||
-    		token[i].equals("_char") ||
-    		token[i].equals("_short") ||
-    		token[i].equals("_long") ||
-    		token[i].equals("_boolean") ||
-    		token[i].equals("_byte") ||
-    		token[i].equals("_float") ||
-    		token[i].equals("_double") ||
-    		token[i].equals("_String")){
-    		  if( i + 1 < token.length)
-    		  {
-    			  token[i+1] = token[i+1].replace("{", "");
-    			  
-    			  //If function with Parameters
-    			  if(token[i + 1].contains("(") && !(token[i+1].charAt(token[i+1].length()-1)==')'))
-    			  {
-    				  int o = i;
-    				  String tok = token[i+1];
-    				  while(!tok.contains(")"))
-    				  {
-    					  System.out.println("tok is " + tok);
-    					  if( o + 2 < token.length)
-    						  tok += " " + token[o+2];
-    					  o++;
-    				  }
-    				  tok = removeExtraTokens(tok);
-    				  provider.addCompletion(new ShorthandCompletion(provider, tok, tok, tok));
-    			  }
-    			  //If function without parameters
-    			  else if(token[i + 1].contains("(") && (token[i+1].charAt(token[i+1].length()-1)==')'))
-    			  	  provider.addCompletion(new ShorthandCompletion(provider, token[i+1], token[i+1], token[i+1]));
-    		  }
-    	  }
-      }
+      for (int j = 0; j < codePerLine.length; j++) {
+    	  codePerLine[j] = codePerLine[j].replaceAll("\n", " ");	//replace new line
+    	  codePerLine[j] = codePerLine[j].replaceAll("\t", " "); //replace tabs
+          token = codePerLine[j].split(" ");
+          
+          for(int i = 0; i < token.length; i++)
+          {
+        	  if(token[i].contains("_int") || 
+        		token[i].contains("_void") ||
+        		token[i].contains("_char") ||
+        		token[i].contains("_short") ||
+        		token[i].contains("_long") ||
+        		token[i].contains("_boolean") ||
+        		token[i].contains("_byte") ||
+        		token[i].contains("_float") ||
+        		token[i].contains("_double") ||
+        		token[i].contains("_String")){
+        		  if( i + 1 < token.length)
+        		  {
+        			  token[i+1] = token[i+1].replace("{", "");
+        			  
+        			  //If function with Parameters
+        			  if(token[i + 1].contains("(") && !(token[i+1].charAt(token[i+1].length()-1)==')'))
+        			  {
+        				  int o = i;
+        				  String tok = token[i+1];
+        				  int closingPar = codePerLine[j].indexOf(')');
+        				  
+        				  for (int k = i; k < token.length-1; k++) {
+        					  if( k + 2 < token.length)
+        						  tok += " " + token[k+2];
+						}
+        				  
+        				  tok = removeExtraTokens(tok);
+        				  provider.addCompletion(new ShorthandCompletion(provider, tok, tok, tok));
+        			  }
+        			  //If function without parameters
+        			  else if(token[i + 1].contains("(") && (token[i+1].charAt(token[i+1].length()-1)==')'))
+        			  	  provider.addCompletion(new ShorthandCompletion(provider, token[i+1], token[i+1], token[i+1]));
+        		  }
+        	  }
+          }
+          
+          
+          
+	}
+      
+      
       
       
       
