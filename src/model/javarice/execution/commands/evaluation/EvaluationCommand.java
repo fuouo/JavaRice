@@ -334,12 +334,19 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		EvaluationCommand evaluationCommand = new EvaluationCommand(arrayIndexExpressionContext);
 		evaluationCommand.execute();
 		
+		ExecutionManager.getInstance().setCurrLineNumber(expressionContext.getStart().getLine());
+		
 		JavaRiceArray javaRiceArray = (JavaRiceArray) javaRiceValue.getValue();
 		JavaRiceValue arrayJavaRiceValue = javaRiceArray.getValueAt(evaluationCommand.getResult().intValue());
 		
-		ExecutionManager.getInstance().setCurrLineNumber(expressionContext.getStart().getLine());
+		//ExecutionManager.getInstance().setCurrLineNumber(expressionContext.getStart().getLine());
 
-		if(arrayJavaRiceValue == null || arrayJavaRiceValue.getValue() == null) {
+		if(arrayJavaRiceValue == null || arrayJavaRiceValue.getValue() == null) {			
+			if(ExecutionManager.getInstance().getCurrCatchType() != null) {
+				return;
+			}
+			
+			Console.log(LogType.DEBUG, TAG + "Array is null");
 			ExecutionManager.getInstance().setCurrCatchType(CatchType.NULL_POINTER);
 			return;
 		}

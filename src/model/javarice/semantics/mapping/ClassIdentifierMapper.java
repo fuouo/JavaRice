@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import model.javarice.builder.ParserHandler;
+import model.javarice.execution.ExecutionManager;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.ParExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.PrimaryContext;
@@ -73,7 +75,15 @@ public class ClassIdentifierMapper implements ParseTreeListener, IValueMapper {
 						ParserHandler.getInstance().getCurrentClassName());
 				
 				this.javaRiceValue = classScope.searchVariableIncludingLocal(variableKey);
-				this.modExpression = this.modExpression.replace(variableKey, this.javaRiceValue.getValue().toString());
+				
+				ExecutionManager.getInstance().setCurrLineNumber(ctx.getStart().getLine());
+				
+				try {
+					this.modExpression = this.modExpression.replace(variableKey, this.javaRiceValue.getValue().toString());
+				}catch(NullPointerException e) {
+					ExecutionManager.getInstance().setCurrCatchType(CatchType.NULL_POINTER);
+				}
+				
 			}
 		}
 	}

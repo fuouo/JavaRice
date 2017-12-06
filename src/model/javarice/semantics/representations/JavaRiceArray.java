@@ -80,7 +80,7 @@ public class JavaRiceArray {
 		
 		if(javaRiceArray == null) {
 			Console.log(LogType.DEBUG, "array not yet initialized! " + index);
-			ExecutionManager.getInstance().setCurrCatchType(CatchType.NULL_POINTER);
+			//ExecutionManager.getInstance().setCurrCatchType(CatchType.NULL_POINTER);
 			return null;
 		}
 		

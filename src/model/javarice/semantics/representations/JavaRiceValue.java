@@ -149,6 +149,7 @@ public class JavaRiceValue {
 		} catch(NumberFormatException e) {
 			
 			if(this.scanning) {
+				Console.log(LogType.DEBUG, TAG + "Input mismatch bitch");
 				ExecutionManager.getInstance().setCurrCatchType(CatchType.INPUT_MISMATCH);
 			} else {
 				ExecutionManager.getInstance().setCurrCatchType(CatchType.NUMBER_FORMAT);

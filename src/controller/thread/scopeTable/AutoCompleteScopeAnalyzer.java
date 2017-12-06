@@ -183,7 +183,9 @@ public class AutoCompleteScopeAnalyzer {
 		int end = 0;
 		 
 		for (int i = 0; i < token.length; i++) {
-			if(hasPrimitiveType(token[i]))
+			if(hasPrimitiveType(token[i]) &&
+					!token[i+1].contains("[") &&
+					!token[i+1].contains("]"))
 			{
 				if(i+1 < token.length)
 				{

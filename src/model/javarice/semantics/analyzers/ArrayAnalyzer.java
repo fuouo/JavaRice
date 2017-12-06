@@ -150,6 +150,8 @@ public class ArrayAnalyzer implements ParseTreeListener {
 		ArrayInitializeCommand arrayInitializeCommand = new ArrayInitializeCommand(
 				this.declaredArray, arrayCreatorCtx);
 		
+		Console.log(LogType.DEBUG, TAG + "Initializing array");
+		
 		StatementControlOverseer statementControl = StatementControlOverseer.getInstance();
 		
 		if(statementControl.isInConditionalCommand()) {

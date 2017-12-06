@@ -176,15 +176,20 @@ public class StatementControlOverseer {
 				Console.log(LogType.DEBUG, TAG + 
 						"Parent is Controlled Command : " + ((IControlledCommand) parentCommand).getControlType());
 				
-				if(!(childCommand instanceof IControlledCommand || childCommand instanceof IAttemptCommand)) {
-					if(((IConditionalCommand) childCommand).getControlType() == ControlTypeEnum.CONDITIONAL_IF && 
+				if(!(childCommand instanceof IControlledCommand)) {
+					
+					if(childCommand instanceof IAttemptCommand) {
+						return;
+					}
+					
+					else if(((IConditionalCommand) childCommand).getControlType() == ControlTypeEnum.CONDITIONAL_IF && 
 							(((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.FOR_CONTROL ||
 							((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.DO_WHILE_CONTROL ||
 							((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.WHILE_CONTROL)) {
-								//System.out.println("Child Command is : " + childCommand.getClass().getSimpleName());
+								System.out.println("Child Command is : " + childCommand.getClass().getSimpleName());
 								Console.log(LogType.DEBUG, "PARENT IS WHILE/DO WHILE");
 							return;
-					}
+					}				
 				}
 					
 				IControlledCommand controlledCommand = (IControlledCommand) parentCommand;

@@ -346,6 +346,8 @@ public class IDEView extends ViewInterface{
           
           for(int i = 0; i < token.length; i++)
           {
+        	  token[i].replace("[", "");
+        	  token[i].replace("]", "");
         	  if(token[i].contains("_int") || 
         		token[i].contains("_void") ||
         		token[i].contains("_char") ||
@@ -355,8 +357,12 @@ public class IDEView extends ViewInterface{
         		token[i].contains("_byte") ||
         		token[i].contains("_float") ||
         		token[i].contains("_double") ||
-        		token[i].contains("_String")){
+        		token[i].contains("_String") ||
+        		token[i].contains("[") || 
+        		token[i].contains("]")){
         		  if( i + 1 < token.length)
+        			  if(!token[i+1].contains("[") &&
+        					  !token[i+1].contains("]") )
         		  {
         			  token[i+1] = token[i+1].replace("{", "");
         			  

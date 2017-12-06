@@ -13,8 +13,10 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import controller.Console;
 import controller.Console.LogType;
 import model.javarice.error.errorcheckers.UndeclaredChecker;
+import model.javarice.execution.ExecutionManager;
 import model.javarice.execution.commands.ICommand;
 import model.javarice.execution.commands.evaluation.EvaluationCommand;
+import model.javarice.execution.commands.execeptionhandler.IAttemptCommand.CatchType;
 import model.javarice.generatedexp.JavaRiceParser.ExpressionContext;
 import model.javarice.generatedexp.JavaRiceParser.LiteralContext;
 import model.javarice.generatedexp.JavaRiceParser.PrimaryContext;
@@ -83,11 +85,20 @@ public class PrintCommand implements ICommand, ParseTreeListener{
 			EvaluationCommand evalComm = new EvaluationCommand(exprCtx);
 			evalComm.execute();
 			
-			if(evalComm.isNumericResult()) {
-				this.strToPrint += evalComm.getResult().toEngineeringString();
+			if (ExecutionManager.getInstance().getCurrCatchType() != null ||
+					ExecutionManager.getInstance().isAborted()) {
+				this.strToPrint += "";
 			} else {
-				this.strToPrint += evalComm.getStringResult();
+				if(evalComm.isNumericResult()) {
+					this.strToPrint += evalComm.getResult().toEngineeringString();
+				} else {
+					this.strToPrint += evalComm.getStringResult();
+				}
 			}
+			
+			
+			
+			
 			
 			this.isEvaluatedExpr = true;
 		}
