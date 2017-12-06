@@ -288,7 +288,12 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 	private void evaluateVariable(ExpressionContext expressionContext) {
 		JavaRiceValue javaRiceValue = VariableSearcher.searchVariable(expressionContext.getText());
 		
-		if(javaRiceValue == null || javaRiceValue.getPrimitiveType() == PrimitiveType.ARRAY) {
+		if(javaRiceValue == null) {
+			ExecutionManager.getInstance().setCurrCatchType(CatchType.NULL_POINTER);
+			return;
+		}
+		
+		if(javaRiceValue.getPrimitiveType() == PrimitiveType.ARRAY) {
 			return;
 		}
 
@@ -334,7 +339,8 @@ public class EvaluationCommand implements ICommand, ParseTreeListener {
 		
 		ExecutionManager.getInstance().setCurrLineNumber(expressionContext.getStart().getLine());
 
-		if(arrayJavaRiceValue == null) {
+		if(arrayJavaRiceValue == null || arrayJavaRiceValue.getValue() == null) {
+			ExecutionManager.getInstance().setCurrCatchType(CatchType.NULL_POINTER);
 			return;
 		}
 		

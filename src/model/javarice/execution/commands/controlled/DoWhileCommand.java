@@ -24,7 +24,7 @@ public class DoWhileCommand extends WhileCommand {
 		
 		this.executeFirstCommandSequence();
 		
-		if(!this.doIsReturned) {
+		if(!this.doIsReturned && !ExecutionManager.getInstance().isAborted()) {
 			Console.log(LogType.DEBUG, "DoWhileCommand: will execute while loops");
 			super.execute();
 		}

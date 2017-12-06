@@ -70,8 +70,13 @@ public class StatementControlOverseer {
 	}
 	
 	public void openAttemptCommand(IAttemptCommand command) {
-		this.procedureCallStack.push(command);
-		this.activeControlledCommand = command;
+		if(this.procedureCallStack.isEmpty()) {
+			this.procedureCallStack.push(command);
+			this.activeControlledCommand = command;
+		}
+		else {
+			this.processAdditionOfCommand(command);
+		}
 		
 		this.isInTry = true;
 	}
@@ -120,6 +125,20 @@ public class StatementControlOverseer {
 			this.procedureCallStack.push(command);
 			this.activeControlledCommand = command;
 		}
+		
+		else if(this.isAttemptCommand()) {
+			IAttemptCommand attemptCommand = (IAttemptCommand) this.activeControlledCommand;
+			
+			if(this.isInTry) {
+				attemptCommand.addTryCommand(command);
+			} else {
+				attemptCommand.addCatchCommand(this.currCatchType, command);
+			}
+			
+			this.procedureCallStack.push(command);
+			this.activeControlledCommand = command;
+		}
+		
 		//just add the newly opened command as a command under the last active controlled command.
 		else {
 			
@@ -154,9 +173,10 @@ public class StatementControlOverseer {
 			
 			// TODO: check this shit
 			if(parentCommand instanceof IControlledCommand) {
-				//System.out.println("Parent is Controlled Command : " + ((IControlledCommand) parentCommand).getControlType());
+				Console.log(LogType.DEBUG, TAG + 
+						"Parent is Controlled Command : " + ((IControlledCommand) parentCommand).getControlType());
 				
-				if(!(childCommand instanceof IControlledCommand)) {
+				if(!(childCommand instanceof IControlledCommand || childCommand instanceof IAttemptCommand)) {
 					if(((IConditionalCommand) childCommand).getControlType() == ControlTypeEnum.CONDITIONAL_IF && 
 							(((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.FOR_CONTROL ||
 							((IControlledCommand) parentCommand).getControlType() == ControlTypeEnum.DO_WHILE_CONTROL ||
@@ -171,6 +191,10 @@ public class StatementControlOverseer {
 				controlledCommand.addCommand(childCommand);
 
 			} else if(parentCommand instanceof IAttemptCommand) {
+				
+				Console.log(LogType.DEBUG, TAG + 
+						"Parent is Attempt command");
+				
 				IAttemptCommand attemptCommand = (IAttemptCommand) parentCommand;
 				
 				if(this.isInTry) {

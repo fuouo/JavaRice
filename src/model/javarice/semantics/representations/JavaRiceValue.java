@@ -2,6 +2,8 @@ package model.javarice.semantics.representations;
 
 import java.util.Stack;
 
+import controller.Console;
+import controller.Console.LogType;
 import model.javarice.builder.BuildChecker;
 import model.javarice.builder.ErrorRepository;
 import model.javarice.execution.ExecutionManager;
